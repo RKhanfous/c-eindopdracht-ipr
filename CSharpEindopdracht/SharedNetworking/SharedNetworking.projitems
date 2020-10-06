@@ -9,5 +9,6 @@
     <Import_RootNamespace>SharedNetworking</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Utils\" />
   </ItemGroup>
 </Project>
