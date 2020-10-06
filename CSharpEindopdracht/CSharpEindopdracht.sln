@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.30503.244
+VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Client\Server.csproj", "{084112F6-823C-4AD5-BBF2-8630368A5039}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Client\Server.csproj", "{084112F6-823C-4AD5-BBF2-8630368A5039}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfClient", "WpfClient\WpfClient.csproj", "{EA7CE9C1-5CA4-4EB6-84AF-D9CD01912A2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfClient", "WpfClient\WpfClient.csproj", "{EA7CE9C1-5CA4-4EB6-84AF-D9CD01912A2E}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedNetworking", "SharedNetworking\SharedNetworking.shproj", "{A2EAF6B3-9AB3-4155-B0EA-8BD0F7AE1DD0}"
 EndProject
