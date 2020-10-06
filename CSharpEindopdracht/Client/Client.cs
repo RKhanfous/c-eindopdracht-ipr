@@ -31,7 +31,7 @@ namespace Server
             Array.Copy(buffer, 0, totalBuffer, totalBufferReceived, receivedBytes);
             totalBufferReceived += receivedBytes;
 
-            int expectedMessageLength = BitConverter.ToInt32(totalBuffer, 0);
+            ushort expectedMessageLength = BitConverter.ToUInt16(totalBuffer, 0);
             while (totalBufferReceived >= expectedMessageLength)
             {
                 //volledig packet binnen
