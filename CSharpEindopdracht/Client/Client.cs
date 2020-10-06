@@ -1,4 +1,5 @@
-﻿using SharedNetworking.Utils;
+﻿using Networking;
+using SharedNetworking.Utils;
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace Server
 {
-    internal class Client : SharedNetworking.Utils.SharedClient
+    internal class Client : SharedClient
     {
 
         private string username;

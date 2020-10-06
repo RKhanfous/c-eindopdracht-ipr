@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SharedNetworking.Utils
 {
-    class SharedClient
+    public class SharedClient
     {
         private TcpClient client;
         private NetworkStream stream;
