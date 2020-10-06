@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SharedSkribbl
 {
-    struct Line
+    public struct Line
     {
         public int Id { get; set; }
         public short BeginX { get; set; }

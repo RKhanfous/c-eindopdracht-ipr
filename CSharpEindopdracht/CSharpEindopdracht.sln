@@ -7,14 +7,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Client\Server.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfClient", "WpfClient\WpfClient.csproj", "{EA7CE9C1-5CA4-4EB6-84AF-D9CD01912A2E}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedNetworking", "SharedNetworking\SharedNetworking.shproj", "{A2EAF6B3-9AB3-4155-B0EA-8BD0F7AE1DD0}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedSkribbl", "SharedSkribbl\SharedSkribbl.shproj", "{5DB30C1E-D9A7-4113-B095-3C993B6BF0A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Networking", "Networking\Networking.csproj", "{C686603C-0440-4F5A-B13D-A8C7F8786501}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		SharedSkribbl\SharedSkribbl.projitems*{5db30c1e-d9a7-4113-b095-3c993b6bf0a4}*SharedItemsImports = 13
-		SharedNetworking\SharedNetworking.projitems*{a2eaf6b3-9ab3-4155-b0ea-8bd0f7ae1dd0}*SharedItemsImports = 13
+		SharedSkribbl\SharedSkribbl.projitems*{c686603c-0440-4f5a-b13d-a8c7f8786501}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +29,10 @@ Global
 		{EA7CE9C1-5CA4-4EB6-84AF-D9CD01912A2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA7CE9C1-5CA4-4EB6-84AF-D9CD01912A2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA7CE9C1-5CA4-4EB6-84AF-D9CD01912A2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C686603C-0440-4F5A-B13D-A8C7F8786501}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C686603C-0440-4F5A-B13D-A8C7F8786501}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C686603C-0440-4F5A-B13D-A8C7F8786501}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C686603C-0440-4F5A-B13D-A8C7F8786501}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

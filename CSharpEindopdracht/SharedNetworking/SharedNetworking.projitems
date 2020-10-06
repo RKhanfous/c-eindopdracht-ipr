@@ -11,4 +11,7 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Utils\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\SharedClient.cs" />
+  </ItemGroup>
 </Project>

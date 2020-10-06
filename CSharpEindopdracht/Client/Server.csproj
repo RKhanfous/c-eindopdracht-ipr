@@ -5,6 +5,8 @@
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 	</PropertyGroup>
 
-	<Import Project="..\SharedNetworking\SharedNetworking.projitems" Label="Shared" />
+	<ItemGroup>
+		<ProjectReference Include="..\Networking\Networking.csproj" />
+	</ItemGroup>
 
 </Project>
