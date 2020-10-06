@@ -7,7 +7,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Client\Server.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfClient", "WpfClient\WpfClient.csproj", "{EA7CE9C1-5CA4-4EB6-84AF-D9CD01912A2E}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedNetworking", "SharedNetworking\SharedNetworking.shproj", "{A2EAF6B3-9AB3-4155-B0EA-8BD0F7AE1DD0}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedSkribbl", "SharedSkribbl\SharedSkribbl.shproj", "{5DB30C1E-D9A7-4113-B095-3C993B6BF0A4}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		SharedSkribbl\SharedSkribbl.projitems*{5db30c1e-d9a7-4113-b095-3c993b6bf0a4}*SharedItemsImports = 13
+		SharedNetworking\SharedNetworking.projitems*{a2eaf6b3-9ab3-4155-b0ea-8bd0f7ae1dd0}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
