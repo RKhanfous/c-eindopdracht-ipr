@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net.Sockets;
 using System.Text;
 
 namespace Server
@@ -9,9 +11,13 @@ namespace Server
         private string username;
         private int clientID;
 
-        public Client()
-        {
+        private TcpClient tcpClient;
+        private NetworkStream networkStream;
 
+        public Client(TcpClient tcpClient, int clientID)
+        {
+            this.tcpClient = tcpClient;
+            this.networkStream = this.tcpClient.GetStream();
         }
     }
 }
