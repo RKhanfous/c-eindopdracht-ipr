@@ -6,5 +6,6 @@ namespace Server
 {
     interface IServer
     {
+        void GiveBytes(byte[] bytes);
     }
 }
