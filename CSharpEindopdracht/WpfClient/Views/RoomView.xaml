@@ -5,8 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfClient.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="White">
     <Grid>
-            
+        <Label x:Name="SkribblRoomView" Content="Skribbl" FontSize="72" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,50,0,0"/>
+        <Label x:Name="ParticipantsRoomView" Content="Participants:" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="80,150,0,0"></Label>
+        <ListView x:Name="ListParticipantsRoom" HorizontalAlignment="Left" VerticalAlignment="Top"></ListView>
+
+
     </Grid>
 </UserControl>

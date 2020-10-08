@@ -5,8 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfClient.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="White">
+    <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Label x:Name="SkribblLoginView" Content="Skribbl" FontSize="72" Margin="304,43,0,0" Height="106" VerticalAlignment="Top" HorizontalAlignment="Left" Width="230"/>
+        <Label x:Name="UsernameLoginView" Content="Username:" FontSize="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="215,161,0,0"/>
+        <Label x:Name="RoomLoginView" Content="Room:" FontSize="20" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,214,0,0"/>
+        <TextBox x:Name="EnterUsernameLogin" Width="180" Height="30" Margin="309,168,10,53"></TextBox>
+        <TextBox x:Name="EnterRoomLogin" Width="180" Height="30" Margin="309,221,10,0"/>
+        <Button x:Name="JoinButton" FontSize="22" Content="JOIN" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="384,0,0,-93" Width="70" Height="40"></Button>
+        <Label x:Name="TrademarkLabel" Content="Eindopdracht C# + IPR: Redouan &amp; Shinichi" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-82,-178"/>
     </Grid>
 </UserControl>
