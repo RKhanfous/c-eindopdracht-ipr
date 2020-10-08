@@ -7,5 +7,10 @@ namespace WpfClient.ViewModels
 {
     class RoomViewModel : ObservableObject
     {
+
+        public RoomViewModel(string Username, string RoomName)
+        {
+
+        }
     }
 }

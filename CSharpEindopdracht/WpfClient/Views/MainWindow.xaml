@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <DockPanel>
-        <Label DockPanel.Dock="Bottom" Content="Gemaakt door Redouan en Shinichi" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="Gray"/>
-        <ContentControl Content="{Binding SelectedModel}"/>
+        <Label DockPanel.Dock="Bottom" Content="Eindopdracht C# + IPR: Redouan &amp; Shinichi" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="Gray"/>
+        <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding SelectedModel}"/>
 
     </DockPanel>
 </Window>
