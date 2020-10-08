@@ -7,7 +7,7 @@ using WpfClient.Utils;
 
 namespace WpfClient.Models
 {
-    class Line : Model
+    class Line : ObservableObject
     {
     }
 }

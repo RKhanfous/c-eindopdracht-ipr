@@ -5,7 +5,7 @@ using System.Text;
 
 namespace WpfClient.Utils
 {
-    class Model : INotifyPropertyChanged
+    class ObservableObject : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
     }
