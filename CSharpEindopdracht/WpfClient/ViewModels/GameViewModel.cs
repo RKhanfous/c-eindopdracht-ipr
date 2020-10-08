@@ -7,5 +7,9 @@ namespace WpfClient.ViewModels
 {
     class GameViewModel : ObservableObject
     {
+        public GameViewModel(string username)
+        {
+
+        }
     }
 }
