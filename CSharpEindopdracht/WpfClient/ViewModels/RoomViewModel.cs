@@ -7,10 +7,11 @@ namespace WpfClient.ViewModels
 {
     class RoomViewModel : ObservableObject
     {
+        private readonly MainViewModel mainViewModel;
 
-        public RoomViewModel(string Username, string RoomName)
+        public RoomViewModel(MainViewModel mainViewModel, string Username, string RoomName)
         {
-
+            this.mainViewModel = mainViewModel;
         }
     }
 }
