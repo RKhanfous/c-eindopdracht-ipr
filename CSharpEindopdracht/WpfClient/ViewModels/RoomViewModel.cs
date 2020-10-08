@@ -9,9 +9,12 @@ namespace WpfClient.ViewModels
     {
         private readonly MainViewModel mainViewModel;
 
+        public string Roomname { get; }
+
         public RoomViewModel(MainViewModel mainViewModel, string Username, string RoomName)
         {
             this.mainViewModel = mainViewModel;
+            this.Roomname = Roomname;
         }
     }
 }

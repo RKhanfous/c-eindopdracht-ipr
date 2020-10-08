@@ -9,20 +9,20 @@
              Background="White">
     <StackPanel>
         <Label x:Name="SkribblRoomView" Content="Skribbl" FontSize="72" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        <Grid x:Name="BiggestGrid">
+        <Grid x:Name="BiggestGrid" MinWidth="720" MinHeight="200">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Vertical" Grid.Column="0">
-                <Label x:Name="ParticipantsRoomView" Content="Participants:" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,75,0,0"></Label>
-                <ListView x:Name="ListParticipantsRoom" HorizontalAlignment="Left" VerticalAlignment="Top"></ListView>
-                <ListViewItem x:Name="ListParticipantItem"></ListViewItem>
+            <StackPanel Orientation="Vertical" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10">
+                <Label x:Name="ParticipantsRoomView" Content="Participants:" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="5"></Label>
+                <!--<ListView x:Name="ListParticipantsRoom" HorizontalAlignment="Left" VerticalAlignment="Top"></ListView>
+                <ListViewItem x:Name="ListParticipantItem"></ListViewItem>-->
             </StackPanel>
-            <StackPanel Orientation="Vertical" Grid.Column="1">
-                <Label x:Name="RoomCodeLabel" Content="ROOMCODE" FontSize="20" Width="125" Margin="0,75,0,50"/>
-                <Button Content="START" FontSize="20" Width="100" Height="35"/>
-            </StackPanel>
+            <Grid Grid.Column="1" HorizontalAlignment="Center" >
+                <TextBlock x:Name="RoomCodeLabel" Text="{Binding Path=Roomname}" IsEnabled="False" Background="#eee" FontSize="20" Padding="5" Margin="5 50 5 5" VerticalAlignment="Top"/>
+                <Button Content="START" FontSize="20" Width="100" Height="35" VerticalAlignment="Bottom"/>
+            </Grid>
         </Grid>
     </StackPanel>
 </UserControl>
