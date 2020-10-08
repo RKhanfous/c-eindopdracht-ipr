@@ -10,7 +10,7 @@ namespace WpfClient.ViewModels
 {
     class LoginViewModel : ObservableObject
     {
-        private MainViewModel mainViewModel;
+        private readonly MainViewModel mainViewModel;
         public string Username { get; set; }
         public string RoomName { get; set; }
         public LoginViewModel(MainViewModel mainViewModel)
@@ -21,11 +21,11 @@ namespace WpfClient.ViewModels
             {
                 if (RoomName == "random" || RoomName == "")
                 {
-                    this.mainViewModel.SelectedModel = new GameViewModel(Username);
+                    this.mainViewModel.SelectedModel = new GameViewModel(this.mainViewModel, Username);
                 }
                 else
                 {
-                    this.mainViewModel.SelectedModel = new RoomViewModel(Username, RoomName);
+                    this.mainViewModel.SelectedModel = new RoomViewModel(this.mainViewModel, Username, RoomName);
                 }
                 Debug.WriteLine("joinCommand");
                 Debug.WriteLine(this.mainViewModel.SelectedModel);

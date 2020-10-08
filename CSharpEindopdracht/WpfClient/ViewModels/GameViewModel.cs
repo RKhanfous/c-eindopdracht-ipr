@@ -7,9 +7,10 @@ namespace WpfClient.ViewModels
 {
     class GameViewModel : ObservableObject
     {
-        public GameViewModel(string username)
+        private readonly MainViewModel mainViewModel;
+        public GameViewModel(MainViewModel mainViewModel, string username)
         {
-
+            this.mainViewModel = mainViewModel;
         }
     }
 }
