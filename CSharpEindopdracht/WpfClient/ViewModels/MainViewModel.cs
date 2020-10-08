@@ -6,7 +6,7 @@ using WpfClient.Utils;
 namespace WpfClient.ViewModels
 {
 
-    class MainViewModel
+    class MainViewModel : ObservableObject
     {
 
         public ObservableObject SelectedModel { get; set; }
