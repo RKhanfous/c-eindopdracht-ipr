@@ -6,8 +6,9 @@
         xmlns:local="clr-namespace:WpfClient"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Canvas/>
+    <DockPanel>
+        <Label DockPanel.Dock="Bottom" Content="Gemaakt door Redouan en Shinichi" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="Gray"/>
+        <ContentControl Content="{Binding SelectedModel}"/>
 
-    </Grid>
+    </DockPanel>
 </Window>
