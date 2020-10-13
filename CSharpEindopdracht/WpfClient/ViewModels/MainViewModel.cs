@@ -13,7 +13,7 @@ namespace WpfClient.ViewModels
 
         public MainViewModel()
         {
-            SelectedModel = new RoomViewModel(this, "", "");
+            SelectedModel = new LoginViewModel(this);
         }
     }
 }
