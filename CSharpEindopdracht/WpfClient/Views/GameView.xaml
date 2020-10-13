@@ -21,13 +21,13 @@
             <StackPanel Grid.Column="1">
                 <Label x:Name="GuessWordGameView" Content="Word" FontSize="18" HorizontalAlignment="Center"></Label>
                 <Canvas></Canvas>
-                <StackPanel Orientation="Horizontal">
+                <StackPanel>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal" Grid.Column="0">
                             <Button  Width="30" Height="30">
                                 <Button.Template>
                                     <ControlTemplate TargetType="{x:Type Button}">
@@ -59,8 +59,10 @@
                                 </Button.Template>
                             </Button>
                         </StackPanel>
-                        <StackPanel>
-                            <Button></Button>
+                        <StackPanel Orientation="Horizontal" Grid.Column="1" >
+                            <Button x:Name="WidthButton1" Width="30" Height="30" Content="Width"></Button>
+                            <Button x:Name="WidthButton2" Width="30" Height="30" Content="Width1"></Button>
+                            <Button x:Name="WidthButton3" Width="30" Height="30" Content="Width2"></Button>
                         </StackPanel>
                     </Grid>
                 </StackPanel>
