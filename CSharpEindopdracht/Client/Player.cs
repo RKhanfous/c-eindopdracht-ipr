@@ -9,6 +9,7 @@ namespace Server
         private string username;
         private int score;
         private int clientID;
+        public bool active { get; set; }
 
         public Player(string username, int score, int clientID)
         {
