@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Timers;
 
 namespace Server
 {
@@ -20,6 +21,7 @@ namespace Server
         private string currentWord;
         private Player currentPlayer;
         private List<Player> drawingPlayers;
+        private Timer timer;
 
         #endregion
 
@@ -58,22 +60,29 @@ namespace Server
             this.currentRound = 0;
             this.numRounds = numberOfRounds;
             this.words = new List<string> { "Boot", "Zon", "Mens", "Gras", "Water", "Sneeuw", "Kerk", "Concert", "Slang", "Huis", "Computer", "Klok", "vlees", "Tong", "Mug", "Soldaat" };
+            this.timer = new Timer();
         }
 
         #endregion
 
+
+        #region main logic
         /// <summary>
         /// main loop for the room
         /// </summary>
         /// <param name="objectState"></param>
-        public void Run(object objectState)
+        public void Start(object objectState)
         {
             //start of room
             //checks
-            doChecks();
+            if (Check())
+            {
+                Stop();
+                return;
+            }
 
             //setup round
-            setNewRound();
+            SetNewRound();
 
             while (running)
             {
@@ -84,33 +93,41 @@ namespace Server
         /// <summary>
         /// checks if room can continue running
         /// </summary>
-        private void doChecks()
+        private bool Check()
         {
             lock (this.players)
             {
                 if (this.players.Count < 2)
                 {
-
+                    return false;
                 }
 
-                //current round is 0 because this is the beginning
                 if (this.words.Count < (this.numRounds = this.currentRound) * 8)
                 {
                     //stop();
                     //return;
                 }
             }
+            return true;
         }
 
         /// <summary>
         /// sets up new round
         /// </summary>
-        private void setNewRound()
+        private void SetNewRound()
         {
             this.currentRound++;
             this.drawingPlayers.Clear();
             this.players.ForEach((player) => { this.drawingPlayers.Add(player); });
         }
+
+        #endregion
+
+        #region timers callbacks
+
+
+
+        #endregion
 
         #region Getters and setters
 
@@ -135,7 +152,7 @@ namespace Server
         /// <summary>
         /// things that need to be done to stop
         /// </summary>
-        private void stop()
+        private void Stop()
         {
             //TODO tell all players to stop
 
