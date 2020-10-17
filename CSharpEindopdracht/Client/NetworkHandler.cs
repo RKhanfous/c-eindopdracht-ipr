@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -20,23 +21,58 @@ namespace Server
 
         private void OnConnect(IAsyncResult ar)
         {
+            Random r = new Random();
+            int randomClientID = r.Next();
+            for(int i = 0; i < clients.Count; i++)
+            {
+                if(clients[i].clientID == randomClientID)
+                {
+                    randomClientID = r.Next();
+                    i = 0;
+                }
+            }
             var tcpClient = listener.EndAcceptTcpClient(ar);
             Console.WriteLine($"Client connected from {tcpClient.Client.RemoteEndPoint}");
-            clients.Add(new Client(TcpClient, );
+            clients.Add(new Client(tcpClient, randomClientID));
             listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
         }
-    }
 
-    class DataParser
-    {
-        internal void TellNewTurn(Player currentPlayer, string currentWord, List<Player> players)
+        internal void Disconnect(Client client)
         {
-            throw new NotImplementedException();
+            clients.Remove(client);
+            Console.WriteLine("Client disconnected");
         }
 
-        internal void TellTurnOver(List<Player> players, string currentWord)
+        internal void SendToUser(int clientID, string packet)
         {
-            throw new NotImplementedException();
+            foreach (var client in clients.Where(c => c.clientID == clientID))
+            {
+                client.Write(packet);
+            }
+        }
+
+        public bool checkClientsForUser(int clientID)
+        {
+            foreach (Client client in clients)
+            {
+                if (client.clientID == clientID)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public Client getClientByUser(int clientID)
+        {
+            foreach (Client client in clients)
+            {
+                if (client.clientID == clientID)
+                {
+                    return client;
+                }
+            }
+            return null;
         }
     }
 }
