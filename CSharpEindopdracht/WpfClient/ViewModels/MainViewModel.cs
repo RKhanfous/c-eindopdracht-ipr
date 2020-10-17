@@ -42,9 +42,9 @@ namespace WpfClient.ViewModels
         /// size of the resize border around the window
         /// </summary>
 
-        public double MinimumWidth { get; set; } = 250;
+        public double MinimumWidth { get; set; } = 400;
 
-        public double MinimumHeight { get; set; } = 250;
+        public double MinimumHeight { get; set; } = 400;
 
 
 

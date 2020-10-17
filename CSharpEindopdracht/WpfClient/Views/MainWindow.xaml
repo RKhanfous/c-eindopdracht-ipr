@@ -9,8 +9,8 @@
         AllowsTransparency="True"
         x:Name="applicatonWindow"
         WindowStartupLocation="CenterScreen"
-        MinHeight="{Binding MinimumHeight}"
-        MinWidth="{Binding MinimumWidth}"
+        MinHeight="400"
+        MinWidth="400"
         Title="Skribbl">
 
     <Window.Resources>
