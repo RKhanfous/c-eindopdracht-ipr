@@ -16,7 +16,7 @@ namespace WpfClient.Views
     /// <summary>
     /// Interaction logic for ScoreBoardView.xaml
     /// </summary>
-    public partial class ScoreBoardView : UserControl
+    public partial class ScoreBoardView : Page
     {
         public ScoreBoardView()
         {

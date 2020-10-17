@@ -118,7 +118,7 @@
     </WindowChrome.WindowChrome>
 
     <Grid>
-        <UserControl Content="{Binding SelectedViewModel}" Focusable="False" />
+        <Frame Content="{Binding SelectedViewModel}" Focusable="False" NavigationUIVisibility="Hidden"/>
         <Label Content="gemaakt door: mensen" DockPanel.Dock="Bottom" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontStyle="Italic" Foreground="Gray"/>
     </Grid>
 </Window>
