@@ -5,16 +5,15 @@ using System.Text;
 
 namespace SharedNetworking.Utils
 {
-    class SharedClient
+    abstract class SharedClient
     {
         private TcpClient client;
         private NetworkStream stream;
         private byte[] buffer = new byte[1024];
         private byte[] totalBuffer = new byte[1024];
         private int totalBufferReceived = 0;
-        private DataHandler dataHandler;
 
-        public SharedClient(TcpClient client, DataHandler dataHandler)
+        public SharedClient(TcpClient client)
         {
             if (!client.Connected)
             {
@@ -23,7 +22,6 @@ namespace SharedNetworking.Utils
             this.client = client;
             this.stream = client.GetStream();
             this.stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
-            this.dataHandler = dataHandler;
         }
 
         private void OnRead(IAsyncResult ar)
@@ -48,13 +46,13 @@ namespace SharedNetworking.Utils
                 //byte[] payloadbytes = new byte[BitConverter.ToInt32(messageBytes, 0) - 5];
 
                 //Array.Copy(messageBytes, 5, payloadbytes, 0, payloadbytes.Length);
-                dataHandler.Invoke(messageBytes);
+                HandleData(messageBytes);
             }
 
             this.stream.BeginRead(this.buffer, 0, this.buffer.Length, new AsyncCallback(OnRead), null);
         }
 
-    }
+        protected abstract void HandleData(byte[] messageBytes);
 
-    public delegate void DataHandler(byte[] bytes);
+    }
 }

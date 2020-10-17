@@ -131,7 +131,6 @@ namespace Server
         /// </summary>
         private void Stop()
         {
-            //TODO tell all players to stop
             this.running = false;
             this.networkHandler.TellGameOver(this.players);
             this.timer.Dispose();

@@ -13,12 +13,14 @@ namespace Server
         private string username;
         private int clientID;
 
-        public Client(TcpClient tcpClient, DataHandler dataHandler, int clientID) : base(tcpClient, dataHandler)
+        public Client(TcpClient tcpClient, int clientID) : base(tcpClient)
         {
             this.clientID = clientID;
         }
 
-
-
+        protected override void HandleData(byte[] messageBytes)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
