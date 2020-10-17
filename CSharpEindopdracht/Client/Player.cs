@@ -6,15 +6,30 @@ namespace Server
 {
     class Player
     {
-        private string username;
-        private int score;
-        private int clientID;
+        #region public properties
+
+        public string username { get; }
+        public int score { get; private set; }
+        public int clientID { get; }
+        public SkribbleRoom playingInRoom { get; set; }
+        public bool active { get; set; }
+
+        #endregion
 
         public Player(string username, int score, int clientID)
         {
             this.username = username;
             this.score = score;
             this.clientID = clientID;
+        }
+
+        public void AddScore(int score)
+        {
+            if (score < 0)
+            {
+                throw new ArgumentOutOfRangeException("cannot add negative scores");
+            }
+            this.score += score;
         }
     }
 }
