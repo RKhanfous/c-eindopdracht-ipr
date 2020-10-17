@@ -17,13 +17,12 @@ namespace Server
         #region private Members
 
         private NetworkHandler networkHandler;
-        private string roomCode;
         private List<Player> players;
         private List<Player> correctlyGuessedPlayers;
         private int currentRound;
         private int numRounds;
-        private List<string> words;
-        private List<string> usedWords;
+        private HashSet<string> words;
+        private HashSet<string> usedWords;
         private string currentWord;
         private Player currentPlayer;
         private List<Player> drawingPlayers;
@@ -37,6 +36,7 @@ namespace Server
         #region Propertys
 
         public bool running { get; set; }
+        public string roomCode { get; set; }
 
         #endregion
 
@@ -72,7 +72,7 @@ namespace Server
                 this.numRounds = numberOfRounds;
             else
                 this.numRounds = 1;
-            this.words = new List<string> { "Boot", "Zon", "Mens", "Gras", "Water", "Sneeuw", "Kerk", "Concert", "Slang", "Huis", "Computer", "Klok", "vlees", "Tong", "Mug", "Soldaat" };
+            this.words = new HashSet<string> { "Boot", "Zon", "Mens", "Gras", "Water", "Sneeuw", "Kerk", "Concert", "Slang", "Huis", "Computer", "Klok", "vlees", "Tong", "Mug", "Soldaat" };
             this.timer = new Timer();
         }
 
@@ -119,20 +119,23 @@ namespace Server
 
                 if (this.words.Count < (this.numRounds = this.currentRound) * maxNumPlayers)
                 {
-                    //return;
+                    Debugger.Break();
+                    return false;
                 }
             }
             return true;
         }
 
         /// <summary>
-        /// things that need to be done to stop
+        /// kill room and release all recourses
         /// </summary>
         private void Stop()
         {
             //TODO tell all players to stop
-
             this.running = false;
+            this.networkHandler.TellGameOver(this.players);
+            this.timer.Dispose();
+            this.stopwatch.Stop();
         }
 
         #endregion
@@ -211,12 +214,20 @@ namespace Server
         private void endOfGame()
         {
             if (!Check())
-                this.networkHandler.TellGameOver(this.players);
+            {
+                this.Stop();
+                return;
+            }
 
             //reset room
+            this.words.UnionWith(this.usedWords);
+            this.usedWords.Clear();
 
             this.networkHandler.TellGameReset(this.players);
-            //stop room or reset room
+
+            Sleep(5000);
+
+            Start();
         }
 
 
@@ -291,6 +302,19 @@ namespace Server
             }
             Random random = new Random();
             return list[random.Next(list.Count)];
+        }
+
+        private T getrandom<T>(HashSet<T> list)
+        {
+            if (list == null || list.Count == 0)
+            {
+                return default;
+            }
+            foreach (T t in list)
+            {
+                return t;
+            }
+            return default;
         }
 
         private async void Sleep(int millis)
