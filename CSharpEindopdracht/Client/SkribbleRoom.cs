@@ -4,6 +4,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Timers;
 using System.Linq;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Server
 {
@@ -28,7 +29,7 @@ namespace Server
         private List<Player> drawingPlayers;
         private Timer timer;
         private const int maxNumPlayers = 8;
-        private const int guessTimeMills = 30000;
+        public const int guessTimeMills = 30000;
         private Stopwatch stopwatch;
 
         #endregion
@@ -67,7 +68,10 @@ namespace Server
             this.players = new List<Player>();
             this.correctlyGuessedPlayers = new List<Player>();
             this.currentRound = 0;
-            this.numRounds = numberOfRounds;
+            if (numRounds > 0)
+                this.numRounds = numberOfRounds;
+            else
+                this.numRounds = 1;
             this.words = new List<string> { "Boot", "Zon", "Mens", "Gras", "Water", "Sneeuw", "Kerk", "Concert", "Slang", "Huis", "Computer", "Klok", "vlees", "Tong", "Mug", "Soldaat" };
             this.timer = new Timer();
         }
@@ -81,20 +85,24 @@ namespace Server
         /// main loop for the room
         /// </summary>
         /// <param name="objectState"></param>
-        public void Start(object objectState)
+        public void Start()
         {
             //start of room
             //checks
-            if (Check())
+            if (!Check())
             {
                 Stop();
                 return;
             }
 
-            ////setup round
-            //SetNextRound();
+            SetNextRound();
 
+            //setup timer
+            this.timer.AutoReset = false;
+            this.timer.Enabled = true;
+            this.timer.Interval = guessTimeMills;
 
+            SetNextTurn();
         }
 
         /// <summary>
@@ -111,7 +119,6 @@ namespace Server
 
                 if (this.words.Count < (this.numRounds = this.currentRound) * maxNumPlayers)
                 {
-                    //stop();
                     //return;
                 }
             }
@@ -182,10 +189,15 @@ namespace Server
 
         private void OnEndTurn(object sender, ElapsedEventArgs e)
         {
+            if (!Check())
+                Debug.WriteLine("did not pass check");
+
             this.networkHandler.TellTurnOver(this.players, this.currentWord);
 
+            Sleep(5000);//idk why
+
             if (this.drawingPlayers.Count == 0)
-                if (this.currentRound < 3)
+                if (this.currentRound < numRounds)
                     SetNextRound();
                 else
                 {
@@ -198,6 +210,12 @@ namespace Server
 
         private void endOfGame()
         {
+            if (!Check())
+                this.networkHandler.TellGameOver(this.players);
+
+            //reset room
+
+            this.networkHandler.TellGameReset(this.players);
             //stop room or reset room
         }
 
@@ -224,7 +242,7 @@ namespace Server
 
         #endregion
 
-        #region public skribblmethods
+        #region public skribbl methods
 
         /// <summary>
         /// returns how much points a player recieves for their guess if it is correct.
@@ -273,6 +291,11 @@ namespace Server
             }
             Random random = new Random();
             return list[random.Next(list.Count)];
+        }
+
+        private async void Sleep(int millis)
+        {
+            await Task.Delay(millis);
         }
 
         #endregion
