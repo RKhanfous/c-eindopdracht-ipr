@@ -13,6 +13,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedSkribbl", "SharedSkri
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		SharedNetworking\SharedNetworking.projitems*{084112f6-823c-4ad5-bbf2-8630368a5039}*SharedItemsImports = 5
+		SharedSkribbl\SharedSkribbl.projitems*{084112f6-823c-4ad5-bbf2-8630368a5039}*SharedItemsImports = 5
 		SharedSkribbl\SharedSkribbl.projitems*{5db30c1e-d9a7-4113-b095-3c993b6bf0a4}*SharedItemsImports = 13
 		SharedNetworking\SharedNetworking.projitems*{a2eaf6b3-9ab3-4155-b0ea-8bd0f7ae1dd0}*SharedItemsImports = 13
 	EndGlobalSection

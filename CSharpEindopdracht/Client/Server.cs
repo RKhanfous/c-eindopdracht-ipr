@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace Server
 {
-    class Server : IServer, SharedClient
+    class Server : IServer
     {
         private NetworkHandler networkHandler;
         private List<SkribbleRoom> skribblRooms;

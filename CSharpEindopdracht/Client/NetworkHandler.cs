@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -36,7 +37,6 @@ namespace Server
             listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
         }
         internal void TellNewTurn(Player currentPlayer, string currentWord, List<Player> players)
->>>>>>> Stashed changes
         {
             clients = new List<Client>();
             listener = new TcpListener(IPAddress.Any, 15243);
@@ -58,7 +58,7 @@ namespace Server
             }
             var tcpClient = listener.EndAcceptTcpClient(ar);
             Console.WriteLine($"Client connected from {tcpClient.Client.RemoteEndPoint}");
-            clients.Add(new Client(tcpClient, randomClientID));
+            clients.Add(new Client(tcpClient, this, randomClientID));
             listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
         }
 
@@ -98,11 +98,6 @@ namespace Server
                 }
             }
             return null;
-        }
-
-        internal void drawLine(int clientID, byte[] messageBytes)
-        {
-            throw new NotImplementedException();
         }
 
         internal void drawLine(int clientID, byte[] messageBytes)
