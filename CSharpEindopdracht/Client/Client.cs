@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Server
 {
-    internal class Client : SharedClient
+    public class Client : SharedClient
     {
         private NetworkHandler networkHandler;
         private string username { get; set; }

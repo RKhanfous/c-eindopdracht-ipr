@@ -3,7 +3,7 @@ using System.Net.Sockets;
 
 namespace SharedNetworking.Utils
 {
-    abstract class SharedClient
+    public abstract class SharedClient
     {
         private TcpClient client;
         private NetworkStream stream;
