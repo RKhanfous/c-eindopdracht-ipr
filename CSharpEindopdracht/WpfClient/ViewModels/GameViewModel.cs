@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Text;
 using WpfClient.Models;
 using WpfClient.Utils;
@@ -10,6 +11,7 @@ namespace WpfClient.ViewModels
     class GameViewModel : ObservableObject
     {
         private readonly MainViewModel mainViewModel;
+        private Point currentPoint;
 
         public ObservableCollection<Player> Players { get; set; }
         public ObservableCollection<string> Chat { get; set; }
