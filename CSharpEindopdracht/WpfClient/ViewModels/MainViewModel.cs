@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Input;
 using Util.MagicCode;
 using WpfClient.Utils;
-using WpfClient.ViewModels;
 
 namespace WpfClient.ViewModels
 {
@@ -117,11 +116,15 @@ namespace WpfClient.ViewModels
 
         #region helper 
 
-        private Point GetMousePosition()
+        internal Point GetMousePosition()
         {
-            Debug.WriteLine("getmousePosition called");
             var p = Mouse.GetPosition(this.mWindow);
             return new Point(p.X + this.mWindow.Left, p.Y + this.mWindow.Top);
+        }
+
+        internal Point GetRawMousePosition()
+        {
+            return Mouse.GetPosition(this.mWindow);
         }
 
         #endregion
