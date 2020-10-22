@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-<<<<<<< Updated upstream
-using System.Linq;
-=======
->>>>>>> Stashed changes
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -15,8 +11,6 @@ namespace Server
         private TcpListener listener;
         private List<Client> clients;
         public NetworkHandler()
-<<<<<<< Updated upstream
-=======
         {
             clients = new List<Client>();
             listener = new TcpListener(IPAddress.Any, 15243);
@@ -104,6 +98,11 @@ namespace Server
                 }
             }
             return null;
+        }
+
+        internal void drawLine(int clientID, byte[] messageBytes)
+        {
+            throw new NotImplementedException();
         }
 
         internal void drawLine(int clientID, byte[] messageBytes)

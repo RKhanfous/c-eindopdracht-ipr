@@ -1,13 +1,9 @@
-<<<<<<< Updated upstream
-﻿using System;
-=======
 ﻿
 using SharedNetworking.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
->>>>>>> Stashed changes
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,20 +16,6 @@ namespace Server
         private string username { get; set; }
         public int clientID { get; set; }
 
-<<<<<<< Updated upstream
-        private string username;
-        public int clientID { get; set; }
-        private TcpClient tcpClient;
-        private NetworkStream stream;
-
-        public Client(TcpClient tcpClient, DataHandler dataHandler, int clientID) : base(tcpClient, dataHandler)
-        {
-            this.clientID = clientID;
-            this.tcpClient = tcpClient;
-            this.stream = this.tcpClient.GetStream();
-            Thread listernerThread = new Thread(()=>Listener());
-            listernerThread.Start();
-=======
         private NetworkStream stream;
 
         public Client(TcpClient tcpClient, NetworkHandler network, int clientID) : base(tcpClient)
@@ -59,20 +41,9 @@ namespace Server
         private void onWrite(IAsyncResult ar)
         {
             this.stream.EndWrite(ar);
->>>>>>> Stashed changes
         }
 
-        public Task Listener()
-        {
-
-        }
-
-        public void Write()
-        {
-
-        }
-
-        internal void Write(string packet)
+        protected override void HandleData(byte[] messageBytes)
         {
             Console.WriteLine("Got a packet: " + messageBytes);
 

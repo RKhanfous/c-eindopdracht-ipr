@@ -20,17 +20,6 @@ namespace Server
             skribblRooms = new List<SkribbleRoom>();
             players = new List<Player>();
         }
-<<<<<<< Updated upstream
-        /// <summary>
-        /// Makes a new room and adds it to the list with skribbleRooms
-        /// </summary>
-        /// <param name="roomcode"></param>
-        /// <param name="numberOfRounds"></param>
-        public void makeRoom(string roomcode, int numberOfRounds)
-        {
-            SkribbleRoom skribbleRoom = new SkribbleRoom(networkHandler, roomcode, numberOfRounds);
-            skribblRooms.Add(skribbleRoom);
-=======
 
         public void GiveBytes(byte[] bytes)
         {
@@ -40,7 +29,6 @@ namespace Server
         protected override void HandleData(byte[] messageBytes)
         {
             throw new NotImplementedException();
->>>>>>> Stashed changes
         }
     }
 }
