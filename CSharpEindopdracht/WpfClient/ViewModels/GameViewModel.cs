@@ -26,9 +26,9 @@ namespace WpfClient.ViewModels
         {
             this.mainViewModel = mainViewModel;
 
-            this.MouseDownCommand = new RelayCommand<object>((param) => { Debug.WriteLine("mouseDown " + param.GetType()); });
+            this.MouseDownCommand = new RelayCommand<object>((param) => { Debug.WriteLine("mouseDown " + param); });
 
-            this.MouseMoveCommand = new RelayCommand<object>((param) => { Debug.WriteLine("mouseMove " + param.GetType()); });
+            this.MouseMoveCommand = new RelayCommand<object>((param) => { Debug.WriteLine("mouseMove " + param); });
         }
     }
 }
