@@ -30,7 +30,7 @@
 
                 <StackPanel Orientation="Vertical" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10">
                     <Label x:Name="ParticipantsRoomView" Content="Participants:" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="5"></Label>
-                    <ListBox Name="ChatBox"  ItemsSource="{Binding Players}"/>
+                    <ListBox Name="ChatBox" ItemsSource="{Binding Players}"/>
                 </StackPanel>
 
                 <Grid Grid.Column="1">

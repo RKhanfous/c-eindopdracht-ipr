@@ -8,70 +8,65 @@
          ShowsNavigationUI="False"
              d:DesignHeight="450" d:DesignWidth="800"
              Background="White">
-    <StackPanel>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="0">
-                <Label x:Name="PlayersLabelGameView" Content="PLAYERS:" FontSize="18" HorizontalAlignment="Center"></Label>
-                <ListView x:Name="PlayersListGameView"></ListView>
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0">
+            <Label x:Name="PlayersLabelGameView" Content="PLAYERS:" FontSize="18" HorizontalAlignment="Center"/>
+            <ListBox Name="PlayersListGameView" ItemsSource="{Binding Players}" Height="500"/>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1">
+            <Label x:Name="GuessWordGameView" Content="Word" FontSize="18" HorizontalAlignment="Center"/>
+            <Canvas Width="500" Height="500" Background="Gray"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+                <!-- buttons for colors -->
+
+                <Button  Width="30" Height="30" Margin="5">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid>
+                                <Ellipse Fill="Black"/>
+                                <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button  Width="30" Height="30" Margin="5">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid>
+                                <Ellipse Fill="red"/>
+                                <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button  Width="30" Height="30" Margin="5">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid>
+                                <Ellipse Fill="Green"/>
+                                <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button x:Name="WidthButton1" Width="30" Height="30" Content="Width" Margin="5"></Button>
+                <Button x:Name="WidthButton2" Width="30" Height="30" Content="Width1" Margin="5"></Button>
+                <Button x:Name="WidthButton3" Width="30" Height="30" Content="Width2" Margin="5"></Button>
+
+
             </StackPanel>
-            <StackPanel Grid.Column="1">
-                <Label x:Name="GuessWordGameView" Content="Word" FontSize="18" HorizontalAlignment="Center"></Label>
-                <Canvas></Canvas>
-                <StackPanel>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Orientation="Horizontal" Grid.Column="0">
-                            <Button  Width="30" Height="30">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Grid>
-                                            <Ellipse Fill="Black"/>
-                                            <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                            <Button  Width="30" Height="30">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Grid>
-                                            <Ellipse Fill="red"/>
-                                            <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                            <Button  Width="30" Height="30">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="{x:Type Button}">
-                                        <Grid>
-                                            <Ellipse Fill="Green"/>
-                                            <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        </Grid>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Grid.Column="1" >
-                            <Button x:Name="WidthButton1" Width="30" Height="30" Content="Width"></Button>
-                            <Button x:Name="WidthButton2" Width="30" Height="30" Content="Width1"></Button>
-                            <Button x:Name="WidthButton3" Width="30" Height="30" Content="Width2"></Button>
-                        </StackPanel>
-                    </Grid>
-                </StackPanel>
-            </StackPanel>
-            <StackPanel Grid.Column="2">
-                <Label x:Name="ChatLabelGameView" Content="CHAT:" FontSize="18" HorizontalAlignment="Center"></Label>
-                <ListView x:Name="ChatListGameView"></ListView>
-            </StackPanel>
-        </Grid>
-    </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Column="2">
+            <Label x:Name="ChatLabelGameView" Content="CHAT:" FontSize="18" HorizontalAlignment="Center"></Label>
+            <ListBox Name="ChatListGameView" ItemsSource="{Binding Chat}" Height="500"/>
+        </StackPanel>
+    </Grid>
 </Page>
