@@ -4,6 +4,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Timers;
 using System.Linq;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Server
 {
@@ -16,19 +17,18 @@ namespace Server
         #region private Members
 
         private NetworkHandler networkHandler;
-        private string roomCode;
         private List<Player> players;
         private List<Player> correctlyGuessedPlayers;
         private int currentRound;
         private int numRounds;
-        private List<string> words;
-        private List<string> usedWords;
+        private HashSet<string> words;
+        private HashSet<string> usedWords;
         private string currentWord;
         private Player currentPlayer;
         private List<Player> drawingPlayers;
         private Timer timer;
         private const int maxNumPlayers = 8;
-        private const int guessTimeMills = 30000;
+        public const int guessTimeMills = 30000;
         private Stopwatch stopwatch;
 
         #endregion
@@ -36,6 +36,7 @@ namespace Server
         #region Propertys
 
         public bool running { get; set; }
+        public string roomCode { get; set; }
 
         #endregion
 
@@ -67,8 +68,11 @@ namespace Server
             this.players = new List<Player>();
             this.correctlyGuessedPlayers = new List<Player>();
             this.currentRound = 0;
-            this.numRounds = numberOfRounds;
-            this.words = new List<string> { "Boot", "Zon", "Mens", "Gras", "Water", "Sneeuw", "Kerk", "Concert", "Slang", "Huis", "Computer", "Klok", "vlees", "Tong", "Mug", "Soldaat" };
+            if (numRounds > 0)
+                this.numRounds = numberOfRounds;
+            else
+                this.numRounds = 1;
+            this.words = new HashSet<string> { "Boot", "Zon", "Mens", "Gras", "Water", "Sneeuw", "Kerk", "Concert", "Slang", "Huis", "Computer", "Klok", "vlees", "Tong", "Mug", "Soldaat" };
             this.timer = new Timer();
         }
 
@@ -81,20 +85,24 @@ namespace Server
         /// main loop for the room
         /// </summary>
         /// <param name="objectState"></param>
-        public void Start(object objectState)
+        public void Start()
         {
             //start of room
             //checks
-            if (Check())
+            if (!Check())
             {
                 Stop();
                 return;
             }
 
-            ////setup round
-            //SetNextRound();
+            SetNextRound();
 
+            //setup timer
+            this.timer.AutoReset = false;
+            this.timer.Enabled = true;
+            this.timer.Interval = guessTimeMills;
 
+            SetNextTurn();
         }
 
         /// <summary>
@@ -111,21 +119,22 @@ namespace Server
 
                 if (this.words.Count < (this.numRounds = this.currentRound) * maxNumPlayers)
                 {
-                    //stop();
-                    //return;
+                    Debugger.Break();
+                    return false;
                 }
             }
             return true;
         }
 
         /// <summary>
-        /// things that need to be done to stop
+        /// kill room and release all recourses
         /// </summary>
         private void Stop()
         {
-            //TODO tell all players to stop
-
             this.running = false;
+            this.networkHandler.TellGameOver(this.players);
+            this.timer.Dispose();
+            this.stopwatch.Stop();
         }
 
         #endregion
@@ -182,10 +191,15 @@ namespace Server
 
         private void OnEndTurn(object sender, ElapsedEventArgs e)
         {
+            if (!Check())
+                Debug.WriteLine("did not pass check");
+
             this.networkHandler.TellTurnOver(this.players, this.currentWord);
 
+            Sleep(5000);//idk why
+
             if (this.drawingPlayers.Count == 0)
-                if (this.currentRound < 3)
+                if (this.currentRound < numRounds)
                     SetNextRound();
                 else
                 {
@@ -198,7 +212,21 @@ namespace Server
 
         private void endOfGame()
         {
-            //stop room or reset room
+            if (!Check())
+            {
+                this.Stop();
+                return;
+            }
+
+            //reset room
+            this.words.UnionWith(this.usedWords);
+            this.usedWords.Clear();
+
+            this.networkHandler.TellGameReset(this.players);
+
+            Sleep(5000);
+
+            Start();
         }
 
 
@@ -224,7 +252,7 @@ namespace Server
 
         #endregion
 
-        #region public skribblmethods
+        #region public skribbl methods
 
         /// <summary>
         /// returns how much points a player recieves for their guess if it is correct.
@@ -273,6 +301,24 @@ namespace Server
             }
             Random random = new Random();
             return list[random.Next(list.Count)];
+        }
+
+        private T getrandom<T>(HashSet<T> list)
+        {
+            if (list == null || list.Count == 0)
+            {
+                return default;
+            }
+            foreach (T t in list)
+            {
+                return t;
+            }
+            return default;
+        }
+
+        private async void Sleep(int millis)
+        {
+            await Task.Delay(millis);
         }
 
         #endregion

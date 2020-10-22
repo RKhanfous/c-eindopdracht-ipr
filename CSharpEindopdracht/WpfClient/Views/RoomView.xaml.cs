@@ -16,7 +16,7 @@ namespace WpfClient.Views
     /// <summary>
     /// Interaction logic for RoomView.xaml
     /// </summary>
-    public partial class RoomView : UserControl
+    public partial class RoomView : Page
     {
         public RoomView()
         {
