@@ -44,24 +44,6 @@ namespace Server
             listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
         }
 
-        private void OnConnect(IAsyncResult ar)
-        {
-            Random r = new Random();
-            int randomClientID = r.Next();
-            for(int i = 0; i < clients.Count; i++)
-            {
-                if(clients[i].clientID == randomClientID)
-                {
-                    randomClientID = r.Next();
-                    i = 0;
-                }
-            }
-            var tcpClient = listener.EndAcceptTcpClient(ar);
-            Console.WriteLine($"Client connected from {tcpClient.Client.RemoteEndPoint}");
-            clients.Add(new Client(tcpClient, this, randomClientID));
-            listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
-        }
-
         internal void Disconnect(Client client)
         {
             clients.Remove(client);
@@ -72,7 +54,7 @@ namespace Server
         {
             foreach (var client in clients.Where(c => c.clientID == clientID))
             {
-                client.Write(packet);
+                client.Write(0x02, packet);
             }
         }
 
@@ -111,6 +93,11 @@ namespace Server
         }
 
         internal void TellGameOver(List<Player> players)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void TellTurnOver(List<Player> players, string currentWord)
         {
             throw new NotImplementedException();
         }

@@ -26,7 +26,7 @@ namespace Server
             throw new NotImplementedException();
         }
 
-        protected override void HandleData(byte[] messageBytes)
+        protected void HandleData(byte[] messageBytes)
         {
             throw new NotImplementedException();
         }
