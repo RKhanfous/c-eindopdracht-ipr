@@ -16,7 +16,7 @@ namespace WpfClient.Views
     /// <summary>
     /// Interaction logic for GameView.xaml
     /// </summary>
-    public partial class GameView : UserControl
+    public partial class GameView : Page
     {
         public GameView()
         {

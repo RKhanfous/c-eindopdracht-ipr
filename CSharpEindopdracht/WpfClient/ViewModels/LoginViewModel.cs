@@ -21,14 +21,14 @@ namespace WpfClient.ViewModels
             {
                 if (RoomName == "random" || RoomName == "")
                 {
-                    this.mainViewModel.SelectedModel = new GameViewModel(this.mainViewModel, Username);
+                    this.mainViewModel.SelectedViewModel = new GameViewModel(this.mainViewModel, Username);
                 }
                 else
                 {
-                    this.mainViewModel.SelectedModel = new RoomViewModel(this.mainViewModel, Username, RoomName);
+                    this.mainViewModel.SelectedViewModel = new RoomViewModel(this.mainViewModel, Username, RoomName);
                 }
                 Debug.WriteLine("joinCommand");
-                Debug.WriteLine(this.mainViewModel.SelectedModel);
+                Debug.WriteLine(this.mainViewModel.SelectedViewModel);
             });
         }
 
