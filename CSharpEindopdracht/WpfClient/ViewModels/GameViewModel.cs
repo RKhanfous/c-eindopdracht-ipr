@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Shapes;
 using WpfClient.Models;
@@ -20,6 +21,7 @@ namespace WpfClient.ViewModels
 
         public ICommand MouseDownCommand { get; set; }
         public ICommand MouseMoveCommand { get; set; }
+        public Border CanvasBorder { get; set; }
 
         public GameViewModel(MainViewModel mainViewModel, string username)
         {
@@ -30,7 +32,10 @@ namespace WpfClient.ViewModels
             this.MouseDownCommand = new RelayCommand<MouseButtonEventArgs>((param) =>
             {
                 if (Mouse.LeftButton == MouseButtonState.Pressed)
-                    lastPoint = this.mainViewModel.GetRawMousePosition();
+                    if (CanvasBorder != null)
+                        lastPoint = Mouse.GetPosition(CanvasBorder);
+                    else
+                        Debug.WriteLine("canvasborder null");
             });
 
             this.MouseMoveCommand = new RelayCommand<MouseEventArgs>((param) =>
@@ -43,7 +48,7 @@ namespace WpfClient.ViewModels
                     line.X1 = lastPoint.X;
                     line.Y1 = lastPoint.Y;
 
-                    lastPoint = this.mainViewModel.GetRawMousePosition();
+                    lastPoint = Mouse.GetPosition(CanvasBorder);
 
                     line.X2 = lastPoint.X;
                     line.Y2 = lastPoint.Y;

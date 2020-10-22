@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfClient.ViewModels;
 
 namespace WpfClient.Views
 {
@@ -21,6 +22,13 @@ namespace WpfClient.Views
         public GameView()
         {
             InitializeComponent();
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ((GameViewModel)this.DataContext).CanvasBorder = this.canvasborder;
+
         }
     }
 }
