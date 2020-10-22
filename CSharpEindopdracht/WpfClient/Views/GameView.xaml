@@ -3,8 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WpfClient.Views" 
-         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+ xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+
+             xmlns:local="clr-namespace:WpfClient.Views"
       mc:Ignorable="d" 
          ShowsNavigationUI="False"
              d:DesignHeight="450" d:DesignWidth="800"
@@ -23,10 +24,17 @@
 
         <StackPanel Grid.Column="1">
             <Label x:Name="GuessWordGameView" Content="Word" FontSize="18" HorizontalAlignment="Center"/>
-            <Canvas Width="500" Height="500" Background="Gray" >
-                <i:Interaction.Triggers>
+            <Canvas Width="500" Height="500" Background="Gray">
 
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDown">
+                        <i:InvokeCommandAction Command="{Binding MouseDownCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="MouseMove">
+                        <i:InvokeCommandAction Command="{Binding MouseMoveCommand}"/>
+                    </i:EventTrigger>
                 </i:Interaction.Triggers>
+
             </Canvas>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 
