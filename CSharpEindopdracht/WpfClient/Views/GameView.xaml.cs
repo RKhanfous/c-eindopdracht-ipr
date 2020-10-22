@@ -25,8 +25,10 @@ namespace WpfClient.Views
 
         }
 
+        //work around
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+
             ((GameViewModel)this.DataContext).CanvasBorder = this.canvasborder;
 
         }
