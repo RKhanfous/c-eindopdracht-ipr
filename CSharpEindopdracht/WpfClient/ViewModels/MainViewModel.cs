@@ -212,7 +212,7 @@ namespace WpfClient.ViewModels
             {
                 player.IsDrawing = player.Id == id;
             }
-            this.currentWord = "are ya cheating?";
+            this.currentWord = "";
         }
 
         public void AddLine(Line line)

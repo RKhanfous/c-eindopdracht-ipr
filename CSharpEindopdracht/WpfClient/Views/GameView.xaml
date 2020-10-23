@@ -26,7 +26,9 @@
                             <StackPanel>
                                 <TextBlock Text="{Binding Username}"/>
                                 <TextBlock Text="{Binding Score, StringFormat=Score: {0}, FallbackValue=failed}"/>
-                                <TextBlock Text="drawing" IsEnabled="{Binding IsDrawing}" />
+                                <Popup IsOpen="{Binding IsDrawing}">
+                                    <TextBlock Text="drawing" />
+                                </Popup>
                             </StackPanel>
                         </StackPanel>
                     </DataTemplate>
@@ -35,7 +37,7 @@
         </StackPanel>
 
         <StackPanel Grid.Column="1">
-            <Label Name="GuessWordGameView" Content="Word" FontSize="18" HorizontalAlignment="Center"/>
+            <Label Name="GuessWordGameView" Content="{Binding MainViewModel.currentWord}" FontSize="18" HorizontalAlignment="Center"/>
 
             <Border Name="canvasborder"  Width="800" Height="450">
                 <ItemsControl ItemsSource="{Binding Path=MainViewModel.Lines}">
