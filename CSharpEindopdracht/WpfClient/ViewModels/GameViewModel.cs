@@ -65,6 +65,7 @@ namespace WpfClient.ViewModels
             this.GuessCommand = new RelayCommand(() =>
             {
                 this.MainViewModel.Chat.Add(Guess);
+                this.MainViewModel.Client.SendMessage(SharedNetworking.Utils.DataParser.GetGuessMessage(Guess));
                 Guess = "";
             });
 

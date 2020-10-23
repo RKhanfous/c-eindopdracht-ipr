@@ -17,5 +17,6 @@ namespace WpfClient.Utils
 
         void AddLine(Line line);
         void ClearLines();
+        void GiveScore(int score);
     }
 }

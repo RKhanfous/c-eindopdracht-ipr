@@ -90,6 +90,11 @@ namespace Server
                             this.networkHandler.DeleteLines(this.ClientId);
 
                             break;
+
+                        case DataParser.GUESS:
+                            int score = this.networkHandler.Guess(this.ClientId, DataParser.GetGuessFromjsonMessage(payload));
+                            SendMessage(DataParser.GetGuessScoreMessage(score));
+                            break;
                         default:
                             Console.WriteLine($"Received json with identifier {identifier}");
                             break;

@@ -17,6 +17,7 @@ namespace SharedNetworking.Utils
         public const string SET_DRAWER = "DRAWER";
         public const string WORD = "WORD";
         public const string CLEAR_LINES = "CLEARLINES";
+        public const string GUESS = "GUESS";
         #endregion
 
 
@@ -182,11 +183,44 @@ namespace SharedNetworking.Utils
             }
             return default;
         }
+
         //==============================================================================================================================================
         public static byte[] GetClearLinesMessage()
         {
             return getJsonMessage(CLEAR_LINES, null);
         }
+
+        //==============================================================================================================================================
+        public static byte[] GetGuessMessage(string Guess)
+        {
+            return getJsonMessage(GUESS, new { guess = Guess });
+        }
+
+        public static string GetGuessFromjsonMessage(byte[] payload)
+        {
+            dynamic json = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(payload));
+            if (json.identifier == GUESS)
+            {
+                return json.data.guess;
+            }
+            return default;
+        }
+
+        public static byte[] GetGuessScoreMessage(int GuessScore)
+        {
+            return getJsonMessage(GUESS, new { guessScore = GuessScore });
+        }
+
+        public static int GetGuessScoreFromjsonMessage(byte[] payload)
+        {
+            dynamic json = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(payload));
+            if (json.identifier == GUESS)
+            {
+                return json.data.guessScore;
+            }
+            return default;
+        }
+
 
         #endregion
 

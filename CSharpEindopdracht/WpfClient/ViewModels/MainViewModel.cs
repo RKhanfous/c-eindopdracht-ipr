@@ -231,6 +231,17 @@ namespace WpfClient.ViewModels
             }));
         }
 
+        public void GiveScore(int score)
+        {
+            Application.Current.Dispatcher.BeginInvoke(new Action<int>((score) =>
+            {
+                if (score == -1)
+                    this.Chat.Add("You Guessed Wrong");
+                else
+                    this.Chat.Add($"You Guessed right and got {score} points");
+            }), score);
+        }
+
         #endregion
     }
 }

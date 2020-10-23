@@ -114,6 +114,12 @@ namespace Server
             }
         }
 
+        internal int Guess(uint clientId, string guess)
+        {
+            Player player = this.Server.GetPlayer(clientId);
+            return player.playingInRoom.guess(player, guess);
+        }
+
         internal void DeleteLines(uint clientId)
         {
             SkribblRoom skribblRoom = this.Server.GetPlayer(clientId).playingInRoom;
