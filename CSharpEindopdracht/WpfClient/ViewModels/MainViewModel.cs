@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using SharedSkribbl;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -44,6 +45,8 @@ namespace WpfClient.ViewModels
         public ObservableCollection<Player> Players { get; private set; } = new ObservableCollection<Player>();
 
         public Player MePlayer { get; set; }
+        public ObservableCollection<string> Chat { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<Line> Lines { get; set; } = new ObservableCollection<Line>();
 
         internal Task connectToServer;
 
@@ -210,6 +213,14 @@ namespace WpfClient.ViewModels
                 player.IsDrawing = player.Id == id;
             }
             this.currentWord = "are ya cheating?";
+        }
+
+        public void AddLine(Line line)
+        {
+            Application.Current.Dispatcher.BeginInvoke(new Action<Line>((actionLine) =>
+            {
+                this.Lines.Add(actionLine);
+            }), line);
         }
 
         #endregion

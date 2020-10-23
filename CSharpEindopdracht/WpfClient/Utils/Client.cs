@@ -1,4 +1,5 @@
 ﻿using SharedNetworking.Utils;
+using SharedSkribbl;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -30,7 +31,7 @@ namespace WpfClient.Utils
             switch (messageId)
             {
                 case 0x01:
-                    throw new NotImplementedException();
+                    this.clientCallback.AddLine(Line.GetLine(payload));
                     break;
 
                 case 0x02:
@@ -75,7 +76,6 @@ namespace WpfClient.Utils
                     break;
 
                 case 0x03:
-                    Debug.WriteLine("received player");
                     Player dataPlayer = DataParser.GetPlayerFromBytes(payload);
 
                     clientCallback.AddPlayer(dataPlayer);

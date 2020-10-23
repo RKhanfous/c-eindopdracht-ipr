@@ -39,7 +39,7 @@ namespace SharedNetworking.Utils
 
         #region lines
 
-        public static byte[] getLineMessage(byte[] line)
+        public static byte[] GetLineMessage(byte[] line)
         {
             return getMessage(line, 0x01);
         }

@@ -26,10 +26,10 @@ namespace WpfClient.Views
         }
 
         //work around
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            await System.Threading.Tasks.Task.Delay(500);
             ((GameViewModel)this.DataContext).CanvasBorder = this.canvasborder;
-
         }
     }
 }

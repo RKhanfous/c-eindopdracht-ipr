@@ -1,4 +1,5 @@
 ﻿using SharedNetworking.Utils;
+using SharedSkribbl;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,5 +15,6 @@ namespace WpfClient.Utils
         void SetDrawer(uint id);
         public string currentWord { get; set; }
 
+        void AddLine(Line line);
     }
 }

@@ -94,7 +94,11 @@ namespace Server
 
         internal void DrewLine(uint clientID, byte[] messageBytes)
         {
-            throw new NotImplementedException();
+            foreach (Player player in this.Server.GetPlayer(clientID).playingInRoom.GetPlayers())
+            {
+                if (player.clientID != clientID)
+                    getClientByUser(player.clientID).SendMessage(messageBytes);
+            }
         }
 
         internal void TellGameReset(List<Player> players)

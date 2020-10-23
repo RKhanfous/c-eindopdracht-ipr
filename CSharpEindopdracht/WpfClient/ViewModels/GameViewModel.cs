@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using Networking.Utils;
 using SharedSkribbl;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -16,8 +17,7 @@ namespace WpfClient.ViewModels
 
         public MainViewModel MainViewModel { get; private set; }
 
-        public ObservableCollection<string> Chat { get; set; } = new ObservableCollection<string>();
-        public ObservableCollection<Line> Lines { get; set; } = new ObservableCollection<Line>();
+
 
         public string Guess { get; set; }
 
@@ -30,8 +30,6 @@ namespace WpfClient.ViewModels
         public GameViewModel(MainViewModel mainViewModel)
         {
             this.MainViewModel = mainViewModel;
-
-            this.Lines = new ObservableCollection<Line>();
 
             this.MouseDownCommand = new RelayCommand<MouseButtonEventArgs>((param) =>
             {
@@ -59,19 +57,21 @@ namespace WpfClient.ViewModels
                     line.Y2 = (short)lastPoint.Y;
 
 
-                    Lines.Add(line);
+                    this.MainViewModel.Lines.Add(line);
+                    this.MainViewModel.Client.SendMessage(SharedNetworking.Utils.DataParser.GetLineMessage(line.serialize()));
                 }
             });
 
             this.GuessCommand = new RelayCommand(() =>
             {
-                this.Chat.Add(Guess);
+                this.MainViewModel.Chat.Add(Guess);
                 Guess = "";
             });
 
             this.DeleteLinesCommand = new RelayCommand(() =>
             {
-                this.Lines.Clear();
+                this.MainViewModel.Lines.Clear();
+                //todo
             });
         }
 
