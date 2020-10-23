@@ -18,13 +18,13 @@ namespace WpfClient.ViewModels
         {
             this.mainViewModel = mainViewModel;
             this.RoomName = "random";
-            this.JoinCommand = new RelayCommand(() =>
+            this.JoinCommand = new RelayCommand(async () =>
             {
                 if (Username != null)
                 {
                     Task createClient = this.mainViewModel.CreateClient(Username);
                     Debug.WriteLine("awaiting client connect");
-                    createClient.Wait();
+                    await createClient;
                     Debug.WriteLine("client connected");
 
                     if (RoomName == "random" || RoomName == "")
