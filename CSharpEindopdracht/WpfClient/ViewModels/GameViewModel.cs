@@ -40,7 +40,7 @@ namespace WpfClient.ViewModels
 
             this.MouseMoveCommand = new RelayCommand<MouseEventArgs>((param) =>
             {
-                if (true
+                if (this.mainViewModel.MePlayer.IsDrawing
                     && Mouse.LeftButton == MouseButtonState.Pressed
                     && IsDistanceGreater(lastPoint, Mouse.GetPosition(CanvasBorder), 1))
                 {
@@ -71,7 +71,9 @@ namespace WpfClient.ViewModels
         private static bool IsDistanceGreater(Point point1, Point point2, double distance)
         {
             Vector difference = (point1 - point2);
-            return (distance * distance) > ((difference.X * difference.X) + (difference.Y * difference.Y));
+            return (distance * distance) < ((difference.X * difference.X) + (difference.Y * difference.Y));
+            //Debug.WriteLine($"defference {difference.Length}");
+            //return distance > difference.Length;
         }
 
         #endregion

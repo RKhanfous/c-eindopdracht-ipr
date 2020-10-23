@@ -22,10 +22,10 @@ namespace WpfClient.ViewModels
             {
                 if (Username != null)
                 {
-                    Task createClient = this.mainViewModel.CreateClient(Username);
-                    Debug.WriteLine("awaiting client connect");
-                    createClient.Wait();
-                    Debug.WriteLine("client connected");
+                    //Task createClient = this.mainViewModel.CreateClient(Username);
+                    //Debug.WriteLine("awaiting client connect");
+                    //createClient.Wait();
+                    //Debug.WriteLine("client connected");
 
                     if (RoomName == "random" || RoomName == "")
                     {

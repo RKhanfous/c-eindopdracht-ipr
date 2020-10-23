@@ -41,9 +41,9 @@ namespace WpfClient.ViewModels
 
         public ObservableObject SelectedViewModel { get; set; }
 
-        public ObservableCollection<Player> Players { get; private set; }
+        public ObservableCollection<Player> Players { get; private set; } = new ObservableCollection<Player>();
 
-        public Player MePlayer { get; set; }
+        public Player MePlayer { get; set; } = new Player() { IsDrawing = true };
 
 
         /// <summary>
