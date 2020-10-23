@@ -1,23 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
+﻿using GalaSoft.MvvmLight.Command;
+using System.Diagnostics;
+using System.Windows.Input;
 using WpfClient.Utils;
 
 namespace WpfClient.ViewModels
 {
     class RoomViewModel : ObservableObject
     {
-        private readonly MainViewModel mainViewModel;
-        public ObservableCollection<string> Players { get; set; }
+        public MainViewModel MainViewModel { get; private set; }
 
-        public string Roomname { get; set; } = "Roomcode";
+        public string Roomname { get; set; } = "Roomcode not found";
+
+        public ICommand GoToGameCommand { get; set; }
 
         public RoomViewModel(MainViewModel mainViewModel, string Username, string RoomName)
         {
-            this.mainViewModel = mainViewModel;
+            this.MainViewModel = mainViewModel;
             this.Roomname = RoomName;
-            //this.Players = new ObservableCollection<string> { "me", "myself", "and", "I" };
+
+            this.GoToGameCommand = new RelayCommand(() =>
+            {
+                this.MainViewModel.SelectedViewModel = new GameViewModel(this.MainViewModel, Username);
+                Debug.WriteLine(this.MainViewModel.SelectedViewModel);
+            });
         }
     }
 }
