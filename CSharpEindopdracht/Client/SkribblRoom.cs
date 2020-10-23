@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using SharedSkribbl;
 using System.Collections.ObjectModel;
+using System.IO;
 
 namespace Server
 {
@@ -33,6 +34,7 @@ namespace Server
         private const int maxNumPlayers = 8;
         public const int guessTimeMills = 30000;
         private Stopwatch stopwatch;
+        private string filePath;
 
         #endregion
 
@@ -67,6 +69,7 @@ namespace Server
         /// <param name="numberOfRounds"></param>
         public SkribblRoom(NetworkHandler networkHandler, string roomCode, int numberOfRounds)
         {
+            this.filePath = @"\CSharpEindopdracht\Client\Words\GameWords.txt";
             this.networkHandler = networkHandler;
             this.roomCode = roomCode;
             this.players = new List<Player>();
@@ -76,7 +79,15 @@ namespace Server
                 this.numRounds = numberOfRounds;
             else
                 this.numRounds = 1;
-            this.words = new HashSet<string> { "Boot", "Zon", "Mens", "Gras", "Water", "Sneeuw", "Kerk", "Concert", "Slang", "Huis", "Computer", "Klok", "vlees", "Tong", "Mug", "Soldaat" };
+            this.words = new HashSet<string>();
+            using (StreamReader sr = File.OpenText(filePath))
+            {
+                string s;
+                while ((s = sr.ReadLine()) != null)
+                {
+                    this.words.Add(s);
+                }
+            }
             this.timer = new Timer();
             this.stopwatch = new Stopwatch();
         }
