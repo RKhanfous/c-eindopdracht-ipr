@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Sockets;
-using System.Text;
 
 namespace SharedNetworking.Utils
 {
-    abstract class SharedClient
+    public abstract class SharedClient
     {
         private TcpClient client;
         private NetworkStream stream;

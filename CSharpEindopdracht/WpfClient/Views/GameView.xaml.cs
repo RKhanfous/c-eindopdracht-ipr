@@ -10,17 +10,26 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfClient.ViewModels;
 
 namespace WpfClient.Views
 {
     /// <summary>
     /// Interaction logic for GameView.xaml
     /// </summary>
-    public partial class GameView : UserControl
+    public partial class GameView : Page
     {
         public GameView()
         {
             InitializeComponent();
+
+        }
+
+        //work around
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            ((GameViewModel)this.DataContext).CanvasBorder = this.canvasborder;
+
         }
     }
 }

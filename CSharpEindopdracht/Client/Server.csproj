@@ -11,4 +11,6 @@
 
 	<Import Project="..\SharedNetworking\SharedNetworking.projitems" Label="Shared" />
 
+	<Import Project="..\SharedSkribbl\SharedSkribbl.projitems" Label="Shared" />
+
 </Project>

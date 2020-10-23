@@ -9,9 +9,7 @@
     <Import_RootNamespace>SharedNetworking</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Utils\" />
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\DataParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\SharedClient.cs" />
   </ItemGroup>
 </Project>

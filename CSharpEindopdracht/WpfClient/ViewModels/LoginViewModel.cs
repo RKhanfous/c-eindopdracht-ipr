@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using WpfClient.Utils;
 
@@ -19,16 +20,28 @@ namespace WpfClient.ViewModels
             this.RoomName = "random";
             this.JoinCommand = new RelayCommand(() =>
             {
-                if (RoomName == "random" || RoomName == "")
+                if (Username != null)
                 {
-                    this.mainViewModel.SelectedModel = new GameViewModel(this.mainViewModel, Username);
+                    //Task createClient = this.mainViewModel.CreateClient(Username);
+                    //Debug.WriteLine("awaiting client connect");
+                    //createClient.Wait();
+                    //Debug.WriteLine("client connected");
+
+                    if (RoomName == "random" || RoomName == "")
+                    {
+                        this.mainViewModel.SelectedViewModel = new GameViewModel(this.mainViewModel, Username);
+                    }
+                    else
+                    {
+                        this.mainViewModel.SelectedViewModel = new RoomViewModel(this.mainViewModel, Username, RoomName);
+                    }
                 }
                 else
                 {
-                    this.mainViewModel.SelectedModel = new RoomViewModel(this.mainViewModel, Username, RoomName);
+                    //TODO
                 }
                 Debug.WriteLine("joinCommand");
-                Debug.WriteLine(this.mainViewModel.SelectedModel);
+                Debug.WriteLine(this.mainViewModel.SelectedViewModel);
             });
         }
 

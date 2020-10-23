@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SharedNetworking.Utils;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -7,7 +8,7 @@ using System.Threading;
 
 namespace Server
 {
-    class Server
+    class Server : IServer
     {
         private NetworkHandler networkHandler;
         private List<SkribbleRoom> skribblRooms;
@@ -19,15 +20,15 @@ namespace Server
             skribblRooms = new List<SkribbleRoom>();
             players = new List<Player>();
         }
-        /// <summary>
-        /// Makes a new room and adds it to the list with skribbleRooms
-        /// </summary>
-        /// <param name="roomcode"></param>
-        /// <param name="numberOfRounds"></param>
-        public void makeRoom(string roomcode, int numberOfRounds)
+
+        public void GiveBytes(byte[] bytes)
         {
-            SkribbleRoom skribbleRoom = new SkribbleRoom(networkHandler, roomcode, numberOfRounds);
-            skribblRooms.Add(skribbleRoom);
+            throw new NotImplementedException();
+        }
+
+        protected void HandleData(byte[] messageBytes)
+        {
+            throw new NotImplementedException();
         }
     }
 }
