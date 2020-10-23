@@ -20,7 +20,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="1" Grid.Column="1">
+        <StackPanel Grid.Row="1" Grid.Column="1" MinWidth="500">
             <Label x:Name="SkribblRoomView" Content="Skribbl" FontSize="72" HorizontalAlignment="Center" VerticalAlignment="Top"/>
             <Grid x:Name="BiggestGrid">
                 <Grid.ColumnDefinitions>
@@ -29,13 +29,26 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Orientation="Vertical" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10">
-                    <Label x:Name="ParticipantsRoomView" Content="Participants:" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="5"></Label>
-                    <ListBox Name="ChatBox" ItemsSource="{Binding Players}"/>
+                    <Label x:Name="ParticipantsRoomView" Content="Participants:" FontSize="20" VerticalAlignment="Top" Margin="0 5 5 5"></Label>
+                    <ListBox Name="ChatBox" ItemsSource="{Binding MainViewModel.Players}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Images/PersonIcon.png" Width="50" Margin="0 0 5 0"/>
+                                    <TextBlock Text="{Binding Username, FallbackValue=username not found}" VerticalAlignment="Center" FontSize="13"/>
+
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </StackPanel>
 
-                <Grid Grid.Column="1">
-                    <TextBlock x:Name="RoomCodeLabel" Text="{Binding Path=Roomname, FallbackValue=RoomCode}" IsEnabled="False" Background="#eee" FontSize="20" Padding="5" Margin=" 10 10 10 100"/>
-                    <Button Content="START" FontSize="20" Width="100" Height="35" VerticalAlignment="Bottom" Margin="10"/>
+                <Grid Grid.Column="1" Margin="10">
+                    <StackPanel>
+                        <Label Content="Roomcode:" FontSize="20" Margin="5"/>
+                        <TextBlock x:Name="RoomCodeLabel" Text="{Binding Path=Roomname, FallbackValue=RoomCode not found}" IsEnabled="False" Background="#ddd" FontSize="20" Padding="5" Margin="5" Height="40" />
+                    </StackPanel>
+                    <Button Content="START" FontSize="20" Width="100" Height="35" VerticalAlignment="Bottom" Margin="10" Command="{Binding GoToGameCommand}"/>
                 </Grid>
             </Grid>
         </StackPanel>

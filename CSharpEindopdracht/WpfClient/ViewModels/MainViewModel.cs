@@ -1,14 +1,18 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Net.Sockets;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Util.MagicCode;
+using WpfClient.Models;
 using WpfClient.Utils;
-using WpfClient.ViewModels;
 
 namespace WpfClient.ViewModels
 {
-    class MainViewModel : ObservableObject
+    class MainViewModel : ObservableObject, IClientCallback
     {
         #region private members
 
@@ -16,6 +20,8 @@ namespace WpfClient.ViewModels
 
         private int mOuterMarginSize = 10;
         private int mWindowRadius = 10;
+
+        private Client client;
 
         #endregion
 
@@ -36,7 +42,10 @@ namespace WpfClient.ViewModels
 
         public ObservableObject SelectedViewModel { get; set; }
 
-        //public Client client { get; }
+        public ObservableCollection<Player> Players { get; private set; } = new ObservableCollection<Player>();
+
+        public Player MePlayer { get; set; } = new Player() { IsDrawing = true };
+
 
         /// <summary>
         /// size of the resize border around the window
@@ -112,16 +121,45 @@ namespace WpfClient.ViewModels
             this.MenuCommand = new RelayCommand(() => SystemCommands.ShowSystemMenu(this.mWindow, GetMousePosition()));
 
             var resizer = new WindowResizer(this.mWindow);
+
+            //test code
+
+            this.Players.Add(this.MePlayer);
+            Random random = new Random();
+            for (uint i = 1; i < 4; i++)
+            {
+                this.Players.Add(new Player() { Username = "bob", Id = i, Score = (uint)random.Next(100), IsDrawing = false });
+            }
+        }
+
+        //check needed
+        internal async Task CreateClient(string username)
+        {
+            if (client == null)
+            {
+                TcpClient tcpClient = new TcpClient();
+                await tcpClient.ConnectAsync("localhost", 5555);
+
+                this.client = new Client(tcpClient, username, this);
+            }
+            else
+            {
+                Debug.WriteLine("[mainviewmodel] i don't want to implement singleton ok? client already exists");
+            }
         }
 
 
         #region helper 
 
-        private Point GetMousePosition()
+        internal Point GetMousePosition()
         {
-            Debug.WriteLine("getmousePosition called");
             var p = Mouse.GetPosition(this.mWindow);
             return new Point(p.X + this.mWindow.Left, p.Y + this.mWindow.Top);
+        }
+
+        internal Point GetRawMousePosition()
+        {
+            return Mouse.GetPosition(this.mWindow);
         }
 
         #endregion

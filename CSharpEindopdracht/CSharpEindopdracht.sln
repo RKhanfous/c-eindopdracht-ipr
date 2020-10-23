@@ -16,6 +16,8 @@ Global
 		SharedNetworking\SharedNetworking.projitems*{084112f6-823c-4ad5-bbf2-8630368a5039}*SharedItemsImports = 5
 		SharedSkribbl\SharedSkribbl.projitems*{5db30c1e-d9a7-4113-b095-3c993b6bf0a4}*SharedItemsImports = 13
 		SharedNetworking\SharedNetworking.projitems*{a2eaf6b3-9ab3-4155-b0ea-8bd0f7ae1dd0}*SharedItemsImports = 13
+		SharedNetworking\SharedNetworking.projitems*{ea7ce9c1-5ca4-4eb6-84af-d9cd01912a2e}*SharedItemsImports = 5
+		SharedSkribbl\SharedSkribbl.projitems*{ea7ce9c1-5ca4-4eb6-84af-d9cd01912a2e}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
