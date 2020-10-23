@@ -1,10 +1,10 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using SharedSkribbl;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Shapes;
 using WpfClient.Models;
 using WpfClient.Utils;
 
@@ -46,22 +46,17 @@ namespace WpfClient.ViewModels
             {
                 if (this.MainViewModel.MePlayer.IsDrawing
                     && Mouse.LeftButton == MouseButtonState.Pressed
-                    && IsDistanceGreater(lastPoint, Mouse.GetPosition(CanvasBorder), 10))
+                    && IsDistanceGreater(lastPoint, Mouse.GetPosition(CanvasBorder), 1))
                 {
                     Line line = new Line();
 
-                    line.Stroke = SystemColors.WindowFrameBrush;
-                    line.X1 = lastPoint.X;
-                    line.Y1 = lastPoint.Y;
+                    line.X1 = (short)lastPoint.X;
+                    line.Y1 = (short)lastPoint.Y;
 
                     lastPoint = Mouse.GetPosition(CanvasBorder);
 
-                    line.X2 = lastPoint.X;
-                    line.Y2 = lastPoint.Y;
-
-                    line.Visibility = Visibility.Visible;
-
-                    line.Stroke = System.Windows.Media.Brushes.Black;
+                    line.X2 = (short)lastPoint.X;
+                    line.Y2 = (short)lastPoint.Y;
 
 
                     Lines.Add(line);
