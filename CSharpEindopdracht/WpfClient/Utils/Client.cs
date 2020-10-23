@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Windows;
 
 namespace WpfClient.Utils
 {
@@ -20,8 +21,9 @@ namespace WpfClient.Utils
         }
 
 
-        protected override void HandleData(byte[] messageBytes)
+        protected override async void HandleData(byte[] messageBytes)
         {
+            //Debug.WriteLine("[wpf client] received packet " + Encoding.ASCII.GetString(messageBytes) + "with length " + messageBytes.Length);
             byte[] payload = messageBytes.Skip(5).ToArray();
 
             byte messageId = messageBytes[4];
@@ -49,6 +51,11 @@ namespace WpfClient.Utils
                             else
                                 this.clientCallback.GoToRoomView(roomData.Item1);
                             break;
+                        case DataParser.OWN_DATA:
+                            (string, uint) playerData = DataParser.GetUsernameIdFromJsonMessage(payload);
+                            clientCallback.SetMePlayer(playerData.Item1, playerData.Item2);
+
+                            break;
 
                         default:
                             Console.WriteLine($"Received json with identifier {identifier}");
@@ -56,7 +63,14 @@ namespace WpfClient.Utils
                     }
                     break;
 
+                case 0x03:
+                    Debug.WriteLine("received player");
+                    Player dataPlayer = DataParser.GetPlayerFromBytes(payload);
+
+                    clientCallback.AddPlayer(dataPlayer);
+                    break;
                 default:
+                    Debug.WriteLine($"received message with id {messageId}");
                     break;
 
             }

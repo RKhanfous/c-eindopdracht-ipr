@@ -10,12 +10,12 @@ namespace Server
 
         public string username { get; }
         public int score { get; private set; }
-        public int clientID { get; }
+        public uint clientID { get; }
         public SkribblRoom playingInRoom { get; set; }
 
         #endregion
 
-        public Player(string username, int score, int clientID)
+        public Player(string username, int score, uint clientID)
         {
             this.username = username;
             this.score = score;

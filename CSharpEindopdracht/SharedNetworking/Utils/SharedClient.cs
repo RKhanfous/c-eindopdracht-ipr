@@ -24,7 +24,7 @@ namespace SharedNetworking.Utils
 
         private void OnRead(IAsyncResult ar)
         {
-            if (ar == null || (!ar.IsCompleted) || (!this.stream.CanRead) || (!this.client.Client.Connected))
+            if (ar == null || (!ar.IsCompleted) || (!this.stream.CanRead) || (!this.client.Connected))
                 return;
             int receivedBytes = this.stream.EndRead(ar);
 
@@ -48,6 +48,7 @@ namespace SharedNetworking.Utils
                 //Array.Copy(messageBytes, 5, payloadbytes, 0, payloadbytes.Length);
                 HandleData(messageBytes);
 
+                Array.Copy(totalBuffer, expectedMessageLength, totalBuffer, 0, (totalBufferReceived - expectedMessageLength)); //maybe unsafe idk
 
                 totalBufferReceived -= expectedMessageLength;
                 expectedMessageLength = BitConverter.ToInt32(totalBuffer, 0);

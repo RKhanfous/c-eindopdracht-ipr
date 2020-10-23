@@ -28,7 +28,6 @@ namespace WpfClient.ViewModels
                     Debug.WriteLine("username is " + Username);
                     this.mainViewModel.Client.LogOn(Username, RoomCode);
 
-                    this.mainViewModel.MePlayer.Username = Username;
 
                     //if (RoomCode == "random" || RoomCode == "")
                     //{

@@ -22,7 +22,7 @@ namespace Server
             players = new List<Player>();
         }
 
-        public (string, bool) GetRoom(string username, int clientID, string roomCode)
+        public (string, bool) GetRoom(string username, uint clientID, string roomCode)
         {
             Player player = GetPlayer(clientID);
 
@@ -41,6 +41,7 @@ namespace Server
                 else
                     skribbleRoom = new SkribblRoom(networkHandler, RandomString(8));
                 skribbleRoom.AddPlayer(player);
+                this.skribblRooms.Add(skribbleRoom);
                 return (skribbleRoom.roomCode, skribbleRoom.running);
             }
             else
@@ -66,7 +67,7 @@ namespace Server
 
         #region helpers
 
-        public Player GetPlayer(int ClientId)
+        public Player GetPlayer(uint ClientId)
         {
             foreach (Player player in players)
             {

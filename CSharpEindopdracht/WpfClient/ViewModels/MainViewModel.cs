@@ -43,7 +43,7 @@ namespace WpfClient.ViewModels
 
         public ObservableCollection<Player> Players { get; private set; } = new ObservableCollection<Player>();
 
-        public Player MePlayer { get; set; } = new Player() { IsDrawing = true };
+        public Player MePlayer { get; set; }
 
         internal Task connectToServer;
 
@@ -131,15 +131,6 @@ namespace WpfClient.ViewModels
 
             var resizer = new WindowResizer(this.mWindow);
 
-            //test code
-
-            this.Players.Add(this.MePlayer);
-            Random random = new Random();
-            for (uint i = 1; i < 4; i++)
-            {
-                this.Players.Add(new Player() { Username = "bob", Id = i, Score = (uint)random.Next(100), IsDrawing = false });
-            }
-
             this.connectToServer = CreateClient();
         }
 
@@ -185,6 +176,29 @@ namespace WpfClient.ViewModels
         public void GoToRoomView(string RoomCode)
         {
             this.SelectedViewModel = new RoomViewModel(this, RoomCode);
+        }
+
+        public void AddPlayer(SharedNetworking.Utils.Player dataPlayer)
+        {
+            foreach (Player player in this.Players)
+            {
+                if (player.Id == dataPlayer.Id)
+                {
+                    return;
+                }
+            }
+            Application.Current.Dispatcher.BeginInvoke(new Action<SharedNetworking.Utils.Player>((ActiondataPlayer) =>
+            {
+                this.Players.Add(new Player() { Username = ActiondataPlayer.Username, Id = ActiondataPlayer.Id, Score = ActiondataPlayer.Score });
+            }), dataPlayer);
+
+            //this.Players.Add(new Player() { Username = dataPlayer.Username, Id = dataPlayer.Id, Score = dataPlayer.Score });
+        }
+
+        public void SetMePlayer(string username, uint id)
+        {
+            this.MePlayer = new Player() { Username = username, Id = id };
+            this.Players.Add(this.MePlayer);
         }
 
         #endregion

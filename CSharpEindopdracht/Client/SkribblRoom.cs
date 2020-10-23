@@ -246,8 +246,8 @@ namespace Server
             {
                 this.players.Add(player);
                 player.playingInRoom = this;
-                //TODO check to see start
             }
+            this.networkHandler.TellAboutNewPlayer(this.players.Take(this.players.Count - 1).ToList(), player); ;
         }
 
         public void RemovePlayer(Player player)
@@ -267,9 +267,9 @@ namespace Server
                     return false;
                 this.players.Add(player);
                 player.playingInRoom = this;
-                //TODO check to see start
-                return true;
             }
+            this.networkHandler.TellAboutNewPlayer(this.players.Take(this.players.Count - 1).ToList(), player); ;
+            return true;
         }
 
         public ReadOnlyCollection<Player> GetPlayers()

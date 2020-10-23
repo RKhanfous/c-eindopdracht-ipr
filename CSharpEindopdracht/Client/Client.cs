@@ -16,9 +16,9 @@ namespace Server
     {
         private NetworkHandler networkHandler;
         private string username { get; set; }
-        public int ClientId { get; set; }
+        public uint ClientId { get; set; }
 
-        public Client(TcpClient tcpClient, NetworkHandler network, int clientID) : base(tcpClient)
+        public Client(TcpClient tcpClient, NetworkHandler network, uint clientID) : base(tcpClient)
         {
             this.ClientId = clientID;
             this.networkHandler = network;
@@ -42,7 +42,7 @@ namespace Server
             this.stream.EndWrite(ar);
         }
 
-        protected override void HandleData(byte[] messageBytes)
+        protected override async void HandleData(byte[] messageBytes)
         {
 
             byte[] payload = messageBytes.Skip(5).ToArray();
@@ -73,6 +73,9 @@ namespace Server
                             if (roomData.Item1 == null)
                                 throw new Exception("should never happen");
 
+                            Player player = networkHandler.Server.GetPlayer(ClientId);
+                            SendMessage(DataParser.GetOwnDataMessage(player.username, player.clientID));
+
                             SendMessage(DataParser.GetGoToRoomMessage(roomData.Item1, roomData.Item2));
 
                             networkHandler.SendDataToPlayer(this);
@@ -85,6 +88,7 @@ namespace Server
                     break;
 
                 default:
+                    Debug.WriteLine($"received message with id {messageId}");
                     break;
 
             }

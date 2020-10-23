@@ -40,7 +40,7 @@ namespace Server
             }
             var tcpClient = listener.EndAcceptTcpClient(ar);
             Console.WriteLine($"Client connected from {tcpClient.Client.RemoteEndPoint}");
-            clients.Add(new Client(tcpClient, this, randomClientID));
+            clients.Add(new Client(tcpClient, this, (uint)randomClientID));
 
 
             listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
@@ -79,7 +79,7 @@ namespace Server
             return false;
         }
 
-        public Client getClientByUser(int clientID)
+        public Client getClientByUser(uint clientID)
         {
             foreach (Client client in clients)
             {
@@ -91,7 +91,7 @@ namespace Server
             return null;
         }
 
-        internal void DrewLine(int clientID, byte[] messageBytes)
+        internal void DrewLine(uint clientID, byte[] messageBytes)
         {
             throw new NotImplementedException();
         }
@@ -111,13 +111,22 @@ namespace Server
             throw new NotImplementedException();
         }
 
-        internal async Task SendDataToPlayer(IClient client)
+        internal void SendDataToPlayer(IClient client)
         {
             Player player = Server.GetPlayer(client.ClientId);
             SkribblRoom skribblRoom = player.playingInRoom;
             foreach (Player participant in skribblRoom.GetPlayers())
             {
+                Console.WriteLine($"sending {participant.GetDataPlayer()}");
                 client.SendMessage(DataParser.GetPlayerMessage(participant.GetDataPlayer()));
+            }
+        }
+
+        internal void TellAboutNewPlayer(List<Player> players, Player newPlayer)
+        {
+            foreach (Player player in players)
+            {
+                getClientByUser(player.clientID).SendMessage(DataParser.GetPlayerMessage(newPlayer.GetDataPlayer()));
             }
         }
     }

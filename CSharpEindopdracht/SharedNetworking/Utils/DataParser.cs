@@ -12,6 +12,7 @@ namespace SharedNetworking.Utils
 
         public const string LOG_ON = "LOGON";
         public const string GO_TO_ROOM = "GOTOROOM";
+        public const string OWN_DATA = "OWNDATA";
         #endregion
 
 
@@ -60,6 +61,7 @@ namespace SharedNetworking.Utils
 
             if (messageId == 0x02)
             {
+                System.Diagnostics.Debug.WriteLine("deseralize " + Encoding.ASCII.GetString(bytes.Skip(5).ToArray()));
                 dynamic json = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(bytes.Skip(5).ToArray()));
                 identifier = json.identifier;
                 return true;
@@ -120,6 +122,22 @@ namespace SharedNetworking.Utils
             if (json.identifier == GO_TO_ROOM)
             {
                 return (json.data.roomCode, json.data.running);
+            }
+            return default;
+        }
+
+        //==============================================================================================================================================
+        public static byte[] GetOwnDataMessage(string mUsername, uint mId)
+        {
+            return getJsonMessage(OWN_DATA, new { username = mUsername, id = mId });
+        }
+
+        public static (string, uint) GetUsernameIdFromJsonMessage(byte[] payload)
+        {
+            dynamic json = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(payload));
+            if (json.identifier == OWN_DATA)
+            {
+                return (json.data.username, json.data.id);
             }
             return default;
         }
