@@ -7,10 +7,10 @@ using System.Text;
 
 namespace Server
 {
-    class NetworkHandler
+    public class NetworkHandler
     {
         private TcpListener listener;
-        private List<Client> clients;
+        public List<Client> clients { get; set; }
         public NetworkHandler()
         {
             clients = new List<Client>();
