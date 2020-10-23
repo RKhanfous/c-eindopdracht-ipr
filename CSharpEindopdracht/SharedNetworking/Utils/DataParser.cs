@@ -42,7 +42,6 @@ namespace SharedNetworking.Utils
 
         #endregion
 
-
         #region json with identifier
 
         /// <summary>
@@ -129,23 +128,16 @@ namespace SharedNetworking.Utils
 
         #region players
 
-        public static byte[] getPlayerMessage(Player player)
+        public static byte[] GetPlayerMessage(Player player)
         {
             return getMessage(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(player)), 0x03);
         }
 
-        public static Player getPlayerFromBytes(byte[] payload)
+        public static Player GetPlayerFromBytes(byte[] payload)
         {
             return JsonConvert.DeserializeObject<Player>(Encoding.ASCII.GetString(payload));
         }
 
         #endregion
-    }
-
-    public struct Player
-    {
-        public string Username { get; set; }
-        public uint Id { get; set; }
-        public uint Score { get; set; }
     }
 }

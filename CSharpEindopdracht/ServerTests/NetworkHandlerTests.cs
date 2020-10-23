@@ -67,7 +67,7 @@ namespace ServerTests
             Client result = networkHandler.getClientByUser(2);
 
             //here we assert if the result client equals the expected client.
-            Assert.AreEqual(result.clientID, expectedClient.clientID);
+            Assert.AreEqual(result.ClientId, expectedClient.ClientId);
         }
 
     }

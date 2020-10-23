@@ -12,15 +12,15 @@ using System.Threading.Tasks;
 
 namespace Server
 {
-    public class Client : SharedClient
+    public class Client : SharedClient, IClient
     {
         private NetworkHandler networkHandler;
         private string username { get; set; }
-        public int clientID { get; set; }
+        public int ClientId { get; set; }
 
         public Client(TcpClient tcpClient, NetworkHandler network, int clientID) : base(tcpClient)
         {
-            this.clientID = clientID;
+            this.ClientId = clientID;
             this.networkHandler = network;
         }
 
@@ -53,7 +53,7 @@ namespace Server
             switch (messageId)
             {
                 case 0x01:
-                    networkHandler.drawLine(clientID, messageBytes);
+                    networkHandler.DrewLine(ClientId, messageBytes);
                     break;
 
                 case 0x02:
@@ -69,11 +69,13 @@ namespace Server
                                 throw new Exception("couldn't get username from json");
                             Console.WriteLine($"received username {username}");
 
-                            (string, bool) roomData = networkHandler.Server.GetRoom(username, this.clientID, DataParser.GetRoomCodeFromLogOnjson(payload));
+                            (string, bool) roomData = networkHandler.Server.GetRoom(username, this.ClientId, DataParser.GetRoomCodeFromLogOnjson(payload));
                             if (roomData.Item1 == null)
                                 throw new Exception("should never happen");
 
-                            sendMessage(DataParser.GetGoToRoomMessage(roomData.Item1, roomData.Item2));
+                            SendMessage(DataParser.GetGoToRoomMessage(roomData.Item1, roomData.Item2));
+
+                            networkHandler.SendDataToPlayer(this);
                             break;
 
                         default:

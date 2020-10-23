@@ -1,8 +1,10 @@
-﻿using System;
+﻿using SharedNetworking.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace Server
 {
@@ -30,7 +32,7 @@ namespace Server
             int randomClientID = r.Next();
             for (int i = 0; i < clients.Count; i++)
             {
-                if (clients[i].clientID == randomClientID)
+                if (clients[i].ClientId == randomClientID)
                 {
                     randomClientID = r.Next();
                     i = 0;
@@ -45,10 +47,10 @@ namespace Server
         }
         internal void TellNewTurn(Player currentPlayer, string currentWord, List<Player> players)
         {
-            clients = new List<Client>();
-            listener = new TcpListener(IPAddress.Any, 15243);
-            listener.Start();
-            listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
+            //clients = new List<Client>();
+            //listener = new TcpListener(IPAddress.Any, 15243);
+            //listener.Start();
+            //listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
         }
 
         internal void Disconnect(Client client)
@@ -59,7 +61,7 @@ namespace Server
 
         internal void SendToUser(int clientID, string packet)
         {
-            foreach (var client in clients.Where(c => c.clientID == clientID))
+            foreach (var client in clients.Where(c => c.ClientId == clientID))
             {
                 client.Write(0x02, packet);
             }
@@ -69,7 +71,7 @@ namespace Server
         {
             foreach (Client client in clients)
             {
-                if (client.clientID == clientID)
+                if (client.ClientId == clientID)
                 {
                     return true;
                 }
@@ -81,7 +83,7 @@ namespace Server
         {
             foreach (Client client in clients)
             {
-                if (client.clientID == clientID)
+                if (client.ClientId == clientID)
                 {
                     return client;
                 }
@@ -89,7 +91,7 @@ namespace Server
             return null;
         }
 
-        internal void drawLine(int clientID, byte[] messageBytes)
+        internal void DrewLine(int clientID, byte[] messageBytes)
         {
             throw new NotImplementedException();
         }
@@ -107,6 +109,16 @@ namespace Server
         internal void TellTurnOver(List<Player> players, string currentWord)
         {
             throw new NotImplementedException();
+        }
+
+        internal async Task SendDataToPlayer(IClient client)
+        {
+            Player player = Server.GetPlayer(client.ClientId);
+            SkribblRoom skribblRoom = player.playingInRoom;
+            foreach (Player participant in skribblRoom.GetPlayers())
+            {
+                client.SendMessage(DataParser.GetPlayerMessage(participant.GetDataPlayer()));
+            }
         }
     }
 }

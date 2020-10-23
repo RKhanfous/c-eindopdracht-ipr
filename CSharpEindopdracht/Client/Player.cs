@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Server
 {
-    class Player
+    public class Player
     {
         #region public properties
 
@@ -29,6 +29,11 @@ namespace Server
                 throw new ArgumentOutOfRangeException("cannot add negative scores");
             }
             this.score += score;
+        }
+
+        public SharedNetworking.Utils.Player GetDataPlayer()
+        {
+            return new SharedNetworking.Utils.Player() { Username = username, Id = (uint)clientID, Score = (uint)score };
         }
     }
 }

@@ -13,8 +13,8 @@
 		<ProjectReference Include="..\Networking\Networking.csproj" />
 	</ItemGroup>
 
-	<Import Project="..\SharedNetworking\SharedNetworking.projitems" Label="Shared" />
-
 	<Import Project="..\SharedSkribbl\SharedSkribbl.projitems" Label="Shared" />
+
+	<Import Project="..\SharedNetworking\SharedNetworking.projitems" Label="Shared" />
 
 </Project>

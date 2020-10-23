@@ -24,7 +24,7 @@ namespace Server
 
         public (string, bool) GetRoom(string username, int clientID, string roomCode)
         {
-            Player player = getPlayer(clientID);
+            Player player = GetPlayer(clientID);
 
             if (player == null)
             {
@@ -66,7 +66,7 @@ namespace Server
 
         #region helpers
 
-        private Player getPlayer(int ClientId)
+        public Player GetPlayer(int ClientId)
         {
             foreach (Player player in players)
             {

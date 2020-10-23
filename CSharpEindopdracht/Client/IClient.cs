@@ -6,6 +6,8 @@ namespace Server
 {
     interface IClient
     {
-        void SendBytes(byte[] bytes);
+        int ClientId { get; set; }
+
+        void SendMessage(byte[] bytes);
     }
 }

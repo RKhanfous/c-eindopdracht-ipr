@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using SharedSkribbl;
+using System.Collections.ObjectModel;
 
 namespace Server
 {
@@ -14,7 +15,7 @@ namespace Server
     /// skribbl room
     /// 
     /// </summary>
-    class SkribblRoom
+    public class SkribblRoom
     {
         #region private Members
 
@@ -268,6 +269,14 @@ namespace Server
                 player.playingInRoom = this;
                 //TODO check to see start
                 return true;
+            }
+        }
+
+        public ReadOnlyCollection<Player> GetPlayers()
+        {
+            lock (this.players)
+            {
+                return new ReadOnlyCollection<Player>(this.players);
             }
         }
 

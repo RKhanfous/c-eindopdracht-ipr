@@ -72,7 +72,7 @@ namespace WpfClient.Utils
         internal void LogOn(string username, string roomCode)
         {
             this.username = username;
-            sendMessage(DataParser.GetLogOnJsonMessage(username, roomCode));
+            SendMessage(DataParser.GetLogOnJsonMessage(username, roomCode));
         }
     }
 }
