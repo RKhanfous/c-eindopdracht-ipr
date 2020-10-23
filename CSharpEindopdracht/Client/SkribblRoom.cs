@@ -69,7 +69,7 @@ namespace Server
         /// <param name="numberOfRounds"></param>
         public SkribblRoom(NetworkHandler networkHandler, string roomCode, int numberOfRounds)
         {
-            this.filePath = @"\CSharpEindopdracht\Client\Words\GameWords.txt";
+            this.filePath = "\\Words\\GameWords.txt";
             this.networkHandler = networkHandler;
             this.roomCode = roomCode;
             this.players = new List<Player>();
@@ -79,15 +79,7 @@ namespace Server
                 this.numRounds = numberOfRounds;
             else
                 this.numRounds = 1;
-            this.words = new HashSet<string>();
-            using (StreamReader sr = File.OpenText(filePath))
-            {
-                string s;
-                while ((s = sr.ReadLine()) != null)
-                {
-                    this.words.Add(s);
-                }
-            }
+            this.words = new HashSet<string> { "Boot", "Zon", "Mens", "Gras", "Water", "Sneeuw", "Kerk", "Concert", "Slang", "Huis", "Computer", "Klok", "vlees", "Tong", "Mug", "Soldaat" };
             this.timer = new Timer();
             this.stopwatch = new Stopwatch();
         }

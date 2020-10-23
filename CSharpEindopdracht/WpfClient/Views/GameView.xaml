@@ -26,9 +26,9 @@
                             <StackPanel>
                                 <TextBlock Text="{Binding Username}"/>
                                 <TextBlock Text="{Binding Score, StringFormat=Score: {0}, FallbackValue=failed}"/>
-                                <Popup IsOpen="{Binding IsDrawing}">
+                                <!--<Popup IsOpen="{Binding IsDrawing}">
                                     <TextBlock Text="drawing" />
-                                </Popup>
+                                </Popup>-->
                             </StackPanel>
                         </StackPanel>
                     </DataTemplate>
