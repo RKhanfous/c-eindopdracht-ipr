@@ -13,6 +13,9 @@ namespace SharedNetworking.Utils
         public const string LOG_ON = "LOGON";
         public const string GO_TO_ROOM = "GOTOROOM";
         public const string OWN_DATA = "OWNDATA";
+        public const string START_GAME = "START";
+        public const string SET_DRAWER = "DRAWER";
+        public const string WORD = "WORD";
         #endregion
 
 
@@ -61,7 +64,6 @@ namespace SharedNetworking.Utils
 
             if (messageId == 0x02)
             {
-                System.Diagnostics.Debug.WriteLine("deseralize " + Encoding.ASCII.GetString(bytes.Skip(5).ToArray()));
                 dynamic json = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(bytes.Skip(5).ToArray()));
                 identifier = json.identifier;
                 return true;
@@ -138,6 +140,44 @@ namespace SharedNetworking.Utils
             if (json.identifier == OWN_DATA)
             {
                 return (json.data.username, json.data.id);
+            }
+            return default;
+        }
+
+        //==============================================================================================================================================
+        public static byte[] GetStartMessage()
+        {
+            return getJsonMessage(START_GAME, null);
+        }
+
+        //==============================================================================================================================================
+        public static byte[] GetDrawerMessage(uint Id)
+        {
+            return getJsonMessage(SET_DRAWER, new { id = Id });
+        }
+
+        public static uint GetDrawerId(byte[] payload)
+        {
+            dynamic json = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(payload));
+            if (json.identifier == SET_DRAWER)
+            {
+                return json.data.id;
+            }
+            return default;
+        }
+
+        //==============================================================================================================================================
+        public static byte[] GetWordMessage(string Word)
+        {
+            return getJsonMessage(WORD, new { word = Word });
+        }
+
+        public static string GetWordFromjsonMessage(byte[] payload)
+        {
+            dynamic json = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(payload));
+            if (json.identifier == WORD)
+            {
+                return json.data.word;
             }
             return default;
         }

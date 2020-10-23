@@ -47,10 +47,11 @@ namespace Server
         }
         internal void TellNewTurn(Player currentPlayer, string currentWord, List<Player> players)
         {
-            //clients = new List<Client>();
-            //listener = new TcpListener(IPAddress.Any, 15243);
-            //listener.Start();
-            //listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
+            foreach (Player player in players)
+            {
+                getClientByUser(player.clientID).SendMessage(DataParser.GetDrawerMessage(currentPlayer.clientID));
+            }
+            getClientByUser(currentPlayer.clientID).SendMessage(DataParser.GetWordMessage(currentWord));
         }
 
         internal void Disconnect(Client client)
@@ -101,9 +102,20 @@ namespace Server
             throw new NotImplementedException();
         }
 
+        internal void TellGameStart(List<Player> players)
+        {
+            foreach (Player player in players)
+            {
+                getClientByUser(player.clientID).SendMessage(DataParser.GetGoToRoomMessage(player.playingInRoom.roomCode, true));
+            }
+        }
+
         internal void TellGameOver(List<Player> players)
         {
-            throw new NotImplementedException();
+            foreach (Player player in players)
+            {
+                getClientByUser(player.clientID).SendMessage(DataParser.GetGoToRoomMessage(player.playingInRoom.roomCode, false));
+            }
         }
 
         internal void TellTurnOver(List<Player> players, string currentWord)

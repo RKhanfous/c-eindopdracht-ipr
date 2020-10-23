@@ -11,5 +11,8 @@ namespace WpfClient.Utils
         void GoToRoomView(string item1);
         void AddPlayer(Player dataPlayer);
         void SetMePlayer(string username, uint id);
+        void SetDrawer(uint id);
+        public string currentWord { get; set; }
+
     }
 }

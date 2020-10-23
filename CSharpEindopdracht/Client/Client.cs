@@ -80,7 +80,12 @@ namespace Server
 
                             networkHandler.SendDataToPlayer(this);
                             break;
-
+                        case DataParser.START_GAME:
+                            if (this.networkHandler.Server.GetPlayer(ClientId).playingInRoom.Start())
+                                SendMessage(DataParser.GetStartMessage());
+                            else
+                                SendMessage(DataParser.GetGoToRoomMessage(this.networkHandler.Server.GetPlayer(ClientId).playingInRoom.roomCode, false));
+                            break;
                         default:
                             Console.WriteLine($"Received json with identifier {identifier}");
                             break;

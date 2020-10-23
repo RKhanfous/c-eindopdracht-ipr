@@ -47,6 +47,8 @@ namespace WpfClient.ViewModels
 
         internal Task connectToServer;
 
+        public string currentWord { get; set; } = "no word found";
+
         public bool Connected
         {
             get
@@ -199,6 +201,15 @@ namespace WpfClient.ViewModels
         {
             this.MePlayer = new Player() { Username = username, Id = id };
             this.Players.Add(this.MePlayer);
+        }
+
+        public void SetDrawer(uint id)
+        {
+            foreach (Player player in this.Players)
+            {
+                player.IsDrawing = player.Id == id;
+            }
+            this.currentWord = "are ya cheating?";
         }
 
         #endregion

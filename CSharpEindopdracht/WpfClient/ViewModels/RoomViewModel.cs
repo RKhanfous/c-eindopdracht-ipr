@@ -20,8 +20,9 @@ namespace WpfClient.ViewModels
 
             this.GoToGameCommand = new RelayCommand(() =>
             {
-                this.MainViewModel.SelectedViewModel = new GameViewModel(this.MainViewModel);
-                Debug.WriteLine(this.MainViewModel.SelectedViewModel);
+                //this.MainViewModel.SelectedViewModel = new GameViewModel(this.MainViewModel);
+                //Debug.WriteLine(this.MainViewModel.SelectedViewModel);
+                this.MainViewModel.Client.AskToStart();
             });
         }
     }

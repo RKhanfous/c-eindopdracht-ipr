@@ -54,6 +54,17 @@ namespace WpfClient.Utils
                         case DataParser.OWN_DATA:
                             (string, uint) playerData = DataParser.GetUsernameIdFromJsonMessage(payload);
                             clientCallback.SetMePlayer(playerData.Item1, playerData.Item2);
+                            break;
+                        case DataParser.START_GAME:
+                            //null should be fine for now
+                            this.clientCallback.GoToGameView(null);
+                            break;
+                        case DataParser.SET_DRAWER:
+                            this.clientCallback.SetDrawer(DataParser.GetDrawerId(payload));
+                            break;
+                        case DataParser.WORD:
+                            this.clientCallback.currentWord = DataParser.GetWordFromjsonMessage(payload);
+                            Debug.WriteLine("word set to " + this.clientCallback.currentWord);
 
                             break;
 
@@ -76,7 +87,10 @@ namespace WpfClient.Utils
             }
         }
 
-
+        internal void AskToStart()
+        {
+            SendMessage(DataParser.GetStartMessage());
+        }
 
         public bool Connected()
         {

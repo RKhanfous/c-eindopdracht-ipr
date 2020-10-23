@@ -25,10 +25,10 @@ namespace Server
         private int currentRound;
         private int numRounds;
         private HashSet<string> words;
-        private HashSet<string> usedWords;
+        private HashSet<string> usedWords = new HashSet<string>();
         private string currentWord;
         private Player currentPlayer;
-        private List<Player> drawingPlayers;
+        private List<Player> drawingPlayers = new List<Player>();
         private Timer timer;
         private const int maxNumPlayers = 8;
         public const int guessTimeMills = 30000;
@@ -78,6 +78,7 @@ namespace Server
                 this.numRounds = 1;
             this.words = new HashSet<string> { "Boot", "Zon", "Mens", "Gras", "Water", "Sneeuw", "Kerk", "Concert", "Slang", "Huis", "Computer", "Klok", "vlees", "Tong", "Mug", "Soldaat" };
             this.timer = new Timer();
+            this.stopwatch = new Stopwatch();
         }
 
 
@@ -89,15 +90,21 @@ namespace Server
         /// main loop for the room
         /// </summary>
         /// <param name="objectState"></param>
-        public void Start()
+        public bool Start()
         {
             //start of room
             //checks
             if (!Check())
             {
-                Stop();
-                return;
+                return false;
             }
+
+            if (running)
+            {
+                return false;
+            }
+
+            this.networkHandler.TellGameStart(this.players);
 
             SetNextRound();
 
@@ -109,6 +116,8 @@ namespace Server
             this.running = true;
 
             SetNextTurn();
+
+            return true;
         }
 
         /// <summary>
@@ -120,6 +129,7 @@ namespace Server
             {
                 if (this.players.Count < 2)
                 {
+                    Debug.WriteLine("not enough players");
                     return false;
                 }
 
