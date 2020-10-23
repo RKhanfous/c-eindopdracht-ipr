@@ -49,6 +49,7 @@ namespace Server
                 skribbleRoom = GetSkribbleRoom(roomCode);
                 if (skribbleRoom != null)
                 {
+                    skribbleRoom.AddPlayer(player);
                     return (skribbleRoom.roomCode, skribbleRoom.running);
                 }
             }
@@ -58,6 +59,7 @@ namespace Server
             {
                 skribbleRoom = new SkribblRoom(networkHandler, roomCode);
                 skribbleRoom.AddPlayer(player);
+                this.skribblRooms.Add(skribbleRoom);
                 return (skribbleRoom.roomCode, skribbleRoom.running);
             }
             return default;
