@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Net.Sockets;
@@ -120,6 +121,15 @@ namespace WpfClient.ViewModels
             this.MenuCommand = new RelayCommand(() => SystemCommands.ShowSystemMenu(this.mWindow, GetMousePosition()));
 
             var resizer = new WindowResizer(this.mWindow);
+
+            //test code
+
+            this.Players.Add(this.MePlayer);
+            Random random = new Random();
+            for (uint i = 1; i < 4; i++)
+            {
+                this.Players.Add(new Player() { Username = "bob", Id = i, Score = (uint)random.Next(100), IsDrawing = false });
+            }
         }
 
         //check needed

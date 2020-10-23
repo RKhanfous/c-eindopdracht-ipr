@@ -8,12 +8,20 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="Images\PersonIcon.png" />
 		<None Remove="Images\SkribblLogo.png" />
+		<None Remove="Images\TrashcanIcon.png" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<Content Include="Images\PersonIcon.png">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 		<Content Include="Images\SkribblLogo.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Images\TrashcanIcon.png">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
 

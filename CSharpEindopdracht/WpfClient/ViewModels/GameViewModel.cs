@@ -12,20 +12,24 @@ namespace WpfClient.ViewModels
 {
     class GameViewModel : ObservableObject
     {
-        private readonly MainViewModel mainViewModel;
         private Point lastPoint;
 
-        public ObservableCollection<Player> Players { get; set; }
-        public ObservableCollection<string> Chat { get; set; }
-        public ObservableCollection<Line> Lines { get; set; }
+        public MainViewModel MainViewModel { get; private set; }
+
+        public ObservableCollection<string> Chat { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<Line> Lines { get; set; } = new ObservableCollection<Line>();
+
+        public string Guess { get; set; }
 
         public ICommand MouseDownCommand { get; set; }
         public ICommand MouseMoveCommand { get; set; }
+        public ICommand GuessCommand { get; set; }
+        public ICommand DeleteLinesCommand { get; set; }
         public Border CanvasBorder { get; set; }
 
         public GameViewModel(MainViewModel mainViewModel, string username)
         {
-            this.mainViewModel = mainViewModel;
+            this.MainViewModel = mainViewModel;
 
             this.Lines = new ObservableCollection<Line>();
 
@@ -40,9 +44,9 @@ namespace WpfClient.ViewModels
 
             this.MouseMoveCommand = new RelayCommand<MouseEventArgs>((param) =>
             {
-                if (this.mainViewModel.MePlayer.IsDrawing
+                if (this.MainViewModel.MePlayer.IsDrawing
                     && Mouse.LeftButton == MouseButtonState.Pressed
-                    && IsDistanceGreater(lastPoint, Mouse.GetPosition(CanvasBorder), 1))
+                    && IsDistanceGreater(lastPoint, Mouse.GetPosition(CanvasBorder), 10))
                 {
                     Line line = new Line();
 
@@ -62,6 +66,17 @@ namespace WpfClient.ViewModels
 
                     Lines.Add(line);
                 }
+            });
+
+            this.GuessCommand = new RelayCommand(() =>
+            {
+                this.Chat.Add(Guess);
+                Guess = "";
+            });
+
+            this.DeleteLinesCommand = new RelayCommand(() =>
+            {
+                this.Lines.Clear();
             });
         }
 
