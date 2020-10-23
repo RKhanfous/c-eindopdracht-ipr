@@ -26,7 +26,15 @@ namespace SharedNetworking.Utils
         {
             if (ar == null || (!ar.IsCompleted) || (!this.stream.CanRead) || (!this.client.Connected))
                 return;
-            int receivedBytes = this.stream.EndRead(ar);
+            int receivedBytes;
+            try
+            {
+                receivedBytes = this.stream.EndRead(ar);
+            }
+            catch
+            {
+                return;
+            }
 
             if (totalBufferReceived + receivedBytes > buffer.Length)
             {
