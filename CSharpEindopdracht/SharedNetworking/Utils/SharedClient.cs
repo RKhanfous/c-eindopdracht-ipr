@@ -24,6 +24,8 @@ namespace SharedNetworking.Utils
 
         private void OnRead(IAsyncResult ar)
         {
+            if (ar == null || (!ar.IsCompleted) || (!this.stream.CanRead) || (!this.client.Client.Connected))
+                return;
             int receivedBytes = this.stream.EndRead(ar);
 
             if (totalBufferReceived + receivedBytes > buffer.Length)

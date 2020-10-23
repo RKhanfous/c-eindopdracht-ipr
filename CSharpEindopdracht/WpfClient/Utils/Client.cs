@@ -36,12 +36,18 @@ namespace WpfClient.Utils
                     bool worked = DataParser.getJsonIdentifier(messageBytes, out identifier);
                     if (!worked)
                         throw new Exception("couldn't get identifier from json");
+
                     switch (identifier)
                     {
                         case DataParser.GO_TO_ROOM:
+                            (string, bool) roomData = DataParser.GetRoomDataFromGoToRoomjson(payload);
+                            if (roomData.Item1 == null)
+                                throw new Exception("somehow didn't find a room");
 
-
-
+                            if (roomData.Item2)
+                                this.clientCallback.GoToGameView(roomData.Item1);
+                            else
+                                this.clientCallback.GoToRoomView(roomData.Item1);
                             break;
 
                         default:

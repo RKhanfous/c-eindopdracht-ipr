@@ -115,7 +115,7 @@ namespace SharedNetworking.Utils
             return getJsonMessage(GO_TO_ROOM, new { roomCode = mRoomCode, running = mRunning });
         }
 
-        public static (string, bool) GetRoomCodeFromGoToRoomjson(byte[] payload)
+        public static (string, bool) GetRoomDataFromGoToRoomjson(byte[] payload)
         {
             dynamic json = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(payload));
             if (json.identifier == GO_TO_ROOM)

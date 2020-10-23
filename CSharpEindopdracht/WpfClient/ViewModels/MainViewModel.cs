@@ -174,5 +174,19 @@ namespace WpfClient.ViewModels
         }
 
         #endregion
+
+        #region clientCallBack interface
+
+        public void GoToGameView(string RoomCode)
+        {
+            this.SelectedViewModel = new GameViewModel(this);
+        }
+
+        public void GoToRoomView(string RoomCode)
+        {
+            this.SelectedViewModel = new RoomViewModel(this, RoomCode);
+        }
+
+        #endregion
     }
 }

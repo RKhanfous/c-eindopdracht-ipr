@@ -1,6 +1,7 @@
 ﻿using SharedNetworking.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -37,6 +38,10 @@ namespace Server
                 (string, bool) roomData = AddToRandomSkribblRoom(player);
                 if (roomData.Item1 != null)
                     return roomData;
+                else
+                    skribbleRoom = new SkribblRoom(networkHandler, RandomString(8));
+                skribbleRoom.AddPlayer(player);
+                return (skribbleRoom.roomCode, skribbleRoom.running);
             }
             else
             {
@@ -95,6 +100,14 @@ namespace Server
                 }
             }
             return default;
+        }
+
+        private static Random random = new Random();
+        public static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
         #endregion

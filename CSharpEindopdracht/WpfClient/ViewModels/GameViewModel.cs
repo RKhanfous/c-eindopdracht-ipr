@@ -27,7 +27,7 @@ namespace WpfClient.ViewModels
         public ICommand DeleteLinesCommand { get; set; }
         public Border CanvasBorder { get; set; }
 
-        public GameViewModel(MainViewModel mainViewModel, string username)
+        public GameViewModel(MainViewModel mainViewModel)
         {
             this.MainViewModel = mainViewModel;
 

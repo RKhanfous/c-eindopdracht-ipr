@@ -6,6 +6,7 @@ using System.Linq;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
+using SharedSkribbl;
 
 namespace Server
 {
@@ -38,6 +39,7 @@ namespace Server
 
         public bool running { get; set; }
         public string roomCode { get; set; }
+        public List<Line> lines { get; set; } = new List<Line>();
 
         #endregion
 
@@ -243,6 +245,7 @@ namespace Server
             {
                 this.players.Add(player);
                 player.playingInRoom = this;
+                //TODO check to see start
             }
         }
 
@@ -263,6 +266,7 @@ namespace Server
                     return false;
                 this.players.Add(player);
                 player.playingInRoom = this;
+                //TODO check to see start
                 return true;
             }
         }
