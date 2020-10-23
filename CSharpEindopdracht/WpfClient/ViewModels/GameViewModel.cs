@@ -71,7 +71,7 @@ namespace WpfClient.ViewModels
             this.DeleteLinesCommand = new RelayCommand(() =>
             {
                 this.MainViewModel.Lines.Clear();
-                //todo
+                this.MainViewModel.Client.SendMessage(SharedNetworking.Utils.DataParser.GetClearLinesMessage());
             });
         }
 

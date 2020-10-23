@@ -16,5 +16,6 @@ namespace WpfClient.Utils
         public string currentWord { get; set; }
 
         void AddLine(Line line);
+        void ClearLines();
     }
 }

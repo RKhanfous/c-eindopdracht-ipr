@@ -68,7 +68,9 @@ namespace WpfClient.Utils
                             Debug.WriteLine("word set to " + this.clientCallback.currentWord);
 
                             break;
-
+                        case DataParser.CLEAR_LINES:
+                            this.clientCallback.ClearLines();
+                            break;
                         default:
                             Console.WriteLine($"Received json with identifier {identifier}");
                             break;

@@ -114,6 +114,17 @@ namespace Server
             }
         }
 
+        internal void DeleteLines(uint clientId)
+        {
+            SkribblRoom skribblRoom = this.Server.GetPlayer(clientId).playingInRoom;
+            skribblRoom.lines.Clear();
+            foreach (Player player in skribblRoom.GetPlayers())
+            {
+                if (player.clientID != clientId)
+                    getClientByUser(player.clientID).SendMessage(DataParser.GetClearLinesMessage());
+            }
+        }
+
         internal void TellGameOver(List<Player> players)
         {
             foreach (Player player in players)

@@ -223,6 +223,14 @@ namespace WpfClient.ViewModels
             }), line);
         }
 
+        public void ClearLines()
+        {
+            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                this.Lines.Clear();
+            }));
+        }
+
         #endregion
     }
 }

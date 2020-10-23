@@ -16,6 +16,7 @@ namespace SharedNetworking.Utils
         public const string START_GAME = "START";
         public const string SET_DRAWER = "DRAWER";
         public const string WORD = "WORD";
+        public const string CLEAR_LINES = "CLEARLINES";
         #endregion
 
 
@@ -180,6 +181,11 @@ namespace SharedNetworking.Utils
                 return json.data.word;
             }
             return default;
+        }
+        //==============================================================================================================================================
+        public static byte[] GetClearLinesMessage()
+        {
+            return getJsonMessage(CLEAR_LINES, null);
         }
 
         #endregion
