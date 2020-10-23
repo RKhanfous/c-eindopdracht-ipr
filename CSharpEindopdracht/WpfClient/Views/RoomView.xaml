@@ -43,7 +43,7 @@
                     </ListBox>
                 </StackPanel>
 
-                <Grid Grid.Column="1" Margin="10">
+                <Grid Grid.Column="1" Margin="10" MinHeight="200">
                     <StackPanel>
                         <Label Content="Roomcode:" FontSize="20" Margin="5"/>
                         <TextBlock x:Name="RoomCodeLabel" Text="{Binding Path=Roomname, FallbackValue=RoomCode not found}" IsEnabled="False" Background="#ddd" FontSize="20" Padding="5" Margin="5" Height="40" />

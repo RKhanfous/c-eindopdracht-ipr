@@ -5,6 +5,9 @@ using System.Timers;
 using System.Linq;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
+using SharedSkribbl;
+using System.Collections.ObjectModel;
 
 namespace Server
 {
@@ -12,7 +15,7 @@ namespace Server
     /// skribbl room
     /// 
     /// </summary>
-    class SkribbleRoom
+    public class SkribblRoom
     {
         #region private Members
 
@@ -22,10 +25,10 @@ namespace Server
         private int currentRound;
         private int numRounds;
         private HashSet<string> words;
-        private HashSet<string> usedWords;
+        private HashSet<string> usedWords = new HashSet<string>();
         private string currentWord;
         private Player currentPlayer;
-        private List<Player> drawingPlayers;
+        private List<Player> drawingPlayers = new List<Player>();
         private Timer timer;
         private const int maxNumPlayers = 8;
         public const int guessTimeMills = 30000;
@@ -37,6 +40,7 @@ namespace Server
 
         public bool running { get; set; }
         public string roomCode { get; set; }
+        public List<Line> lines { get; set; } = new List<Line>();
 
         #endregion
 
@@ -46,14 +50,14 @@ namespace Server
         /// 
         /// </summary>
         /// <param name="networkHandler"></param>
-        public SkribbleRoom(NetworkHandler networkHandler) : this(networkHandler, "") { }
+        public SkribblRoom(NetworkHandler networkHandler) : this(networkHandler, "") { }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="networkHandler"></param>
         /// <param name="roomCode"></param>
-        public SkribbleRoom(NetworkHandler networkHandler, string roomCode) : this(networkHandler, roomCode, 3) { }
+        public SkribblRoom(NetworkHandler networkHandler, string roomCode) : this(networkHandler, roomCode, 3) { }
 
         /// <summary>
         /// 
@@ -61,7 +65,7 @@ namespace Server
         /// <param name="networkHandler"></param>
         /// <param name="roomCode"></param>
         /// <param name="numberOfRounds"></param>
-        public SkribbleRoom(NetworkHandler networkHandler, string roomCode, int numberOfRounds)
+        public SkribblRoom(NetworkHandler networkHandler, string roomCode, int numberOfRounds)
         {
             this.networkHandler = networkHandler;
             this.roomCode = roomCode;
@@ -74,6 +78,7 @@ namespace Server
                 this.numRounds = 1;
             this.words = new HashSet<string> { "Boot", "Zon", "Mens", "Gras", "Water", "Sneeuw", "Kerk", "Concert", "Slang", "Huis", "Computer", "Klok", "vlees", "Tong", "Mug", "Soldaat" };
             this.timer = new Timer();
+            this.stopwatch = new Stopwatch();
         }
 
 
@@ -85,15 +90,21 @@ namespace Server
         /// main loop for the room
         /// </summary>
         /// <param name="objectState"></param>
-        public void Start()
+        public bool Start()
         {
             //start of room
             //checks
             if (!Check())
             {
-                Stop();
-                return;
+                return false;
             }
+
+            if (running)
+            {
+                return false;
+            }
+
+            this.networkHandler.TellGameStart(this.players);
 
             SetNextRound();
 
@@ -102,7 +113,11 @@ namespace Server
             this.timer.Enabled = true;
             this.timer.Interval = guessTimeMills;
 
+            this.running = true;
+
             SetNextTurn();
+
+            return true;
         }
 
         /// <summary>
@@ -114,6 +129,7 @@ namespace Server
             {
                 if (this.players.Count < 2)
                 {
+                    Debug.WriteLine("not enough players");
                     return false;
                 }
 
@@ -239,7 +255,9 @@ namespace Server
             lock (this.players)
             {
                 this.players.Add(player);
+                player.playingInRoom = this;
             }
+            this.networkHandler.TellAboutNewPlayer(this.players.Take(this.players.Count - 1).ToList(), player); ;
         }
 
         public void RemovePlayer(Player player)
@@ -247,6 +265,28 @@ namespace Server
             lock (this.players)
             {
                 this.players.Remove(player);
+                player.playingInRoom = null;
+            }
+        }
+
+        public bool TryAddPlayer(Player player)
+        {
+            lock (this.players)
+            {
+                if (this.players.Count >= maxNumPlayers)
+                    return false;
+                this.players.Add(player);
+                player.playingInRoom = this;
+            }
+            this.networkHandler.TellAboutNewPlayer(this.players.Take(this.players.Count - 1).ToList(), player); ;
+            return true;
+        }
+
+        public ReadOnlyCollection<Player> GetPlayers()
+        {
+            lock (this.players)
+            {
+                return new ReadOnlyCollection<Player>(this.players);
             }
         }
 

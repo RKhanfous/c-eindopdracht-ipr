@@ -3,6 +3,7 @@ using SharedNetworking.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -11,18 +12,15 @@ using System.Threading.Tasks;
 
 namespace Server
 {
-    public class Client : SharedClient
+    public class Client : SharedClient, IClient
     {
         private NetworkHandler networkHandler;
         private string username { get; set; }
-        public int clientID { get; set; }
+        public uint ClientId { get; set; }
 
-        private NetworkStream stream;
-
-        public Client(TcpClient tcpClient, NetworkHandler network, int clientID) : base(tcpClient)
+        public Client(TcpClient tcpClient, NetworkHandler network, uint clientID) : base(tcpClient)
         {
-            this.clientID = clientID;
-            this.stream = tcpClient.GetStream();
+            this.ClientId = clientID;
             this.networkHandler = network;
         }
 
@@ -36,7 +34,7 @@ namespace Server
 
             byte[] lengthAndMessageID = lengthPacket.Concat(packetMessageAsBytes).ToArray();
 
-            stream.BeginWrite(lengthAndMessageID, 0, lengthAndMessageID.Length, new AsyncCallback(onWrite), null);
+            this.stream.BeginWrite(lengthAndMessageID, 0, lengthAndMessageID.Length, new AsyncCallback(onWrite), null);
         }
 
         private void onWrite(IAsyncResult ar)
@@ -44,29 +42,71 @@ namespace Server
             this.stream.EndWrite(ar);
         }
 
-        protected override void HandleData(byte[] messageBytes)
+        protected override async void HandleData(byte[] messageBytes)
         {
-            Console.WriteLine("Got a packet: " + messageBytes);
 
-            byte[] packetMessage = messageBytes.Skip(5).ToArray();
+            byte[] payload = messageBytes.Skip(5).ToArray();
 
-            string packet = Encoding.ASCII.GetString(packetMessage);
+            string packet = Encoding.ASCII.GetString(payload);
 
-            byte command = messageBytes[4];
-            switch (command)
+            byte messageId = messageBytes[4];
+            switch (messageId)
             {
                 case 0x01:
-                    networkHandler.drawLine(clientID, messageBytes);
+                    networkHandler.DrewLine(ClientId, messageBytes);
                     break;
 
                 case 0x02:
+                    string identifier;
+                    bool worked = DataParser.getJsonIdentifier(messageBytes, out identifier);
+                    if (!worked)
+                        throw new Exception("couldn't get identifier from json");
+                    switch (identifier)
+                    {
+                        case DataParser.LOG_ON:
+                            username = DataParser.GetUsernameFromLogOnjson(payload);
+                            if (username == null)
+                                throw new Exception("couldn't get username from json");
+                            Console.WriteLine($"received username {username}");
+
+                            (string, bool) roomData = networkHandler.Server.GetRoom(username, this.ClientId, DataParser.GetRoomCodeFromLogOnjson(payload));
+                            if (roomData.Item1 == null)
+                                throw new Exception("should never happen");
+
+                            Player player = networkHandler.Server.GetPlayer(ClientId);
+                            SendMessage(DataParser.GetOwnDataMessage(player.username, player.clientID));
+
+                            SendMessage(DataParser.GetGoToRoomMessage(roomData.Item1, roomData.Item2));
+
+                            networkHandler.SendDataToPlayer(this);
+                            break;
+                        case DataParser.START_GAME:
+                            if (this.networkHandler.Server.GetPlayer(ClientId).playingInRoom.Start())
+                                SendMessage(DataParser.GetStartMessage());
+                            else
+                                SendMessage(DataParser.GetGoToRoomMessage(this.networkHandler.Server.GetPlayer(ClientId).playingInRoom.roomCode, false));
+                            break;
+                        case DataParser.CLEAR_LINES:
+                            this.networkHandler.DeleteLines(this.ClientId);
+
+                            break;
+
+                        case DataParser.GUESS:
+                            int score = this.networkHandler.Guess(this.ClientId, DataParser.GetGuessFromjsonMessage(payload));
+                            SendMessage(DataParser.GetGuessScoreMessage(score));
+                            break;
+                        default:
+                            Console.WriteLine($"Received json with identifier {identifier}");
+                            break;
+                    }
                     break;
 
                 default:
+                    Debug.WriteLine($"received message with id {messageId}");
                     break;
 
             }
-            
+
         }
 
         public byte[] addByteToArray(byte[] bArray, byte newByte)

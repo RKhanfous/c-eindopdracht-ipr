@@ -13,28 +13,30 @@ namespace WpfClient.ViewModels
     {
         private readonly MainViewModel mainViewModel;
         public string Username { get; set; }
-        public string RoomName { get; set; }
+        public string RoomCode { get; set; }
         public LoginViewModel(MainViewModel mainViewModel)
         {
             this.mainViewModel = mainViewModel;
-            this.RoomName = "random";
-            this.JoinCommand = new RelayCommand(() =>
+            this.RoomCode = "random";
+            this.JoinCommand = new RelayCommand(async () =>
             {
                 if (Username != null)
                 {
-                    //Task createClient = this.mainViewModel.CreateClient(Username);
-                    //Debug.WriteLine("awaiting client connect");
-                    //createClient.Wait();
-                    //Debug.WriteLine("client connected");
+                    Debug.WriteLine("awaiting client connect");
+                    await this.mainViewModel.connectToServer;
+                    Debug.WriteLine("client connected");
+                    Debug.WriteLine("username is " + Username);
+                    this.mainViewModel.Client.LogOn(Username, RoomCode);
 
-                    if (RoomName == "random" || RoomName == "")
-                    {
-                        this.mainViewModel.SelectedViewModel = new GameViewModel(this.mainViewModel, Username);
-                    }
-                    else
-                    {
-                        this.mainViewModel.SelectedViewModel = new RoomViewModel(this.mainViewModel, Username, RoomName);
-                    }
+
+                    //if (RoomCode == "random" || RoomCode == "")
+                    //{
+                    //    this.mainViewModel.SelectedViewModel = new GameViewModel(this.mainViewModel, Username);
+                    //}
+                    //else
+                    //{
+                    //    this.mainViewModel.SelectedViewModel = new RoomViewModel(this.mainViewModel, Username, RoomCode);
+                    //}
                 }
                 else
                 {

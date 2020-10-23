@@ -6,11 +6,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\Networking\Networking.csproj" />
 	</ItemGroup>
 
-	<Import Project="..\SharedNetworking\SharedNetworking.projitems" Label="Shared" />
-
 	<Import Project="..\SharedSkribbl\SharedSkribbl.projitems" Label="Shared" />
+
+	<Import Project="..\SharedNetworking\SharedNetworking.projitems" Label="Shared" />
 
 </Project>

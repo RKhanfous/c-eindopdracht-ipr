@@ -13,15 +13,16 @@ namespace WpfClient.ViewModels
 
         public ICommand GoToGameCommand { get; set; }
 
-        public RoomViewModel(MainViewModel mainViewModel, string Username, string RoomName)
+        public RoomViewModel(MainViewModel mainViewModel, string RoomName)
         {
             this.MainViewModel = mainViewModel;
             this.Roomname = RoomName;
 
             this.GoToGameCommand = new RelayCommand(() =>
             {
-                this.MainViewModel.SelectedViewModel = new GameViewModel(this.MainViewModel, Username);
-                Debug.WriteLine(this.MainViewModel.SelectedViewModel);
+                //this.MainViewModel.SelectedViewModel = new GameViewModel(this.MainViewModel);
+                //Debug.WriteLine(this.MainViewModel.SelectedViewModel);
+                this.MainViewModel.Client.AskToStart();
             });
         }
     }

@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Utils\DataParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Player.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\SharedClient.cs" />
   </ItemGroup>
 </Project>

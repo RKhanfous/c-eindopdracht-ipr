@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using SharedSkribbl;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -21,7 +22,6 @@ namespace WpfClient.ViewModels
         private int mOuterMarginSize = 10;
         private int mWindowRadius = 10;
 
-        private Client client;
 
         #endregion
 
@@ -38,13 +38,27 @@ namespace WpfClient.ViewModels
         #endregion
 
         #region public properties
-        //public Info InfoModel { get; set; }
+        public Client Client { get; set; }
 
         public ObservableObject SelectedViewModel { get; set; }
 
         public ObservableCollection<Player> Players { get; private set; } = new ObservableCollection<Player>();
 
-        public Player MePlayer { get; set; } = new Player() { IsDrawing = true };
+        public Player MePlayer { get; set; }
+        public ObservableCollection<string> Chat { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<Line> Lines { get; set; } = new ObservableCollection<Line>();
+
+        internal Task connectToServer;
+
+        public string currentWord { get; set; } = "no word found";
+
+        public bool Connected
+        {
+            get
+            {
+                return Client.Connected();
+            }
+        }
 
 
         /// <summary>
@@ -122,25 +136,18 @@ namespace WpfClient.ViewModels
 
             var resizer = new WindowResizer(this.mWindow);
 
-            //test code
-
-            this.Players.Add(this.MePlayer);
-            Random random = new Random();
-            for (uint i = 1; i < 4; i++)
-            {
-                this.Players.Add(new Player() { Username = "bob", Id = i, Score = (uint)random.Next(100), IsDrawing = false });
-            }
+            this.connectToServer = CreateClient();
         }
 
         //check needed
-        internal async Task CreateClient(string username)
+        internal async Task CreateClient()
         {
-            if (client == null)
+            if (Client == null)
             {
                 TcpClient tcpClient = new TcpClient();
                 await tcpClient.ConnectAsync("localhost", 5555);
 
-                this.client = new Client(tcpClient, username, this);
+                this.Client = new Client(tcpClient, this);
             }
             else
             {
@@ -160,6 +167,79 @@ namespace WpfClient.ViewModels
         internal Point GetRawMousePosition()
         {
             return Mouse.GetPosition(this.mWindow);
+        }
+
+        #endregion
+
+        #region clientCallBack interface
+
+        public void GoToGameView(string RoomCode)
+        {
+            this.SelectedViewModel = new GameViewModel(this);
+        }
+
+        public void GoToRoomView(string RoomCode)
+        {
+            this.SelectedViewModel = new RoomViewModel(this, RoomCode);
+        }
+
+        public void AddPlayer(SharedNetworking.Utils.Player dataPlayer)
+        {
+            foreach (Player player in this.Players)
+            {
+                if (player.Id == dataPlayer.Id)
+                {
+                    return;
+                }
+            }
+            Application.Current.Dispatcher.BeginInvoke(new Action<SharedNetworking.Utils.Player>((ActiondataPlayer) =>
+            {
+                this.Players.Add(new Player() { Username = ActiondataPlayer.Username, Id = ActiondataPlayer.Id, Score = ActiondataPlayer.Score });
+            }), dataPlayer);
+
+            //this.Players.Add(new Player() { Username = dataPlayer.Username, Id = dataPlayer.Id, Score = dataPlayer.Score });
+        }
+
+        public void SetMePlayer(string username, uint id)
+        {
+            this.MePlayer = new Player() { Username = username, Id = id };
+            this.Players.Add(this.MePlayer);
+        }
+
+        public void SetDrawer(uint id)
+        {
+            foreach (Player player in this.Players)
+            {
+                player.IsDrawing = player.Id == id;
+            }
+            this.currentWord = "";
+        }
+
+        public void AddLine(Line line)
+        {
+            Application.Current.Dispatcher.BeginInvoke(new Action<Line>((actionLine) =>
+            {
+                this.Lines.Add(actionLine);
+            }), line);
+        }
+
+        public void ClearLines()
+        {
+            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                this.Lines.Clear();
+            }));
+        }
+
+        public void GiveScore(int score)
+        {
+            Application.Current.Dispatcher.BeginInvoke(new Action<int>((score) =>
+            {
+                if (score == -1)
+                    this.Chat.Add("You Guessed Wrong");
+                else
+                    this.Chat.Add($"You Guessed right and got {score} points");
+            }), score);
         }
 
         #endregion

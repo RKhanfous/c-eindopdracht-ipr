@@ -29,7 +29,7 @@ namespace SharedSkribbl
             return bytes;
         }
 
-        public static Line getLine(byte[] bytes)
+        public static Line GetLine(byte[] bytes)
         {
             if (bytes == null || bytes.Length != 14)
                 throw new ArgumentNullException("bytes null or not of length 14");
