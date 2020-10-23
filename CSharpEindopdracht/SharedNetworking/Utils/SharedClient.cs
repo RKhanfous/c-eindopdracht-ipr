@@ -33,7 +33,7 @@ namespace SharedNetworking.Utils
             Array.Copy(buffer, 0, totalBuffer, totalBufferReceived, receivedBytes);
             totalBufferReceived += receivedBytes;
 
-            ushort expectedMessageLength = BitConverter.ToUInt16(totalBuffer, 0);
+            int expectedMessageLength = BitConverter.ToInt32(totalBuffer, 0);
             while (totalBufferReceived >= expectedMessageLength)
             {
                 //volledig packet binnen
@@ -45,6 +45,10 @@ namespace SharedNetworking.Utils
 
                 //Array.Copy(messageBytes, 5, payloadbytes, 0, payloadbytes.Length);
                 HandleData(messageBytes);
+
+
+                totalBufferReceived -= expectedMessageLength;
+                expectedMessageLength = BitConverter.ToInt32(totalBuffer, 0);
             }
 
             this.stream.BeginRead(this.buffer, 0, this.buffer.Length, new AsyncCallback(OnRead), null);

@@ -3,6 +3,7 @@ using SharedNetworking.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -45,18 +46,35 @@ namespace Server
         {
             Console.WriteLine("Got a packet: " + messageBytes);
 
-            byte[] packetMessage = messageBytes.Skip(5).ToArray();
+            byte[] payload = messageBytes.Skip(5).ToArray();
 
-            string packet = Encoding.ASCII.GetString(packetMessage);
+            string packet = Encoding.ASCII.GetString(payload);
 
-            byte command = messageBytes[4];
-            switch (command)
+            byte messageId = messageBytes[4];
+            switch (messageId)
             {
                 case 0x01:
                     networkHandler.drawLine(clientID, messageBytes);
                     break;
 
                 case 0x02:
+                    string identifier;
+                    bool worked = DataParser.getJsonIdentifier(messageBytes, out identifier);
+                    if (!worked)
+                        throw new Exception("couldn't get identifier from json");
+                    switch (identifier)
+                    {
+                        case DataParser.LOGON:
+                            username = DataParser.getUsernameFromLogOnjson(payload);
+                            if (username == null)
+                                throw new Exception("couldn't get username from json");
+                            Console.WriteLine($"received username {username}");
+                            break;
+
+                        default:
+                            Console.WriteLine($"Received json with identifier {identifier}");
+                            break;
+                    }
                     break;
 
                 default:

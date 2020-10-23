@@ -15,6 +15,9 @@ namespace Server
             clients = new List<Client>();
             listener = new TcpListener(IPAddress.Any, 5555);
             listener.Start();
+            Console.WriteLine($"==========================================================================\n" +
+                                $"\tstarted accepting clients at {DateTime.Now}\n" +
+                            $"==========================================================================");
             listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
         }
 
