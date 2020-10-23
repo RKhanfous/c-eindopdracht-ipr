@@ -26,6 +26,7 @@
                             <StackPanel>
                                 <TextBlock Text="{Binding Username}"/>
                                 <TextBlock Text="{Binding Score, StringFormat=Score: {0}, FallbackValue=failed}"/>
+                                <TextBlock Text="drawing" IsEnabled="{Binding IsDrawing}" />
                             </StackPanel>
                         </StackPanel>
                     </DataTemplate>
