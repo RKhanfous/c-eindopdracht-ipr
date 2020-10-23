@@ -64,11 +64,17 @@ namespace Server
                         throw new Exception("couldn't get identifier from json");
                     switch (identifier)
                     {
-                        case DataParser.LOGON:
-                            username = DataParser.getUsernameFromLogOnjson(payload);
+                        case DataParser.LOG_ON:
+                            username = DataParser.GetUsernameFromLogOnjson(payload);
                             if (username == null)
                                 throw new Exception("couldn't get username from json");
                             Console.WriteLine($"received username {username}");
+
+                            string roomCode = networkHandler.Server.GetRoom(username, this.clientID, DataParser.GetRoomCodeFromLogOnjson(payload));
+                            if (roomCode == null)
+                                throw new Exception("should never happen");
+
+                            sendMessage(DataParser.GetGoToRoomMessage(roomCode));
                             break;
 
                         default:

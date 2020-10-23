@@ -54,6 +54,15 @@ namespace SharedNetworking.Utils
             this.stream.BeginRead(this.buffer, 0, this.buffer.Length, new AsyncCallback(OnRead), null);
         }
 
+        protected void sendMessage(byte[] message)
+        {
+            this.stream.BeginWrite(message, 0, message.Length, new AsyncCallback(OnWrite), null);
+        }
+        private void OnWrite(IAsyncResult ar)
+        {
+            this.stream.EndWrite(ar);
+        }
+
         protected abstract void HandleData(byte[] messageBytes);
 
     }

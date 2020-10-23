@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Server
 {
-    interface IServer
+    public interface IServer
     {
-        void GiveBytes(byte[] bytes);
+        string GetRoom(string username, int clientID, string roomCode);
     }
 }

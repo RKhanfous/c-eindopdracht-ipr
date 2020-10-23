@@ -31,21 +31,10 @@ namespace WpfClient.Utils
             return this.client.Client.Connected;
         }
 
-        private void sendMessage(byte[] message)
-        {
-            this.stream.BeginWrite(message, 0, message.Length, new AsyncCallback(OnWrite), null);
-        }
-
-        private void OnWrite(IAsyncResult ar)
-        {
-            this.stream.EndWrite(ar);
-        }
-
-        internal void LogOn(string username)
+        internal void LogOn(string username, string roomCode)
         {
             this.username = username;
-            Debug.WriteLine("sending username " + username);
-            sendMessage(DataParser.getLogOnJsonMessage(username));
+            sendMessage(DataParser.GetLogOnJsonMessage(username, roomCode));
         }
     }
 }

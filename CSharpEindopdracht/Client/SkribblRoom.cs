@@ -5,6 +5,7 @@ using System.Timers;
 using System.Linq;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
 namespace Server
 {
@@ -12,7 +13,7 @@ namespace Server
     /// skribbl room
     /// 
     /// </summary>
-    class SkribbleRoom
+    class SkribblRoom
     {
         #region private Members
 
@@ -46,14 +47,14 @@ namespace Server
         /// 
         /// </summary>
         /// <param name="networkHandler"></param>
-        public SkribbleRoom(NetworkHandler networkHandler) : this(networkHandler, "") { }
+        public SkribblRoom(NetworkHandler networkHandler) : this(networkHandler, "") { }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="networkHandler"></param>
         /// <param name="roomCode"></param>
-        public SkribbleRoom(NetworkHandler networkHandler, string roomCode) : this(networkHandler, roomCode, 3) { }
+        public SkribblRoom(NetworkHandler networkHandler, string roomCode) : this(networkHandler, roomCode, 3) { }
 
         /// <summary>
         /// 
@@ -61,7 +62,7 @@ namespace Server
         /// <param name="networkHandler"></param>
         /// <param name="roomCode"></param>
         /// <param name="numberOfRounds"></param>
-        public SkribbleRoom(NetworkHandler networkHandler, string roomCode, int numberOfRounds)
+        public SkribblRoom(NetworkHandler networkHandler, string roomCode, int numberOfRounds)
         {
             this.networkHandler = networkHandler;
             this.roomCode = roomCode;
@@ -239,6 +240,7 @@ namespace Server
             lock (this.players)
             {
                 this.players.Add(player);
+                player.playingInRoom = this;
             }
         }
 
@@ -247,6 +249,19 @@ namespace Server
             lock (this.players)
             {
                 this.players.Remove(player);
+                player.playingInRoom = null;
+            }
+        }
+
+        public bool TryAddPlayer(Player player)
+        {
+            lock (this.players)
+            {
+                if (this.players.Count >= maxNumPlayers)
+                    return false;
+                this.players.Add(player);
+                player.playingInRoom = this;
+                return true;
             }
         }
 

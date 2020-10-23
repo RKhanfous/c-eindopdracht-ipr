@@ -10,8 +10,11 @@ namespace Server
     {
         private TcpListener listener;
         public List<Client> clients { get; set; }
-        public NetworkHandler()
+        public IServer Server { get; private set; }
+
+        public NetworkHandler(IServer server)
         {
+            this.Server = server;
             clients = new List<Client>();
             listener = new TcpListener(IPAddress.Any, 5555);
             listener.Start();
@@ -36,6 +39,8 @@ namespace Server
             var tcpClient = listener.EndAcceptTcpClient(ar);
             Console.WriteLine($"Client connected from {tcpClient.Client.RemoteEndPoint}");
             clients.Add(new Client(tcpClient, this, randomClientID));
+
+
             listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
         }
         internal void TellNewTurn(Player currentPlayer, string currentWord, List<Player> players)

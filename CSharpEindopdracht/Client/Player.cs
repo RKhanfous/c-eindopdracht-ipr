@@ -11,8 +11,7 @@ namespace Server
         public string username { get; }
         public int score { get; private set; }
         public int clientID { get; }
-        public SkribbleRoom playingInRoom { get; set; }
-        public bool active { get; set; }
+        public SkribblRoom playingInRoom { get; set; }
 
         #endregion
 

@@ -10,7 +10,8 @@ namespace SharedNetworking.Utils
 
         #region consts
 
-        public const string LOGON = "LOGON";
+        public const string LOG_ON = "LOGON";
+        public const string GO_TO_ROOM = "GOTOROOM";
         #endregion
 
 
@@ -81,25 +82,43 @@ namespace SharedNetworking.Utils
             return getMessage(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(json)), 0x02);
         }
 
-        public static byte[] getLogOnJsonMessage(string mUsername, string mRoomCode)
+        //==============================================================================================================================================
+        public static byte[] GetLogOnJsonMessage(string mUsername, string mRoomCode)
         {
-            return getJsonMessage(LOGON, new { username = mUsername, roomCode = mRoomCode });
+            return getJsonMessage(LOG_ON, new { username = mUsername, roomCode = mRoomCode });
         }
 
-        public static string getUsernameFromLogOnjson(byte[] payload)
+        public static string GetUsernameFromLogOnjson(byte[] payload)
         {
             dynamic json = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(payload));
-            if (json.identifier == LOGON)
+            if (json.identifier == LOG_ON)
             {
                 return json.data.username;
             }
             return null;
         }
 
-        public static string getRoomCodeFromLogOnjson(byte[] payload)
+        public static string GetRoomCodeFromLogOnjson(byte[] payload)
         {
             dynamic json = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(payload));
-            if (json.identifier == LOGON)
+            if (json.identifier == LOG_ON)
+            {
+                return json.data.roomCode;
+            }
+            return null;
+        }
+
+        //==============================================================================================================================================
+
+        public static byte[] GetGoToRoomMessage(string mRoomCode)
+        {
+            return getJsonMessage(GO_TO_ROOM, new { roomCode = mRoomCode });
+        }
+
+        public static string GetRoomCodeFromGoToRoomjson(byte[] payload)
+        {
+            dynamic json = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(payload));
+            if (json.identifier == GO_TO_ROOM)
             {
                 return json.data.roomCode;
             }
