@@ -19,13 +19,21 @@ namespace WpfClient.ViewModels
             this.RoomName = "random";
             this.JoinCommand = new RelayCommand(() =>
             {
-                if (RoomName == "random" || RoomName == "")
+                if (Username != null)
                 {
-                    this.mainViewModel.SelectedViewModel = new GameViewModel(this.mainViewModel, Username);
+                    this.mainViewModel.createClient(Username);
+                    if (RoomName == "random" || RoomName == "")
+                    {
+                        this.mainViewModel.SelectedViewModel = new GameViewModel(this.mainViewModel, Username);
+                    }
+                    else
+                    {
+                        this.mainViewModel.SelectedViewModel = new RoomViewModel(this.mainViewModel, Username, RoomName);
+                    }
                 }
                 else
                 {
-                    this.mainViewModel.SelectedViewModel = new RoomViewModel(this.mainViewModel, Username, RoomName);
+                    //TODO
                 }
                 Debug.WriteLine("joinCommand");
                 Debug.WriteLine(this.mainViewModel.SelectedViewModel);

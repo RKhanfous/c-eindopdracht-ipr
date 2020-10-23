@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using System.Diagnostics;
+using System.Net.Sockets;
 using System.Windows;
 using System.Windows.Input;
 using Util.MagicCode;
@@ -7,7 +8,7 @@ using WpfClient.Utils;
 
 namespace WpfClient.ViewModels
 {
-    class MainViewModel : ObservableObject
+    class MainViewModel : ObservableObject, IClientCallback
     {
         #region private members
 
@@ -15,6 +16,8 @@ namespace WpfClient.ViewModels
 
         private int mOuterMarginSize = 10;
         private int mWindowRadius = 10;
+
+        private Client client;
 
         #endregion
 
@@ -111,6 +114,22 @@ namespace WpfClient.ViewModels
             this.MenuCommand = new RelayCommand(() => SystemCommands.ShowSystemMenu(this.mWindow, GetMousePosition()));
 
             var resizer = new WindowResizer(this.mWindow);
+        }
+
+        //check needed
+        internal async void createClient(string username)
+        {
+            if (client == null)
+            {
+                TcpClient tcpClient = new TcpClient();
+                await tcpClient.ConnectAsync("localhost", 5555);
+
+                this.client = new Client(tcpClient, username, this);
+            }
+            else
+            {
+                Debug.WriteLine("[mainviewmodel] i don't want to implement singleton ok? client already exists");
+            }
         }
 
 
