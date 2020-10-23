@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 
 namespace Server
 {
@@ -14,7 +13,7 @@ namespace Server
         public NetworkHandler()
         {
             clients = new List<Client>();
-            listener = new TcpListener(IPAddress.Any, 15243);
+            listener = new TcpListener(IPAddress.Any, 5555);
             listener.Start();
             listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
         }

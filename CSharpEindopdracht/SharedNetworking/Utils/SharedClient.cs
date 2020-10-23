@@ -5,8 +5,8 @@ namespace SharedNetworking.Utils
 {
     public abstract class SharedClient
     {
-        private TcpClient client;
-        private NetworkStream stream;
+        protected TcpClient client;
+        protected NetworkStream stream;
         private byte[] buffer = new byte[1024];
         private byte[] totalBuffer = new byte[1024];
         private int totalBufferReceived = 0;

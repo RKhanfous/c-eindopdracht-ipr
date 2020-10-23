@@ -115,14 +115,14 @@
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Style="{StaticResource EnterTextBackground}" Grid.Column="0">
+                <TextBox Style="{StaticResource EnterTextBackground}" Grid.Column="0" Text="{Binding Guess}">
                     <!-- why not work-->
                     <!--<TextBox.InputBindings>
                     <KeyBinding Command="{Binding GuessCommand}" Key="Enter" />
                 </TextBox.InputBindings>-->
                 </TextBox>
 
-                <Button Grid.Column="1" Content="Send" Command="{Binding GuessCommand}" Margin=" 10 0 0 0"/>
+                <Button Grid.Column="1" Content="Send" Command="{Binding GuessCommand}" Margin=" 10 0 0 0" IsEnabled="{Binding MainViewModel.Connected}"/>
 
             </Grid>
 

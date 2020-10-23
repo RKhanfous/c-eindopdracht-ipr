@@ -23,5 +23,12 @@ namespace WpfClient.Utils
         {
             throw new NotImplementedException();
         }
+
+
+
+        public bool Connected()
+        {
+            return this.client.Client.Connected;
+        }
     }
 }

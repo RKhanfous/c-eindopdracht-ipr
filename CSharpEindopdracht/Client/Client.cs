@@ -17,12 +17,9 @@ namespace Server
         private string username { get; set; }
         public int clientID { get; set; }
 
-        private NetworkStream stream;
-
         public Client(TcpClient tcpClient, NetworkHandler network, int clientID) : base(tcpClient)
         {
             this.clientID = clientID;
-            this.stream = tcpClient.GetStream();
             this.networkHandler = network;
         }
 
@@ -36,7 +33,7 @@ namespace Server
 
             byte[] lengthAndMessageID = lengthPacket.Concat(packetMessageAsBytes).ToArray();
 
-            stream.BeginWrite(lengthAndMessageID, 0, lengthAndMessageID.Length, new AsyncCallback(onWrite), null);
+            this.stream.BeginWrite(lengthAndMessageID, 0, lengthAndMessageID.Length, new AsyncCallback(onWrite), null);
         }
 
         private void onWrite(IAsyncResult ar)
@@ -66,7 +63,7 @@ namespace Server
                     break;
 
             }
-            
+
         }
 
         public byte[] addByteToArray(byte[] bArray, byte newByte)

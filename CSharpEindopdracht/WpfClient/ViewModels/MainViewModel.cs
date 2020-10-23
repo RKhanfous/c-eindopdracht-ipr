@@ -38,13 +38,20 @@ namespace WpfClient.ViewModels
         #endregion
 
         #region public properties
-        //public Info InfoModel { get; set; }
 
         public ObservableObject SelectedViewModel { get; set; }
 
         public ObservableCollection<Player> Players { get; private set; } = new ObservableCollection<Player>();
 
         public Player MePlayer { get; set; } = new Player() { IsDrawing = true };
+
+        public bool Connected
+        {
+            get
+            {
+                return client.Connected();
+            }
+        }
 
 
         /// <summary>

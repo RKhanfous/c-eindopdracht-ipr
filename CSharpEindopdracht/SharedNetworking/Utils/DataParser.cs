@@ -1,30 +1,32 @@
-﻿using Server;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace SharedNetworking.Utils
 {
     class DataParser
     {
-        internal void TellNewTurn(Player currentPlayer, string currentWord, List<Player> players)
+        /// <summary>
+        /// constructs a message with the payload and messageId
+        /// </summary>
+        /// <param name="payload"></param>
+        /// <param name="messageId"></param>
+        /// <returns>the message ready for sending</returns>
+        private static byte[] getMessage(byte[] payload, byte messageId)
         {
-            throw new NotImplementedException();
+            byte[] res = new byte[payload.Length + 5];
+
+            Array.Copy(BitConverter.GetBytes(payload.Length + 5), 0, res, 0, 4);
+            res[4] = messageId;
+            Array.Copy(payload, 0, res, 5, payload.Length);
+
+            return res;
         }
 
-        internal void TellTurnOver(List<Player> players, string currentWord)
+
+        public static byte[] getLineMessage(byte[] line)
         {
-            throw new NotImplementedException();
+            return getMessage(line, 0x01);
         }
 
-        internal void TellGameReset(List<Player> players)
-        {
-            throw new NotImplementedException();
-        }
 
-        internal void TellGameOver(List<Player> players)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
