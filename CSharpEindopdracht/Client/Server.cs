@@ -21,7 +21,7 @@ namespace Server
             players = new List<Player>();
         }
 
-        public string GetRoom(string username, int clientID, string roomCode)
+        public (string, bool) GetRoom(string username, int clientID, string roomCode)
         {
             Player player = getPlayer(clientID);
 
@@ -34,16 +34,16 @@ namespace Server
             SkribblRoom skribbleRoom = null;
             if (roomCode == "random" || roomCode == "")
             {
-                string newRoomCode = AddToRandomSkribblRoom(player);
-                if (newRoomCode != null)
-                    return newRoomCode;
+                (string, bool) roomData = AddToRandomSkribblRoom(player);
+                if (roomData.Item1 != null)
+                    return roomData;
             }
             else
             {
                 skribbleRoom = GetSkribbleRoom(roomCode);
                 if (skribbleRoom != null)
                 {
-                    return skribbleRoom.roomCode;
+                    return (skribbleRoom.roomCode, skribbleRoom.running);
                 }
             }
 
@@ -52,9 +52,9 @@ namespace Server
             {
                 skribbleRoom = new SkribblRoom(networkHandler, roomCode);
                 skribbleRoom.AddPlayer(player);
-                return skribbleRoom.roomCode;
+                return (skribbleRoom.roomCode, skribbleRoom.running);
             }
-            return null;
+            return default;
         }
 
 
@@ -85,16 +85,16 @@ namespace Server
             return null;
         }
 
-        private string AddToRandomSkribblRoom(Player player)
+        private (string, bool) AddToRandomSkribblRoom(Player player)
         {
             foreach (SkribblRoom skribbleRoom in skribblRooms)
             {
                 if (skribbleRoom.TryAddPlayer(player))
                 {
-                    return skribbleRoom.roomCode;
+                    return (skribbleRoom.roomCode, skribbleRoom.running);
                 }
             }
-            return null;
+            return default;
         }
 
         #endregion

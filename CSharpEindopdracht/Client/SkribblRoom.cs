@@ -103,6 +103,8 @@ namespace Server
             this.timer.Enabled = true;
             this.timer.Interval = guessTimeMills;
 
+            this.running = true;
+
             SetNextTurn();
         }
 

@@ -6,6 +6,6 @@ namespace Server
 {
     public interface IServer
     {
-        string GetRoom(string username, int clientID, string roomCode);
+        (string, bool) GetRoom(string username, int clientID, string roomCode);
     }
 }

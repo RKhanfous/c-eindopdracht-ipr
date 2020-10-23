@@ -44,7 +44,6 @@ namespace Server
 
         protected override void HandleData(byte[] messageBytes)
         {
-            Console.WriteLine("Got a packet: " + messageBytes);
 
             byte[] payload = messageBytes.Skip(5).ToArray();
 
@@ -70,11 +69,11 @@ namespace Server
                                 throw new Exception("couldn't get username from json");
                             Console.WriteLine($"received username {username}");
 
-                            string roomCode = networkHandler.Server.GetRoom(username, this.clientID, DataParser.GetRoomCodeFromLogOnjson(payload));
-                            if (roomCode == null)
+                            (string, bool) roomData = networkHandler.Server.GetRoom(username, this.clientID, DataParser.GetRoomCodeFromLogOnjson(payload));
+                            if (roomData.Item1 == null)
                                 throw new Exception("should never happen");
 
-                            sendMessage(DataParser.GetGoToRoomMessage(roomCode));
+                            sendMessage(DataParser.GetGoToRoomMessage(roomData.Item1, roomData.Item2));
                             break;
 
                         default:

@@ -110,19 +110,19 @@ namespace SharedNetworking.Utils
 
         //==============================================================================================================================================
 
-        public static byte[] GetGoToRoomMessage(string mRoomCode)
+        public static byte[] GetGoToRoomMessage(string mRoomCode, bool mRunning)
         {
-            return getJsonMessage(GO_TO_ROOM, new { roomCode = mRoomCode });
+            return getJsonMessage(GO_TO_ROOM, new { roomCode = mRoomCode, running = mRunning });
         }
 
-        public static string GetRoomCodeFromGoToRoomjson(byte[] payload)
+        public static (string, bool) GetRoomCodeFromGoToRoomjson(byte[] payload)
         {
             dynamic json = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(payload));
             if (json.identifier == GO_TO_ROOM)
             {
-                return json.data.roomCode;
+                return (json.data.roomCode, json.data.running);
             }
-            return null;
+            return default;
         }
 
         #endregion
