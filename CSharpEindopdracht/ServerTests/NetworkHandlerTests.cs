@@ -18,7 +18,7 @@ namespace ServerTests
 
             //here we fill up a list of clients for the Networkhandler.
             List<Client> clients = new List<Client>();
-            for(int i = 0; i < 5; i++)
+            for (int i = 0; i < 5; i++)
             {
                 clients.Add(new Client(new TcpClient(), new NetworkHandler(), i));
             }
@@ -28,6 +28,7 @@ namespace ServerTests
             Assert.IsTrue(networkHandler.checkClientsForUser(2));
         }
 
+        [TestMethod]
         public void checkClientsForUser_checkIfClientDoesntExist_returnFalse()
         {
             //here we create a instance of the NetworkHandler object.
@@ -45,6 +46,7 @@ namespace ServerTests
             Assert.IsFalse(networkHandler.checkClientsForUser(7));
         }
 
+        [TestMethod]
         public void getClientByUser_getRequestedClient_returnClientWithClientID()
         {
             //here we create a instance of the NetworkHandler object.
