@@ -40,7 +40,9 @@ namespace WpfClient.ViewModels
 
             this.MouseMoveCommand = new RelayCommand<MouseEventArgs>((param) =>
             {
-                if (Mouse.LeftButton == MouseButtonState.Pressed)
+                if (true
+                    && Mouse.LeftButton == MouseButtonState.Pressed
+                    && IsDistanceGreater(lastPoint, Mouse.GetPosition(CanvasBorder), 1))
                 {
                     Line line = new Line();
 
@@ -62,5 +64,16 @@ namespace WpfClient.ViewModels
                 }
             });
         }
+
+
+        #region helpers
+
+        private static bool IsDistanceGreater(Point point1, Point point2, double distance)
+        {
+            Vector difference = (point1 - point2);
+            return (distance * distance) > ((difference.X * difference.X) + (difference.Y * difference.Y));
+        }
+
+        #endregion
     }
 }

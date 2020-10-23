@@ -24,6 +24,14 @@
 		<PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Reference Include="Networking">
+	    <HintPath>..\Networking\bin\Debug\netcoreapp3.1\Networking.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
 	<Import Project="..\SharedSkribbl\SharedSkribbl.projitems" Label="Shared" />
+
+	<Import Project="..\SharedNetworking\SharedNetworking.projitems" Label="Shared" />
 
 </Project>

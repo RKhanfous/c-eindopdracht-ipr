@@ -10,5 +10,6 @@ namespace WpfClient.Models
         public string username { get; set; }
         public uint Id { get; set; }
         public uint score { get; set; }
+        public bool IsDrawing { get; set; }
     }
 }

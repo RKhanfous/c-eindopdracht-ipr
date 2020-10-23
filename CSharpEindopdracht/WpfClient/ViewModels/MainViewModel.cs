@@ -1,9 +1,12 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Util.MagicCode;
+using WpfClient.Models;
 using WpfClient.Utils;
 
 namespace WpfClient.ViewModels
@@ -38,7 +41,10 @@ namespace WpfClient.ViewModels
 
         public ObservableObject SelectedViewModel { get; set; }
 
-        //public Client client { get; }
+        public ObservableCollection<Player> Players { get; private set; }
+
+        public Player MePlayer { get; set; }
+
 
         /// <summary>
         /// size of the resize border around the window
@@ -117,7 +123,7 @@ namespace WpfClient.ViewModels
         }
 
         //check needed
-        internal async void createClient(string username)
+        internal async Task CreateClient(string username)
         {
             if (client == null)
             {

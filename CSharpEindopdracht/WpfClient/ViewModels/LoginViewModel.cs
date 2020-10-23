@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using WpfClient.Utils;
 
@@ -21,7 +22,11 @@ namespace WpfClient.ViewModels
             {
                 if (Username != null)
                 {
-                    this.mainViewModel.createClient(Username);
+                    Task createClient = this.mainViewModel.CreateClient(Username);
+                    Debug.WriteLine("awaiting client connect");
+                    createClient.Wait();
+                    Debug.WriteLine("client connected");
+
                     if (RoomName == "random" || RoomName == "")
                     {
                         this.mainViewModel.SelectedViewModel = new GameViewModel(this.mainViewModel, Username);
