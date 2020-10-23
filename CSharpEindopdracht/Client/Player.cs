@@ -4,19 +4,18 @@ using System.Text;
 
 namespace Server
 {
-    class Player
+    public class Player
     {
         #region public properties
 
         public string username { get; }
         public int score { get; private set; }
-        public int clientID { get; }
-        public SkribbleRoom playingInRoom { get; set; }
-        public bool active { get; set; }
+        public uint clientID { get; }
+        public SkribblRoom playingInRoom { get; set; }
 
         #endregion
 
-        public Player(string username, int score, int clientID)
+        public Player(string username, int score, uint clientID)
         {
             this.username = username;
             this.score = score;
@@ -30,6 +29,11 @@ namespace Server
                 throw new ArgumentOutOfRangeException("cannot add negative scores");
             }
             this.score += score;
+        }
+
+        public SharedNetworking.Utils.Player GetDataPlayer()
+        {
+            return new SharedNetworking.Utils.Player() { Username = username, Id = (uint)clientID, Score = (uint)score };
         }
     }
 }

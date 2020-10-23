@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:WpfClient.Views" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       mc:Ignorable="d" 
          ShowsNavigationUI="False"
-             d:DesignHeight="450" d:DesignWidth="800"
+             d:DesignHeight="800" d:DesignWidth="1400"
              Background="White"
       Loaded="Page_Loaded">
     <Grid Margin="10" Name="stupidName">
@@ -26,6 +26,9 @@
                             <StackPanel>
                                 <TextBlock Text="{Binding Username}"/>
                                 <TextBlock Text="{Binding Score, StringFormat=Score: {0}, FallbackValue=failed}"/>
+                                <Popup IsOpen="{Binding IsDrawing}">
+                                    <TextBlock Text="drawing" />
+                                </Popup>
                             </StackPanel>
                         </StackPanel>
                     </DataTemplate>
@@ -34,10 +37,10 @@
         </StackPanel>
 
         <StackPanel Grid.Column="1">
-            <Label Name="GuessWordGameView" Content="Word" FontSize="18" HorizontalAlignment="Center"/>
+            <Label Name="GuessWordGameView" Content="{Binding MainViewModel.currentWord}" FontSize="18" HorizontalAlignment="Center"/>
 
             <Border Name="canvasborder"  Width="800" Height="450">
-                <ItemsControl ItemsSource="{Binding Path=Lines}">
+                <ItemsControl ItemsSource="{Binding Path=MainViewModel.Lines}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas Name="MyCanvas" Width="800" Height="450" Background="LightGray">
@@ -45,8 +48,6 @@
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="MouseDown">
                                         <i:InvokeCommandAction Command="{Binding MouseDownCommand}"/>
-                                        <!--<cmd:EventToCommand Command="{Binding Mode=OneWay, Path=MouseDownCommand}"
-                            PassEventArgsToCommand="True" />-->
                                     </i:EventTrigger>
                                     <i:EventTrigger EventName="MouseMove">
                                         <i:InvokeCommandAction Command="{Binding MouseMoveCommand}"/>
@@ -67,7 +68,7 @@
 
                 <!-- buttons for colors -->
 
-                <Button  Width="30" Height="30" Margin="5">
+                <Button  Width="30" Height="30" Margin="5" Click="Page_Loaded">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Grid>
@@ -109,20 +110,20 @@
         </StackPanel>
         <StackPanel Grid.Column="2">
             <Label x:Name="ChatLabelGameView" Content="CHAT:" FontSize="18" HorizontalAlignment="Center"></Label>
-            <ListBox Name="ChatListGameView" ItemsSource="{Binding Chat}" Height="500"/>
+            <ListBox Name="ChatListGameView" ItemsSource="{Binding MainViewModel.Chat}" Height="500"/>
             <Grid Margin="0 10 0 0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Style="{StaticResource EnterTextBackground}" Grid.Column="0">
+                <TextBox Style="{StaticResource EnterTextBackground}" Grid.Column="0" Text="{Binding Guess}">
                     <!-- why not work-->
                     <!--<TextBox.InputBindings>
                     <KeyBinding Command="{Binding GuessCommand}" Key="Enter" />
                 </TextBox.InputBindings>-->
                 </TextBox>
 
-                <Button Grid.Column="1" Content="Send" Command="{Binding GuessCommand}" Margin=" 10 0 0 0"/>
+                <Button Grid.Column="1" Content="Send" Command="{Binding GuessCommand}" Margin=" 10 0 0 0" IsEnabled="{Binding MainViewModel.Connected}"/>
 
             </Grid>
 

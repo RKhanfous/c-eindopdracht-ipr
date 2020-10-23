@@ -5,8 +5,8 @@ namespace SharedNetworking.Utils
 {
     public abstract class SharedClient
     {
-        private TcpClient client;
-        private NetworkStream stream;
+        protected TcpClient client;
+        protected NetworkStream stream;
         private byte[] buffer = new byte[1024];
         private byte[] totalBuffer = new byte[1024];
         private int totalBufferReceived = 0;
@@ -24,6 +24,8 @@ namespace SharedNetworking.Utils
 
         private void OnRead(IAsyncResult ar)
         {
+            if (ar == null || (!ar.IsCompleted) || (!this.stream.CanRead) || (!this.client.Connected))
+                return;
             int receivedBytes = this.stream.EndRead(ar);
 
             if (totalBufferReceived + receivedBytes > buffer.Length)
@@ -33,7 +35,7 @@ namespace SharedNetworking.Utils
             Array.Copy(buffer, 0, totalBuffer, totalBufferReceived, receivedBytes);
             totalBufferReceived += receivedBytes;
 
-            ushort expectedMessageLength = BitConverter.ToUInt16(totalBuffer, 0);
+            int expectedMessageLength = BitConverter.ToInt32(totalBuffer, 0);
             while (totalBufferReceived >= expectedMessageLength)
             {
                 //volledig packet binnen
@@ -45,9 +47,23 @@ namespace SharedNetworking.Utils
 
                 //Array.Copy(messageBytes, 5, payloadbytes, 0, payloadbytes.Length);
                 HandleData(messageBytes);
+
+                Array.Copy(totalBuffer, expectedMessageLength, totalBuffer, 0, (totalBufferReceived - expectedMessageLength)); //maybe unsafe idk
+
+                totalBufferReceived -= expectedMessageLength;
+                expectedMessageLength = BitConverter.ToInt32(totalBuffer, 0);
             }
 
             this.stream.BeginRead(this.buffer, 0, this.buffer.Length, new AsyncCallback(OnRead), null);
+        }
+
+        public void SendMessage(byte[] message)
+        {
+            this.stream.BeginWrite(message, 0, message.Length, new AsyncCallback(OnWrite), null);
+        }
+        private void OnWrite(IAsyncResult ar)
+        {
+            this.stream.EndWrite(ar);
         }
 
         protected abstract void HandleData(byte[] messageBytes);
