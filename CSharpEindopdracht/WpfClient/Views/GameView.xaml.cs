@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,17 +12,24 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfClient.ViewModels;
 
-namespace WpfClient
+namespace WpfClient.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for GameView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class GameView : Page
     {
-        public MainWindow()
+        public GameView()
         {
             InitializeComponent();
-            DataContext = new MainViewModel(this);
+
+        }
+
+        //work around
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            await System.Threading.Tasks.Task.Delay(500);
+            ((GameViewModel)this.DataContext).CanvasBorder = this.canvasborder;
         }
     }
 }

@@ -1,0 +1,132 @@
+﻿<Page x:Class="WpfClient.Views.GameView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfClient.Views" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+      mc:Ignorable="d" 
+         ShowsNavigationUI="False"
+             d:DesignHeight="800" d:DesignWidth="1400"
+             Background="White"
+      Loaded="Page_Loaded">
+    <Grid Margin="10" Name="stupidName">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0">
+            <Label x:Name="PlayersLabelGameView" Content="PLAYERS:" FontSize="18" HorizontalAlignment="Center"/>
+            <ListBox Name="PlayersListGameView" ItemsSource="{Binding MainViewModel.Players}" Height="500">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Images/PersonIcon.png" Width="50" Margin="0 0 5 0"/>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Username}"/>
+                                <TextBlock Text="{Binding Score, StringFormat=Score: {0}, FallbackValue=failed}"/>
+                                <!--<Popup IsOpen="{Binding IsDrawing}">
+                                    <TextBlock Text="drawing" />
+                                </Popup>-->
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1">
+            <Label Name="GuessWordGameView" Content="{Binding MainViewModel.currentWord}" FontSize="18" HorizontalAlignment="Center"/>
+
+            <Border Name="canvasborder"  Width="800" Height="450">
+                <ItemsControl ItemsSource="{Binding Path=MainViewModel.Lines}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas Name="MyCanvas" Width="800" Height="450" Background="LightGray">
+
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseDown">
+                                        <i:InvokeCommandAction Command="{Binding MouseDownCommand}"/>
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="MouseMove">
+                                        <i:InvokeCommandAction Command="{Binding MouseMoveCommand}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+
+                            </Canvas>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Line X1="{Binding X1}" Y1="{Binding Y1}" X2="{Binding X2}" Y2="{Binding Y2}" Stroke="Black" StrokeThickness="1"></Line>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+                <!-- buttons for colors -->
+
+                <Button  Width="30" Height="30" Margin="5" Click="Page_Loaded">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid>
+                                <Ellipse Fill="Black"/>
+                                <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button  Width="30" Height="30" Margin="5">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid>
+                                <Ellipse Fill="red"/>
+                                <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button  Width="30" Height="30" Margin="5">
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid>
+                                <Ellipse Fill="Green"/>
+                                <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <Button x:Name="WidthButton1" Width="30" Height="30" Content="Width" Margin="5"></Button>
+                <Button x:Name="WidthButton2" Width="30" Height="30" Content="Width1" Margin="5"></Button>
+                <Button x:Name="WidthButton3" Width="30" Height="30" Content="Width2" Margin="5"></Button>
+
+                <Button Grid.Column="0" Style="{StaticResource SystemIconButton}" Command="{Binding DeleteLinesCommand}" Width="30" Height="30">
+                    <Image Source="/Images/TrashcanIcon.png"/>
+                    <!--<TextBlock Text="icon"/>-->
+                </Button>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Column="2">
+            <Label x:Name="ChatLabelGameView" Content="CHAT:" FontSize="18" HorizontalAlignment="Center"></Label>
+            <ListBox Name="ChatListGameView" ItemsSource="{Binding MainViewModel.Chat}" Height="500"/>
+            <Grid Margin="0 10 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Style="{StaticResource EnterTextBackground}" Grid.Column="0" Text="{Binding Guess}">
+                    <!-- why not work-->
+                    <!--<TextBox.InputBindings>
+                    <KeyBinding Command="{Binding GuessCommand}" Key="Enter" />
+                </TextBox.InputBindings>-->
+                </TextBox>
+
+                <Button Grid.Column="1" Content="Send" Command="{Binding GuessCommand}" Margin=" 10 0 0 0" IsEnabled="{Binding MainViewModel.Connected}"/>
+
+            </Grid>
+
+        </StackPanel>
+    </Grid>
+</Page>

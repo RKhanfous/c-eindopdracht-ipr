@@ -1,12 +1,20 @@
 ﻿using System;
+using System.Threading;
 
-namespace Client
+namespace Server
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("server started");
+
+            Server server = new Server();
+
+            while (true)
+            {
+                Thread.Yield();
+            }
         }
     }
 }
