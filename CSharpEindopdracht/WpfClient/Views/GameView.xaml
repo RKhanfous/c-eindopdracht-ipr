@@ -98,9 +98,13 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-                <Button x:Name="WidthButton1" Width="30" Height="30" Content="Width" Margin="5"></Button>
-                <Button x:Name="WidthButton2" Width="30" Height="30" Content="Width1" Margin="5"></Button>
-                <Button x:Name="WidthButton3" Width="30" Height="30" Content="Width2" Margin="5"></Button>
+                <Button x:Name="WidthButton1" Command="{Binding Stroke1Command}" Width="30" Height="30" Content="Width" Margin="5"></Button>
+                <Button x:Name="WidthButton2" Command="{Binding Stroke2Command}"  Width="30" Height="30" Content="Width1" Margin="5"></Button>
+                <Button x:Name="WidthButton3" Command="{Binding Stroke3Command}" Width="30" Height="30" Content="Width2" Margin="5"></Button>
+
+                <Button x:Name="EraserButton" Style="{StaticResource SystemIconButton}" Command="{Binding EraserCommand}" Width="30" Height="30">
+                    <Image Source="/Images/EraserIcon.png"/>
+                </Button>
 
                 <Button Grid.Column="0" Style="{StaticResource SystemIconButton}" Command="{Binding DeleteLinesCommand}" Width="30" Height="30">
                     <Image Source="/Images/TrashcanIcon.png"/>
