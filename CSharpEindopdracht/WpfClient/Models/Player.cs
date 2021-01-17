@@ -11,5 +11,6 @@ namespace WpfClient.Models
         public uint Id { get; set; }
         public uint Score { get; set; }
         public bool IsDrawing { get; set; }
+        public PenState PenState { get; set; } = PenState.STROKE1;
     }
 }

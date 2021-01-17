@@ -1,6 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Command;
-using Networking.Utils;
 using SharedSkribbl;
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
@@ -24,6 +24,10 @@ namespace WpfClient.ViewModels
         public ICommand MouseDownCommand { get; set; }
         public ICommand MouseMoveCommand { get; set; }
         public ICommand GuessCommand { get; set; }
+        public ICommand Stroke1Command { get; set; }
+        public ICommand Stroke2Command { get; set; }
+        public ICommand Stroke3Command { get; set; }
+        public ICommand EraserCommand { get; set; }
         public ICommand DeleteLinesCommand { get; set; }
         public Border CanvasBorder { get; set; }
 
@@ -46,19 +50,48 @@ namespace WpfClient.ViewModels
                     && Mouse.LeftButton == MouseButtonState.Pressed
                     && IsDistanceGreater(lastPoint, Mouse.GetPosition(CanvasBorder), 1))
                 {
-                    Line line = new Line();
+                    int stroke = -1;
+                    switch (this.MainViewModel.MePlayer.PenState)
+                    {
+                        case PenState.STROKE1:
+                            stroke = 1;
+                            break;
+                        case PenState.STROKE2:
+                            stroke = 2;
+                            break;
+                        case PenState.STROKE3:
+                            stroke = 3;
+                            break;
+                        case PenState.ERASOR:
+                            stroke = 0;
+                            break;
+                    }
 
-                    line.X1 = (short)lastPoint.X;
-                    line.Y1 = (short)lastPoint.Y;
+                    Debug.WriteLine(stroke);
 
-                    lastPoint = Mouse.GetPosition(CanvasBorder);
+                    if (stroke == -1)
+                        throw new InvalidOperationException();
+                    if (stroke == 0)
+                    {
+                        //do erasor stuff
+                    }
+                    else
+                    {
+                        Line line = new Line();
 
-                    line.X2 = (short)lastPoint.X;
-                    line.Y2 = (short)lastPoint.Y;
+                        line.X1 = (short)lastPoint.X;
+                        line.Y1 = (short)lastPoint.Y;
+
+                        lastPoint = Mouse.GetPosition(CanvasBorder);
+
+                        line.X2 = (short)lastPoint.X;
+                        line.Y2 = (short)lastPoint.Y;
 
 
-                    this.MainViewModel.Lines.Add(line);
-                    this.MainViewModel.Client.SendMessage(SharedNetworking.Utils.DataParser.GetLineMessage(line.serialize()));
+
+                        this.MainViewModel.Lines.Add(line);
+                        this.MainViewModel.Client.SendMessage(SharedNetworking.Utils.DataParser.GetLineMessage(line.serialize()));
+                    }
                 }
             });
 
@@ -67,6 +100,26 @@ namespace WpfClient.ViewModels
                 this.MainViewModel.Chat.Add(Guess);
                 this.MainViewModel.Client.SendMessage(SharedNetworking.Utils.DataParser.GetGuessMessage(Guess));
                 Guess = "";
+            });
+
+            this.Stroke1Command = new RelayCommand(() =>
+            {
+                this.MainViewModel.MePlayer.PenState = PenState.STROKE1;
+            });
+
+            this.Stroke2Command = new RelayCommand(() =>
+            {
+                this.MainViewModel.MePlayer.PenState = PenState.STROKE2;
+            });
+
+            this.Stroke3Command = new RelayCommand(() =>
+            {
+                this.MainViewModel.MePlayer.PenState = PenState.STROKE3;
+            });
+
+            this.EraserCommand = new RelayCommand(() =>
+            {
+                this.MainViewModel.MePlayer.PenState = PenState.ERASOR;
             });
 
             this.DeleteLinesCommand = new RelayCommand(() =>
