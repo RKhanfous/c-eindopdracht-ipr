@@ -13,21 +13,9 @@ namespace Server
 
             Server server = new Server();
 
-            /*while (true)
+            while (true)
             {
                 Thread.Yield();
-            }*/
-
-            string filepath = @"Words\GameWords.txt";
-            HashSet<String> words = new HashSet<string>();
-            foreach (string word in File.ReadAllLines(filepath))
-            {
-                words.Add(word);
-            }
-
-            foreach (string word in words)
-            {
-                Console.WriteLine(word);
             }
         }
     }

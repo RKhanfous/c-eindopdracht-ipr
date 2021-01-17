@@ -69,8 +69,10 @@ namespace Server
         /// <param name="numberOfRounds"></param>
         public SkribblRoom(NetworkHandler networkHandler, string roomCode, int numberOfRounds)
         {
+            // Filepath for FileIO
             this.filePath = @"\Words\GameWords.txt";
             this.words = new HashSet<string>();
+            // Reading lines from File and adding them to the HashSet
             foreach (string word in File.ReadAllLines(filePath))
             {
                 this.words.Add(word);
@@ -84,7 +86,6 @@ namespace Server
                 this.numRounds = numberOfRounds;
             else
                 this.numRounds = 1;
-            //this.words = new HashSet<string> { "Boot", "Zon", "Mens", "Gras", "Water", "Sneeuw", "Kerk", "Concert", "Slang", "Huis", "Computer", "Klok", "vlees", "Tong", "Mug", "Soldaat" };
             this.timer = new Timer();
             this.stopwatch = new Stopwatch();
         }
