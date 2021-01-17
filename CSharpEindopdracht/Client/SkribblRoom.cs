@@ -358,9 +358,14 @@ namespace Server
             {
                 return default;
             }
+            Random random = new Random();
+            int randomPos = random.Next(list.Count);// 0 >= randomInt < list.Count   ?
+            int current = 0;
             foreach (T t in list)
             {
-                return t;
+                if (current == randomPos)
+                    return t;
+                current++;
             }
             return default;
         }

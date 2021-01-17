@@ -7,6 +7,10 @@
 		<ApplicationIcon>Images\SkribblLogo.ico</ApplicationIcon>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <OutputPath>output\</OutputPath>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<None Remove="Images\PersonIcon.png" />
 		<None Remove="Images\SkribblLogo.png" />
