@@ -67,8 +67,6 @@ namespace WpfClient.ViewModels
                             break;
                     }
 
-                    Debug.WriteLine(stroke);
-
                     if (stroke == -1)
                         throw new InvalidOperationException();
                     if (stroke == 0)
