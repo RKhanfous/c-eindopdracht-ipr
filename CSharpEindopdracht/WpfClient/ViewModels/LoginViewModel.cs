@@ -17,7 +17,7 @@ namespace WpfClient.ViewModels
         public LoginViewModel(MainViewModel mainViewModel)
         {
             this.mainViewModel = mainViewModel;
-            this.RoomCode = "random";
+            this.RoomCode = "";
             this.JoinCommand = new RelayCommand(async () =>
             {
                 if (Username != null)
