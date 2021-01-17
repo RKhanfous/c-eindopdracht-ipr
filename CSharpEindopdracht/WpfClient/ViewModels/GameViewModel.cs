@@ -1,5 +1,4 @@
 ﻿using GalaSoft.MvvmLight.Command;
-using Networking.Utils;
 using SharedSkribbl;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
