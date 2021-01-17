@@ -46,32 +46,33 @@ namespace WpfClient.ViewModels
 
             this.MouseMoveCommand = new RelayCommand<MouseEventArgs>((param) =>
             {
+                int stroke = -1;
+                switch (this.MainViewModel.MePlayer.PenState)
+                {
+                    case PenState.STROKE1:
+                        stroke = 1;
+                        break;
+                    case PenState.STROKE2:
+                        stroke = 2;
+                        break;
+                    case PenState.STROKE3:
+                        stroke = 3;
+                        break;
+                    case PenState.ERASOR:
+                        stroke = 0;
+                        break;
+                }
                 if (this.MainViewModel.MePlayer.IsDrawing
                     && Mouse.LeftButton == MouseButtonState.Pressed
-                    && IsDistanceGreater(lastPoint, Mouse.GetPosition(CanvasBorder), 1))
+                    && IsDistanceGreater(lastPoint, Mouse.GetPosition(CanvasBorder), stroke == 0 ? 10 : 1))
                 {
-                    int stroke = -1;
-                    switch (this.MainViewModel.MePlayer.PenState)
-                    {
-                        case PenState.STROKE1:
-                            stroke = 1;
-                            break;
-                        case PenState.STROKE2:
-                            stroke = 2;
-                            break;
-                        case PenState.STROKE3:
-                            stroke = 3;
-                            break;
-                        case PenState.ERASOR:
-                            stroke = 0;
-                            break;
-                    }
 
                     if (stroke == -1)
                         throw new InvalidOperationException();
                     if (stroke == 0)
                     {
                         //do erasor stuff
+
                     }
                     else
                     {
