@@ -11,7 +11,7 @@ namespace Server
         {
             Console.WriteLine("server started");
 
-            //Server server = new Server();
+            Server server = new Server();
 
             /*while (true)
             {
@@ -25,7 +25,7 @@ namespace Server
                 words.Add(word);
             }
 
-            foreach(string word in words)
+            foreach (string word in words)
             {
                 Console.WriteLine(word);
             }
