@@ -1,8 +1,10 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using SharedSkribbl;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -46,47 +48,58 @@ namespace WpfClient.ViewModels
 
             this.MouseMoveCommand = new RelayCommand<MouseEventArgs>((param) =>
             {
+                int stroke = -1;
+                switch (this.MainViewModel.MePlayer.PenState)
+                {
+                    case PenState.STROKE1:
+                        stroke = 1;
+                        break;
+                    case PenState.STROKE2:
+                        stroke = 2;
+                        break;
+                    case PenState.STROKE3:
+                        stroke = 3;
+                        break;
+                    case PenState.ERASOR:
+                        stroke = 0;
+                        break;
+                }
                 if (this.MainViewModel.MePlayer.IsDrawing
                     && Mouse.LeftButton == MouseButtonState.Pressed
-                    && IsDistanceGreater(lastPoint, Mouse.GetPosition(CanvasBorder), 1))
+                    && IsDistanceGreater(lastPoint, Mouse.GetPosition(CanvasBorder), stroke == 0 ? 10 : 1))
                 {
-                    int stroke = -1;
-                    switch (this.MainViewModel.MePlayer.PenState)
-                    {
-                        case PenState.STROKE1:
-                            stroke = 1;
-                            break;
-                        case PenState.STROKE2:
-                            stroke = 2;
-                            break;
-                        case PenState.STROKE3:
-                            stroke = 3;
-                            break;
-                        case PenState.ERASOR:
-                            stroke = 0;
-                            break;
-                    }
 
                     if (stroke == -1)
                         throw new InvalidOperationException();
+                    Line line = new Line();
+
+                    line.X1 = (short)lastPoint.X;
+                    line.Y1 = (short)lastPoint.Y;
+
+                    lastPoint = Mouse.GetPosition(CanvasBorder);
+
+                    line.X2 = (short)lastPoint.X;
+                    line.Y2 = (short)lastPoint.Y;
                     if (stroke == 0)
                     {
-                        //do erasor stuff
+                        ICollection<Line> toBeDeltedLines = new LinkedList<Line>();
+                        Parallel.ForEach(this.MainViewModel.Lines, (otherLine) =>
+                         {
+                             if (line.Collide1(otherLine))
+                             {
+                                 lock (toBeDeltedLines)
+                                 {
+                                     toBeDeltedLines.Add(otherLine);
+                                 }
+                             }
+                         });
+
+                        //todo delelte lines
+                        if (toBeDeltedLines.Count > 0)
+                            Debug.WriteLine("toBeDeltedLines.Count = " + toBeDeltedLines.Count);
                     }
                     else
                     {
-                        Line line = new Line();
-
-                        line.X1 = (short)lastPoint.X;
-                        line.Y1 = (short)lastPoint.Y;
-
-                        lastPoint = Mouse.GetPosition(CanvasBorder);
-
-                        line.X2 = (short)lastPoint.X;
-                        line.Y2 = (short)lastPoint.Y;
-
-
-
                         this.MainViewModel.Lines.Add(line);
                         this.MainViewModel.Client.SendMessage(SharedNetworking.Utils.DataParser.GetLineMessage(line.serialize()));
                     }

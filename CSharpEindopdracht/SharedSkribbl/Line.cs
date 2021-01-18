@@ -45,5 +45,53 @@ namespace SharedSkribbl
                 Color = bytes[13]
             };
         }
+
+        public bool Collide1(Line otherLine)
+        {
+            float denominator = ((X2 - X1) * (otherLine.Y2 - otherLine.Y1)) - ((Y2 - Y1) * (otherLine.X2 - otherLine.X1));
+            float numerator1 = ((Y1 - otherLine.Y1) * (otherLine.X2 - otherLine.X1)) - ((X1 - otherLine.X1) * (otherLine.Y2 - otherLine.Y1));
+            float numerator2 = ((Y1 - otherLine.Y1) * (X2 - X1)) - ((X1 - otherLine.X1) * (Y2 - Y1));
+
+            // Detect coincident lines (has a problem, read below)
+            if (denominator == 0) return numerator1 == 0 && numerator2 == 0;
+
+            float r = numerator1 / denominator;
+            float s = numerator2 / denominator;
+
+            return (r >= 0 && r <= 1) && (s >= 0 && s <= 1);
+        }
+
+        public bool Collide2(Line otherLine)
+        {
+            short rect1X = Math.Min(X1, X2);
+            short rect1Width = Math.Max(X1, X2);
+            short rect1Y = Math.Min(Y1, Y2);
+            short rect1Height = Math.Max(Y1, Y2);
+
+            short rect2X = Math.Min(otherLine.X1, otherLine.X2);
+            short rect2Width = Math.Max(otherLine.X1, otherLine.X2);
+            short rect2Y = Math.Min(otherLine.Y1, otherLine.Y2);
+            short rect2Height = Math.Max(otherLine.Y1, otherLine.Y2);
+
+            if (rect1X < rect2X + rect2Width &&
+                rect1X + rect1Width > rect2X &&
+                rect1Y < rect2Y + rect2Height &&
+                rect1Y + rect1Height > rect2Y)
+            {
+                float fC = (X2 * otherLine.Y1) - (Y2 * otherLine.X1); //<0 == to the left, >0 == to the right
+                float fD = (X2 * otherLine.Y2) - (Y2 * otherLine.X2);
+
+                if ((fC < 0) && (fD < 0)) //both to the left  -> No Cross!
+                    return false;
+                if ((fC > 0) && (fD > 0)) //both to the right -> No Cross!
+                    return false;
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

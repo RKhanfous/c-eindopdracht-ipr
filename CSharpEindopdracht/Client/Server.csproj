@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="Words\GameWords.txt" />
+		<None Remove="Words\GameWords.txt" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -17,7 +17,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 	</ItemGroup>
 
 	<Import Project="..\SharedSkribbl\SharedSkribbl.projitems" Label="Shared" />

@@ -47,6 +47,12 @@
 	  </Reference>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="Images\EraserIcon.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 	<Import Project="..\SharedSkribbl\SharedSkribbl.projitems" Label="Shared" />
 
 	<Import Project="..\SharedNetworking\SharedNetworking.projitems" Label="Shared" />
