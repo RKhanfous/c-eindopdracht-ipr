@@ -242,6 +242,21 @@ namespace WpfClient.ViewModels
             }), score);
         }
 
+        public void DeleteLine(int lineId)
+        {
+            Application.Current.Dispatcher.BeginInvoke(new Action<int>((lineId) =>
+            {
+                foreach (Line mainLine in this.Lines)
+                {
+                    if (mainLine.Id == lineId)
+                    {
+                        this.Lines.Remove(mainLine);
+                        break;
+                    }
+                }
+            }), lineId);
+        }
+
         #endregion
     }
 }

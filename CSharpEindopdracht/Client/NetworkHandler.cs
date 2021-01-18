@@ -100,7 +100,14 @@ namespace Server
                     getClientByUser(player.clientID).SendMessage(messageBytes);
             }
         }
-
+        internal void DeleteLine(uint clientID, byte[] messageBytes)
+        {
+            foreach (Player player in this.Server.GetPlayer(clientID).playingInRoom.GetPlayers())
+            {
+                if (player.clientID != clientID)
+                    getClientByUser(player.clientID).SendMessage(messageBytes);
+            }
+        }
         internal void TellGameReset(List<Player> players)
         {
             throw new NotImplementedException();
@@ -120,7 +127,7 @@ namespace Server
             return player.playingInRoom.guess(player, guess);
         }
 
-        internal void DeleteLines(uint clientId)
+        internal void ClearLines(uint clientId)
         {
             SkribblRoom skribblRoom = this.Server.GetPlayer(clientId).playingInRoom;
             skribblRoom.lines.Clear();

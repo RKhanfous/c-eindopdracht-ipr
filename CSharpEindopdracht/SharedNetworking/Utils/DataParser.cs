@@ -18,6 +18,7 @@ namespace SharedNetworking.Utils
         public const string WORD = "WORD";
         public const string CLEAR_LINES = "CLEARLINES";
         public const string GUESS = "GUESS";
+        public const string DELETE_LINE = "DELETELINE";
         #endregion
 
 
@@ -44,6 +45,28 @@ namespace SharedNetworking.Utils
         public static byte[] GetLineMessage(byte[] line)
         {
             return getMessage(line, 0x01);
+        }
+        //==============================================================================================================================================
+
+        public static byte[] GetPlayerMessage(Player player)
+        {
+            return getMessage(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(player)), 0x03);
+        }
+
+        public static Player GetPlayerFromBytes(byte[] payload)
+        {
+            return JsonConvert.DeserializeObject<Player>(Encoding.ASCII.GetString(payload));
+        }
+        //==============================================================================================================================================
+
+        public static byte[] GetDeleteLineMessage(int toBeDeltedLineId)
+        {
+            return getMessage(BitConverter.GetBytes(toBeDeltedLineId), 0x04);
+        }
+
+        public static int GetLineFromDeleteLine(byte[] payload)
+        {
+            return BitConverter.ToInt32(payload, 0);
         }
 
         #endregion
@@ -219,21 +242,6 @@ namespace SharedNetworking.Utils
                 return json.data.guessScore;
             }
             return default;
-        }
-
-
-        #endregion
-
-        #region players
-
-        public static byte[] GetPlayerMessage(Player player)
-        {
-            return getMessage(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(player)), 0x03);
-        }
-
-        public static Player GetPlayerFromBytes(byte[] payload)
-        {
-            return JsonConvert.DeserializeObject<Player>(Encoding.ASCII.GetString(payload));
         }
 
         #endregion

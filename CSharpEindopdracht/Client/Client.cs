@@ -87,7 +87,7 @@ namespace Server
                                 SendMessage(DataParser.GetGoToRoomMessage(this.networkHandler.Server.GetPlayer(ClientId).playingInRoom.roomCode, false));
                             break;
                         case DataParser.CLEAR_LINES:
-                            this.networkHandler.DeleteLines(this.ClientId);
+                            this.networkHandler.ClearLines(this.ClientId);
 
                             break;
 
@@ -99,6 +99,10 @@ namespace Server
                             Console.WriteLine($"Received json with identifier {identifier}");
                             break;
                     }
+                    break;
+
+                case 0x04:
+                    this.networkHandler.DeleteLine(ClientId, messageBytes);
                     break;
 
                 default:

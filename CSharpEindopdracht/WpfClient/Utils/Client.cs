@@ -86,6 +86,10 @@ namespace WpfClient.Utils
 
                     clientCallback.AddPlayer(dataPlayer);
                     break;
+
+                case 0x04:
+                    this.clientCallback.DeleteLine(DataParser.GetLineFromDeleteLine(payload));
+                    break;
                 default:
                     Debug.WriteLine($"received message with id {messageId}");
                     break;
