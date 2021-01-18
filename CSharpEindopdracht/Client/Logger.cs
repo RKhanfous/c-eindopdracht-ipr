@@ -8,37 +8,52 @@ namespace Server
     public class Logger : ILogger
     {
         private string logPath { get; set; }
-        public StreamWriter outputFile { get; }
+
+        private string logName { get; set; }
 
         public Logger(string logPathApp)
         {
             this.logPath = logPathApp;
-            this.outputFile = new StreamWriter(Path.Combine(logPath, "SystemLog" + StringBuilderTime() + ".txt"));
+            this.logName = "SystemLog" + StringBuilderTime() + ".txt";
         }
 
         public void logException(String exception)
         {
-            this.outputFile.WriteLine("[" + DateTime.Now + "] this exception has occured: " + exception + "!");
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(logPath, logName))) {
+                this.outputFile.WriteLine("[" + DateTime.Now + "] this exception has occured: " + exception + "!");
+            }
         }
 
         public void logServer()
         {
-            this.outputFile.WriteLine("[" + DateTime.Now + "] server started!");
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(logPath, logName)))
+            {
+                this.outputFile.WriteLine("[" + DateTime.Now + "] server started!");
+            }
         }
 
         public void logStartGame(Player player)
         {
-            this.outputFile.WriteLine("[" + DateTime.Now + "] player:" + player.username + "with clientID:" + player.clientID + " started a game.");
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(logPath, logName)))
+            {
+                this.outputFile.WriteLine("[" + DateTime.Now + "] player:" + player.username + "with clientID:" + player.clientID + " started a game.");
+            }
         }
 
         public void logConnectClient(int clientID)
         {
-            this.outputFile.WriteLine("[" + DateTime.Now + "]" + clientID + " connected to the server!");
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(logPath, logName)))
+            {
+                this.outputFile.WriteLine("[" + DateTime.Now + "]" + clientID + " connected to the server!");
+            }
         }
 
         public void logDisconnectClient(Client client)
         {
-            this.outputFile.WriteLine("[" + DateTime.Now + "]" + client.ClientId + " left the server!");
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(logPath, logName)))
+            {
+                this.outputFile.WriteLine("[" + DateTime.Now + "]" + client.ClientId + " left the server!");
+            }
         }
 
         private string StringBuilderTime()

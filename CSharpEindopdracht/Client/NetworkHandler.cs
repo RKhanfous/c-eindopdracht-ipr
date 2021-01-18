@@ -38,6 +38,7 @@ namespace Server
             //}
 
             this.logger = logger;
+            logger.logServer();
         }
 
         private void OnConnect(IAsyncResult ar)
