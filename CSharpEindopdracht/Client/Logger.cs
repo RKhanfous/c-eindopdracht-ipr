@@ -34,13 +34,11 @@ namespace Server
         public void logConnectClient(int clientID)
         {
             this.outputFile.WriteLine("[" + DateTime.Now + "]" + clientID + " connected to the server!");
-            throw new NotImplementedException();
         }
 
         public void logDisconnectClient(Client client)
         {
             this.outputFile.WriteLine("[" + DateTime.Now + "]" + client.ClientId + " left the server!");
-            throw new NotImplementedException();
         }
 
         private string StringBuilderTime()

@@ -36,6 +36,8 @@ namespace Server
             //{
             //    outputFile.WriteLine("[" + DateTime.Now + "] server started!");
             //}
+
+            this.logger = logger;
         }
 
         private void OnConnect(IAsyncResult ar)
