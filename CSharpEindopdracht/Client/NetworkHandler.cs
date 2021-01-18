@@ -1,4 +1,5 @@
 ﻿using SharedNetworking.Utils;
+using SharedSkribbl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -94,6 +95,8 @@ namespace Server
 
         internal void DrewLine(uint clientID, byte[] messageBytes)
         {
+            SkribblRoom skribblRoom = this.Server.GetPlayer(clientID).playingInRoom;
+            skribblRoom.lines.Add(Line.GetLine(messageBytes.Skip(5).ToArray()));
             foreach (Player player in this.Server.GetPlayer(clientID).playingInRoom.GetPlayers())
             {
                 if (player.clientID != clientID)
@@ -102,6 +105,16 @@ namespace Server
         }
         internal void DeleteLine(uint clientID, byte[] messageBytes)
         {
+            SkribblRoom skribblRoom = this.Server.GetPlayer(clientID).playingInRoom;
+            Line deleteLine = Line.GetLine(messageBytes.Skip(5).ToArray());
+            foreach (Line line in skribblRoom.lines)
+            {
+                if (line.Id == deleteLine.Id)
+                {
+                    skribblRoom.lines.Remove(line);
+                    break;
+                }
+            }
             foreach (Player player in this.Server.GetPlayer(clientID).playingInRoom.GetPlayers())
             {
                 if (player.clientID != clientID)
@@ -121,10 +134,15 @@ namespace Server
             }
         }
 
-        internal int Guess(uint clientId, string guess)
+        internal void Guess(uint clientId, string guess)
         {
             Player player = this.Server.GetPlayer(clientId);
-            return player.playingInRoom.guess(player, guess);
+            int score = player.playingInRoom.guess(player, guess);
+            foreach (Player roomPlayers in player.playingInRoom.GetPlayers())
+            {
+                getClientByUser(roomPlayers.clientID).SendMessage(
+                    DataParser.GetGuessScoreMessage(player.clientID, score));
+            }
         }
 
         internal void ClearLines(uint clientId)

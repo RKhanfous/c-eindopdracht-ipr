@@ -113,6 +113,7 @@ namespace Server
 
             //setup timer
             this.timer.AutoReset = false;
+            this.timer.Elapsed += OnEndTurn;
             this.timer.Enabled = true;
             this.timer.Interval = guessTimeMills;
 
@@ -300,6 +301,7 @@ namespace Server
         /// <summary>
         /// returns how much points a player recieves for their guess if it is correct.
         /// returns -1 is incorrect guess
+        /// returns -1 is not allowed to guess
         /// updates internal data
         /// </summary>
         /// <param name="player">player who guesses</param>
@@ -308,9 +310,12 @@ namespace Server
         public int guess(Player player, string guess)
         {
             //check if guess is correct
-            if (guess != this.currentWord)
+            if (guess.ToLower() != this.currentWord.ToLower())
                 return -1;
 
+            //check if player already guessed correctly
+            if (correctlyGuessedPlayers.Contains(player))
+                return -2;
             //calculate score
             int score = (int)((guessTimeMills - this.stopwatch.ElapsedMilliseconds) / 100);
 
@@ -323,6 +328,9 @@ namespace Server
 
             //add score
             player.AddScore(score);
+
+            //add player to list of players that already guessed correcly
+            correctlyGuessedPlayers.Add(player);
 
             //return score
             return score;

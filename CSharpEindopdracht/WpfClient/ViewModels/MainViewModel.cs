@@ -231,14 +231,38 @@ namespace WpfClient.ViewModels
             }));
         }
 
-        public void GiveScore(int score)
+        public void GiveScore(uint id, int score)
         {
             Application.Current.Dispatcher.BeginInvoke(new Action<int>((score) =>
             {
-                if (score == -1)
-                    this.Chat.Add("You Guessed Wrong");
-                else
-                    this.Chat.Add($"You Guessed right and got {score} points");
+                if (MePlayer.Id == id)
+                {
+                    if (score == -1)
+                        this.Chat.Add("You Guessed Wrong");
+                    else if (score == -2)
+                        this.Chat.Add("You are not allowd to guess");
+                    else
+                    {
+                        this.Chat.Add($"You Guessed right and got {score} points");
+                        //this.MePlayer.Score += (uint)score;
+                    }
+                }
+                if (score == -1 || score == -2)
+                    return;
+                Player player = null;
+                foreach (Player p in Players)
+                {
+                    if (p.Id == id)
+                    {
+                        p.Score += (uint)score;
+                        player = p;
+                        break;
+                    }
+                }
+
+                if (player.Id != MePlayer.Id)
+                    this.Chat.Add($"{player.Username} Guessed right and got {score} points");
+
             }), score);
         }
 

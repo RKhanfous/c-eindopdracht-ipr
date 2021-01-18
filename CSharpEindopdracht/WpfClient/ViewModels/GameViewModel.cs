@@ -97,10 +97,6 @@ namespace WpfClient.ViewModels
                              }
                          });
 
-                        //todo delelte lines
-                        if (toBeDeltedLineIds.Count > 0)
-                            Debug.WriteLine("toBeDeltedLines.Count = " + toBeDeltedLineIds.Count);
-
 
                         foreach (int toBeDeltedLineId in toBeDeltedLineIds)
                         {

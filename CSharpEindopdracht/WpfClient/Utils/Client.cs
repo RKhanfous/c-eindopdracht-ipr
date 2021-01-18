@@ -72,8 +72,8 @@ namespace WpfClient.Utils
                             this.clientCallback.ClearLines();
                             break;
                         case DataParser.GUESS:
-                            int score = DataParser.GetGuessScoreFromjsonMessage(payload);
-                            this.clientCallback.GiveScore(score);
+                            (uint, int) score = DataParser.GetGuessScoreFromjsonMessage(payload);
+                            this.clientCallback.GiveScore(score.Item1, score.Item2);
                             break;
                         default:
                             Console.WriteLine($"Received json with identifier {identifier}");

@@ -229,17 +229,17 @@ namespace SharedNetworking.Utils
             return default;
         }
 
-        public static byte[] GetGuessScoreMessage(int GuessScore)
+        public static byte[] GetGuessScoreMessage(uint mClientId, int GuessScore)
         {
-            return getJsonMessage(GUESS, new { guessScore = GuessScore });
+            return getJsonMessage(GUESS, new { clientId = mClientId, guessScore = GuessScore });
         }
 
-        public static int GetGuessScoreFromjsonMessage(byte[] payload)
+        public static (uint, int) GetGuessScoreFromjsonMessage(byte[] payload)
         {
             dynamic json = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(payload));
             if (json.identifier == GUESS)
             {
-                return json.data.guessScore;
+                return (json.data.clientId, json.data.guessScore);
             }
             return default;
         }
