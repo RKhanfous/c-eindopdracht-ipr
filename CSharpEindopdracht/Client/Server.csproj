@@ -20,10 +20,6 @@
 	  <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Log\" />
-	</ItemGroup>
-
 	<Import Project="..\SharedSkribbl\SharedSkribbl.projitems" Label="Shared" />
 
 	<Import Project="..\SharedNetworking\SharedNetworking.projitems" Label="Shared" />
