@@ -18,7 +18,7 @@ namespace Server
 
         public Server()
         {
-            networkHandler = new NetworkHandler(this);
+            networkHandler = new NetworkHandler(this, new Logger(AppDomain.CurrentDomain + @"\Log"));
             skribblRooms = new List<SkribblRoom>();
             players = new List<Player>();
         }

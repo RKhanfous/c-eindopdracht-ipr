@@ -21,7 +21,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Logs\" />
+	  <Folder Include="Log\" />
 	</ItemGroup>
 
 	<Import Project="..\SharedSkribbl\SharedSkribbl.projitems" Label="Shared" />
