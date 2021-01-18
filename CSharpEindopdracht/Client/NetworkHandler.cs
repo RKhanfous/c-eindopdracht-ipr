@@ -53,6 +53,7 @@ namespace Server
                 getClientByUser(player.clientID).SendMessage(DataParser.GetDrawerMessage(currentPlayer.clientID));
             }
             getClientByUser(currentPlayer.clientID).SendMessage(DataParser.GetWordMessage(currentWord));
+
         }
 
         internal void Disconnect(Client client)
@@ -166,7 +167,10 @@ namespace Server
 
         internal void TellTurnOver(List<Player> players, string currentWord)
         {
-            throw new NotImplementedException();
+            foreach (Player p in players)
+            {
+                getClientByUser(p.clientID).SendMessage(DataParser.GetTurnOverMessage(currentWord));
+            }
         }
 
         internal void SendDataToPlayer(IClient client)

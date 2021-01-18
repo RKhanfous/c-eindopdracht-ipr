@@ -208,11 +208,17 @@ namespace WpfClient.ViewModels
 
         public void SetDrawer(uint id)
         {
-            foreach (Player player in this.Players)
+            Application.Current.Dispatcher.BeginInvoke(new Action<uint>((id) =>
             {
-                player.IsDrawing = player.Id == id;
-            }
-            this.currentWord = "";
+                foreach (Player player in this.Players)
+                {
+                    player.IsDrawing = (player.Id == id);
+                    player.PenState = PenState.STROKE1;
+                }
+                if (!MePlayer.IsDrawing)
+                    this.currentWord = "";
+                this.Lines.Clear();
+            }), id);
         }
 
         public void AddLine(Line line)
@@ -244,25 +250,27 @@ namespace WpfClient.ViewModels
                     else
                     {
                         this.Chat.Add($"You Guessed right and got {score} points");
-                        //this.MePlayer.Score += (uint)score;
+                        this.MePlayer.Score += (uint)score;
                     }
                 }
-                if (score == -1 || score == -2)
-                    return;
-                Player player = null;
-                foreach (Player p in Players)
+                else
                 {
-                    if (p.Id == id)
+                    if (score == -1 || score == -2)
+                        return;
+                    Player player = null;
+                    foreach (Player p in Players)
                     {
-                        p.Score += (uint)score;
-                        player = p;
-                        break;
+                        if (p.Id == id)
+                        {
+                            p.Score += (uint)score;
+                            player = p;
+                            break;
+                        }
                     }
+
+                    if (player.Id != MePlayer.Id)
+                        this.Chat.Add($"{player.Username} Guessed right and got {score} points");
                 }
-
-                if (player.Id != MePlayer.Id)
-                    this.Chat.Add($"{player.Username} Guessed right and got {score} points");
-
             }), score);
         }
 
@@ -279,6 +287,19 @@ namespace WpfClient.ViewModels
                     }
                 }
             }), lineId);
+        }
+
+        public void TurnOver(string word)
+        {
+            Application.Current.Dispatcher.BeginInvoke(new Action<string>((word) =>
+            {
+                this.Chat.Add($"Word was {word}");
+                foreach (Player p in Players)
+                {
+                    p.IsDrawing = false;
+                }
+                this.currentWord = word;
+            }), word);
         }
 
         #endregion

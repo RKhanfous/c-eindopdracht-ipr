@@ -75,6 +75,10 @@ namespace WpfClient.Utils
                             (uint, int) score = DataParser.GetGuessScoreFromjsonMessage(payload);
                             this.clientCallback.GiveScore(score.Item1, score.Item2);
                             break;
+                        case DataParser.TURN_OVER:
+                            string word = DataParser.GetWordFromjsonTurnOverMessage(payload);
+                            this.clientCallback.TurnOver(word);
+                            break;
                         default:
                             Console.WriteLine($"Received json with identifier {identifier}");
                             break;

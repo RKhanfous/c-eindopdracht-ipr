@@ -19,5 +19,6 @@ namespace WpfClient.Utils
         void ClearLines();
         void GiveScore(uint clientId, int score);
         void DeleteLine(int lineId);
+        void TurnOver(string word);
     }
 }

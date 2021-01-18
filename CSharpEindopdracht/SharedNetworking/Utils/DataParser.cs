@@ -19,6 +19,7 @@ namespace SharedNetworking.Utils
         public const string CLEAR_LINES = "CLEARLINES";
         public const string GUESS = "GUESS";
         public const string DELETE_LINE = "DELETELINE";
+        public const string TURN_OVER = "TURNOVER";
         #endregion
 
 
@@ -240,6 +241,21 @@ namespace SharedNetworking.Utils
             if (json.identifier == GUESS)
             {
                 return (json.data.clientId, json.data.guessScore);
+            }
+            return default;
+        }
+        //==============================================================================================================================================
+        public static byte[] GetTurnOverMessage(string Word)
+        {
+            return getJsonMessage(TURN_OVER, new { word = Word });
+        }
+
+        public static string GetWordFromjsonTurnOverMessage(byte[] payload)
+        {
+            dynamic json = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(payload));
+            if (json.identifier == TURN_OVER)
+            {
+                return json.data.word;
             }
             return default;
         }
