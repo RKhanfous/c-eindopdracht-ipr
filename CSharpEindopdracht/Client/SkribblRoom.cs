@@ -137,7 +137,7 @@ namespace Server
                     return false;
                 }
 
-                if (this.words.Count < (this.numRounds = this.currentRound) * maxNumPlayers)
+                if (this.words.Count < (this.numRounds - this.currentRound) * maxNumPlayers)
                 {
                     Debugger.Break();
                     return false;
