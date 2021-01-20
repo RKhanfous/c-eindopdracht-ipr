@@ -17,19 +17,20 @@ namespace Server
         {
             this.logPath = logPathApp;
             this.logName = "SystemLog" + StringBuilderTime() + ".txt";
-            this.outputFile = new StreamWriter(Path.Combine(logPath, logName));
+            this.outputFile = new StreamWriter(Path.Combine(logPath, logName), true);
         }
 
         public void logException(String exception)
         {
-            using (outputFile) {
+            using (this.outputFile) {
+
                 this.outputFile.WriteLine("[" + DateTime.Now + "] this exception has occured: " + exception + "!");
             }
         }
 
         public void logServer()
         {
-            using (outputFile)
+            using (this.outputFile)
             {
                 this.outputFile.WriteLine("[" + DateTime.Now + "] server started!");
             }
@@ -37,7 +38,7 @@ namespace Server
 
         public void logStartGame(Player player)
         {
-            using (outputFile)
+            using (this.outputFile)
             {
                 this.outputFile.WriteLine("[" + DateTime.Now + "] player:" + player.username + "with clientID:" + player.clientID + " started a game.");
             }
@@ -45,7 +46,7 @@ namespace Server
 
         public void logConnectClient(int clientID)
         {
-            using (outputFile)
+            using (this.outputFile)
             {
                 this.outputFile.WriteLine("[" + DateTime.Now + "]" + clientID + " connected to the server!");
             }
@@ -53,7 +54,7 @@ namespace Server
 
         public void logDisconnectClient(Client client)
         {
-            using (outputFile)
+            using (this.outputFile)
             {
                 this.outputFile.WriteLine("[" + DateTime.Now + "]" + client.ClientId + " left the server!");
             }
