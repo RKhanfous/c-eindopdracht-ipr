@@ -79,6 +79,9 @@ namespace WpfClient.Utils
                             string word = DataParser.GetWordFromjsonTurnOverMessage(payload);
                             this.clientCallback.TurnOver(word);
                             break;
+                        case DataParser.GAME_OVER:
+                            this.clientCallback.GameOver(DataParser.GetPlayersFromGameOverJsonMessage(payload));
+                            break;
                         default:
                             Console.WriteLine($"Received json with identifier {identifier}");
                             break;

@@ -124,7 +124,17 @@ namespace Server
         }
         internal void TellGameReset(List<Player> players)
         {
-            throw new NotImplementedException();
+            SharedNetworking.Utils.Player[] dataPlayers = new SharedNetworking.Utils.Player[players.Count];
+            int index = 0;
+            foreach (Player p in players)
+            {
+                dataPlayers[index] = p.GetDataPlayer();
+                index++;
+            }
+            foreach (Player player in players)
+            {
+                getClientByUser(player.clientID).SendMessage(DataParser.GetGameOverMessage(dataPlayers));
+            }
         }
 
         internal void TellGameStart(List<Player> players)

@@ -20,6 +20,7 @@ namespace SharedNetworking.Utils
         public const string GUESS = "GUESS";
         public const string DELETE_LINE = "DELETELINE";
         public const string TURN_OVER = "TURNOVER";
+        public const string GAME_OVER = "GAMEOVER";
         #endregion
 
 
@@ -259,7 +260,23 @@ namespace SharedNetworking.Utils
             }
             return default;
         }
+        //==============================================================================================================================================
 
+        public static byte[] GetGameOverMessage(Player[] players)
+        {
+            return getJsonMessage(GAME_OVER, new { players = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(players)) });
+
+        }
+
+        public static Player[] GetPlayersFromGameOverJsonMessage(byte[] payload)
+        {
+            dynamic json = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(payload));
+            if (json.identifier == GAME_OVER)
+            {
+                return JsonConvert.DeserializeObject<Player>(Encoding.ASCII.GetString(json.data.players));
+            }
+            return default;
+        }
         #endregion
     }
 }
