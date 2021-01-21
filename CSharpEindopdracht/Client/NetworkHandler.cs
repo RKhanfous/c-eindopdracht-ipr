@@ -1,6 +1,8 @@
 ﻿using SharedNetworking.Utils;
+using SharedSkribbl;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -8,13 +10,16 @@ using System.Threading.Tasks;
 
 namespace Server
 {
-    public class NetworkHandler
+    public class NetworkHandler : INetworkHandler
+
     {
         private TcpListener listener;
         public List<Client> clients { get; set; }
         public IServer Server { get; private set; }
 
-        public NetworkHandler(IServer server)
+        private ILogger logger;
+
+        public NetworkHandler(IServer server, Logger logger)
         {
             this.Server = server;
             clients = new List<Client>();
@@ -24,6 +29,16 @@ namespace Server
                                 $"\tstarted accepting clients at {DateTime.Now}\n" +
                             $"==========================================================================");
             listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
+
+            // Write to file
+            //docPath = AppDomain.CurrentDomain.BaseDirectory + @"\Server\Logs";
+            //using (outputFile = new StreamWriter(Path.Combine(docPath, "ServerLog.txt")))
+            //{
+            //    outputFile.WriteLine("[" + DateTime.Now + "] server started!");
+            //}
+
+            this.logger = logger;
+            logger.logServer();
         }
 
         private void OnConnect(IAsyncResult ar)
@@ -40,27 +55,29 @@ namespace Server
             }
             var tcpClient = listener.EndAcceptTcpClient(ar);
             Console.WriteLine($"Client connected from {tcpClient.Client.RemoteEndPoint}");
-            clients.Add(new Client(tcpClient, this, (uint)randomClientID));
-
+            clients.Add(new Client(tcpClient, this, (uint)randomClientID, this.logger));
+            logger.logConnectClient(randomClientID);
 
             listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
         }
-        internal void TellNewTurn(Player currentPlayer, string currentWord, List<Player> players)
+        public void TellNewTurn(Player currentPlayer, string currentWord, List<Player> players)
         {
             foreach (Player player in players)
             {
                 getClientByUser(player.clientID).SendMessage(DataParser.GetDrawerMessage(currentPlayer.clientID));
             }
             getClientByUser(currentPlayer.clientID).SendMessage(DataParser.GetWordMessage(currentWord));
+
         }
 
         internal void Disconnect(Client client)
         {
             clients.Remove(client);
+            logger.logDisconnectClient(client);
             Console.WriteLine("Client disconnected");
         }
 
-        internal void SendToUser(int clientID, string packet)
+        public void SendToUser(int clientID, string packet)
         {
             foreach (var client in clients.Where(c => c.ClientId == clientID))
             {
@@ -94,33 +111,68 @@ namespace Server
 
         internal void DrewLine(uint clientID, byte[] messageBytes)
         {
+            SkribblRoom skribblRoom = this.Server.GetPlayer(clientID).playingInRoom;
+            skribblRoom.lines.Add(Line.GetLine(messageBytes.Skip(5).ToArray()));
             foreach (Player player in this.Server.GetPlayer(clientID).playingInRoom.GetPlayers())
             {
                 if (player.clientID != clientID)
                     getClientByUser(player.clientID).SendMessage(messageBytes);
             }
         }
-
-        internal void TellGameReset(List<Player> players)
+        internal void DeleteLine(uint clientID, byte[] messageBytes)
         {
-            throw new NotImplementedException();
+            SkribblRoom skribblRoom = this.Server.GetPlayer(clientID).playingInRoom;
+            Line deleteLine = Line.GetLine(messageBytes.Skip(5).ToArray());
+            foreach (Line line in skribblRoom.lines)
+            {
+                if (line.Id == deleteLine.Id)
+                {
+                    skribblRoom.lines.Remove(line);
+                    break;
+                }
+            }
+            foreach (Player player in this.Server.GetPlayer(clientID).playingInRoom.GetPlayers())
+            {
+                if (player.clientID != clientID)
+                    getClientByUser(player.clientID).SendMessage(messageBytes);
+            }
+        }
+        public void TellGameReset(List<Player> players)
+        {
+            SharedNetworking.Utils.Player[] dataPlayers = new SharedNetworking.Utils.Player[players.Count];
+            int index = 0;
+            foreach (Player p in players)
+            {
+                dataPlayers[index] = p.GetDataPlayer();
+                index++;
+            }
+            foreach (Player player in players)
+            {
+                getClientByUser(player.clientID).SendMessage(DataParser.GetGameOverMessage());
+            }
         }
 
-        internal void TellGameStart(List<Player> players)
+        public void TellGameStart(List<Player> players)
         {
             foreach (Player player in players)
             {
                 getClientByUser(player.clientID).SendMessage(DataParser.GetGoToRoomMessage(player.playingInRoom.roomCode, true));
+                logger.logStartGame(player);
             }
         }
 
-        internal int Guess(uint clientId, string guess)
+        internal void Guess(uint clientId, string guess)
         {
             Player player = this.Server.GetPlayer(clientId);
-            return player.playingInRoom.guess(player, guess);
+            int score = player.playingInRoom.guess(player, guess);
+            foreach (Player roomPlayers in player.playingInRoom.GetPlayers())
+            {
+                getClientByUser(roomPlayers.clientID).SendMessage(
+                    DataParser.GetGuessScoreMessage(player.clientID, score));
+            }
         }
 
-        internal void DeleteLines(uint clientId)
+        internal void ClearLines(uint clientId)
         {
             SkribblRoom skribblRoom = this.Server.GetPlayer(clientId).playingInRoom;
             skribblRoom.lines.Clear();
@@ -131,17 +183,21 @@ namespace Server
             }
         }
 
-        internal void TellGameOver(List<Player> players)
+        public void TellGameOver(List<Player> players)
         {
             foreach (Player player in players)
             {
                 getClientByUser(player.clientID).SendMessage(DataParser.GetGoToRoomMessage(player.playingInRoom.roomCode, false));
+                this.logger.LogGameOver(player);
             }
         }
 
-        internal void TellTurnOver(List<Player> players, string currentWord)
+        public void TellTurnOver(List<Player> players, string currentWord)
         {
-            throw new NotImplementedException();
+            foreach (Player p in players)
+            {
+                getClientByUser(p.clientID).SendMessage(DataParser.GetTurnOverMessage(currentWord));
+            }
         }
 
         internal void SendDataToPlayer(IClient client)
@@ -155,8 +211,9 @@ namespace Server
             }
         }
 
-        internal void TellAboutNewPlayer(List<Player> players, Player newPlayer)
+        public void TellAboutNewPlayer(List<Player> players, Player newPlayer)
         {
+            this.logger.logNewPlayer(newPlayer);
             foreach (Player player in players)
             {
                 getClientByUser(player.clientID).SendMessage(DataParser.GetPlayerMessage(newPlayer.GetDataPlayer()));

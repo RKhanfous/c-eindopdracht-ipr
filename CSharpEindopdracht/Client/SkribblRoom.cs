@@ -20,7 +20,7 @@ namespace Server
     {
         #region private Members
 
-        private NetworkHandler networkHandler;
+        private INetworkHandler networkHandler;
         private List<Player> players;
         private List<Player> correctlyGuessedPlayers;
         private int currentRound;
@@ -35,6 +35,7 @@ namespace Server
         public const int guessTimeMills = 30000;
         private Stopwatch stopwatch;
         private string filePath;
+        private object onEndTurnSyncLock = new object();
 
         #endregion
 
@@ -52,14 +53,14 @@ namespace Server
         /// 
         /// </summary>
         /// <param name="networkHandler"></param>
-        public SkribblRoom(NetworkHandler networkHandler) : this(networkHandler, "") { }
+        public SkribblRoom(INetworkHandler networkHandler) : this(networkHandler, "") { }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="networkHandler"></param>
         /// <param name="roomCode"></param>
-        public SkribblRoom(NetworkHandler networkHandler, string roomCode) : this(networkHandler, roomCode, 3) { }
+        public SkribblRoom(INetworkHandler networkHandler, string roomCode) : this(networkHandler, roomCode, 3) { }
 
         /// <summary>
         /// 
@@ -67,9 +68,16 @@ namespace Server
         /// <param name="networkHandler"></param>
         /// <param name="roomCode"></param>
         /// <param name="numberOfRounds"></param>
-        public SkribblRoom(NetworkHandler networkHandler, string roomCode, int numberOfRounds)
+        public SkribblRoom(INetworkHandler networkHandler, string roomCode, int numberOfRounds)
         {
-            this.filePath = "\\Words\\GameWords.txt";
+            // Filepath for FileIO
+            this.filePath = @"Words\GameWords.txt";
+            this.words = new HashSet<string>();
+            // Reading lines from File and adding them to the HashSet
+            foreach (string word in File.ReadAllLines(filePath))
+            {
+                this.words.Add(word);
+            }
             this.networkHandler = networkHandler;
             this.roomCode = roomCode;
             this.players = new List<Player>();
@@ -79,7 +87,6 @@ namespace Server
                 this.numRounds = numberOfRounds;
             else
                 this.numRounds = 1;
-            this.words = new HashSet<string> { "Boot", "Zon", "Mens", "Gras", "Water", "Sneeuw", "Kerk", "Concert", "Slang", "Huis", "Computer", "Klok", "vlees", "Tong", "Mug", "Soldaat" };
             this.timer = new Timer();
             this.stopwatch = new Stopwatch();
         }
@@ -113,6 +120,7 @@ namespace Server
 
             //setup timer
             this.timer.AutoReset = false;
+            this.timer.Elapsed += OnEndTurn;
             this.timer.Enabled = true;
             this.timer.Interval = guessTimeMills;
 
@@ -136,7 +144,7 @@ namespace Server
                     return false;
                 }
 
-                if (this.words.Count < (this.numRounds = this.currentRound) * maxNumPlayers)
+                if (this.words.Count < (this.numRounds - this.currentRound) * maxNumPlayers)
                 {
                     Debugger.Break();
                     return false;
@@ -210,23 +218,26 @@ namespace Server
 
         private void OnEndTurn(object sender, ElapsedEventArgs e)
         {
-            if (!Check())
-                Debug.WriteLine("did not pass check");
+            lock (onEndTurnSyncLock)
+            {
+                if (!Check())
+                    Debug.WriteLine("did not pass check");
 
-            this.networkHandler.TellTurnOver(this.players, this.currentWord);
+                this.networkHandler.TellTurnOver(this.players, this.currentWord);
 
-            Sleep(5000);//idk why
+                Sleep(5000);//idk why
 
-            if (this.drawingPlayers.Count == 0)
-                if (this.currentRound < numRounds)
-                    SetNextRound();
-                else
-                {
-                    endOfGame();
-                    return;
-                }
+                if (this.drawingPlayers.Count == 0)
+                    if (this.currentRound < numRounds)
+                        SetNextRound();
+                    else
+                    {
+                        endOfGame();
+                        return;
+                    }
 
-            SetNextTurn();
+                SetNextTurn();
+            }
         }
 
         private void endOfGame()
@@ -300,6 +311,7 @@ namespace Server
         /// <summary>
         /// returns how much points a player recieves for their guess if it is correct.
         /// returns -1 is incorrect guess
+        /// returns -1 is not allowed to guess
         /// updates internal data
         /// </summary>
         /// <param name="player">player who guesses</param>
@@ -308,9 +320,12 @@ namespace Server
         public int guess(Player player, string guess)
         {
             //check if guess is correct
-            if (guess != this.currentWord)
+            if (guess.ToLower() != this.currentWord.ToLower())
                 return -1;
 
+            //check if player already guessed correctly
+            if (correctlyGuessedPlayers.Contains(player))
+                return -2;
             //calculate score
             int score = (int)((guessTimeMills - this.stopwatch.ElapsedMilliseconds) / 100);
 
@@ -324,13 +339,20 @@ namespace Server
             //add score
             player.AddScore(score);
 
+            //add player to list of players that already guessed correcly
+            correctlyGuessedPlayers.Add(player);
+
+            if (players.Count == correctlyGuessedPlayers.Count)
+                this.OnEndTurn(null, null);
+
             //return score
             return score;
         }
 
         #endregion
 
-        #region helpers
+        
+#region helpers
 
         private T getrandom<T>(List<T> list)
         {
@@ -352,9 +374,14 @@ namespace Server
             {
                 return default;
             }
+            Random random = new Random();
+            int randomPos = random.Next(list.Count);// 0 >= randomInt < list.Count   ?
+            int current = 0;
             foreach (T t in list)
             {
-                return t;
+                if (current == randomPos)
+                    return t;
+                current++;
             }
             return default;
         }
@@ -365,6 +392,5 @@ namespace Server
         }
 
         #endregion
-
     }
 }

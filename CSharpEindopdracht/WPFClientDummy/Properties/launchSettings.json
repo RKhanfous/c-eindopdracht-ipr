@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "WPFClientDummy": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\Shinichi\\source\\repos\\c-eindopdracht-ipr\\CSharpEindopdracht\\WpfClient\\output\\netcoreapp3.1\\WpfClient.exe"
+    }
+  }
+}
