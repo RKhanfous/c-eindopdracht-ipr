@@ -1,0 +1,8 @@
+{
+  "runtimeOptions": {
+    "additionalProbingPaths": [
+      "C:\\Users\\redon\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\redon\\.nuget\\packages"
+    ]
+  }
+}

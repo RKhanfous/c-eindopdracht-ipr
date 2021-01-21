@@ -42,6 +42,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Client\Server.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Reference Include="Networking">
 	    <HintPath>..\Networking\bin\Debug\netcoreapp3.1\Networking.dll</HintPath>
 	  </Reference>

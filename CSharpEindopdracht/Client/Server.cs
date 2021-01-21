@@ -1,6 +1,7 @@
 ﻿using SharedNetworking.Utils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -17,7 +18,8 @@ namespace Server
 
         public Server()
         {
-            networkHandler = new NetworkHandler(this);
+            DirectoryInfo di = Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + @"\Log");
+            networkHandler = new NetworkHandler(this, new Logger(AppDomain.CurrentDomain.BaseDirectory + @"\Log"));
             skribblRooms = new List<SkribblRoom>();
             players = new List<Player>();
         }
