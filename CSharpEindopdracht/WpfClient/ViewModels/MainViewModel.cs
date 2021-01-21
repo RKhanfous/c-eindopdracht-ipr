@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using SharedSkribbl;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Net.Sockets;
@@ -169,6 +170,22 @@ namespace WpfClient.ViewModels
             return Mouse.GetPosition(this.mWindow);
         }
 
+        internal void sortPlayers()
+        {
+            List<Player> newPlayers = new List<Player>();
+            foreach (Player p in this.Players)
+            {
+                newPlayers.Add(p);
+            }
+            newPlayers.Sort((x, y) => (int)(y.Score - x.Score));
+            this.Players.Clear();
+
+            foreach (Player p in newPlayers)
+            {
+                this.Players.Add(p);
+            }
+        }
+
         #endregion
 
         #region clientCallBack interface
@@ -251,6 +268,7 @@ namespace WpfClient.ViewModels
                     {
                         this.Chat.Add($"You Guessed right and got {score} points");
                         this.MePlayer.Score += (uint)score;
+                        sortPlayers();
                     }
                 }
                 else
@@ -264,6 +282,7 @@ namespace WpfClient.ViewModels
                         {
                             p.Score += (uint)score;
                             player = p;
+                            sortPlayers();
                             break;
                         }
                     }
@@ -304,7 +323,7 @@ namespace WpfClient.ViewModels
 
         public void GameOver()
         {
-            //throw new NotImplementedException();
+            this.SelectedViewModel = new ScoreBoardViewModel(this);
         }
 
         #endregion
