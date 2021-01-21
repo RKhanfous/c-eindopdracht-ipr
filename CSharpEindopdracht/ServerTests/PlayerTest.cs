@@ -13,11 +13,11 @@ namespace ServerTests
         public void testAddScore_addsScoreToPlayer_whereScoreGreaterThanZero()
         {
             // Arrange
-            Player testplayer = new Player("testPerson", 0, (uint)100);
+            Server.Player testplayer = new Player("testPerson", 0, (uint)100);
             int testScore = 100;
 
             // Act
-            Player.AddScore(testScore);
+            testplayer.AddScore(testScore);
 
             // Assert
             Assert.AreEqual(testScore, testplayer.score);
@@ -35,6 +35,24 @@ namespace ServerTests
 
             // Assert
             Assert.AreNotEqual(testScore, testplayer.score);
+        }
+
+        [TestMethod]
+        public void testGetJsonIdentifier_returnsBool_where()
+        {
+            // Arrange
+            byte[] testArray = new byte[9];
+            for (int i = 0; i < 10; i++)
+            {
+                testArray[i] = 0x02;
+            }
+
+            string testIdentifier = "START";
+            // Act
+            bool testResult = SharedNetworking.Utils.DataParser.getJsonIdentifier(testArray, out testIdentifier);
+
+            // Assert
+            Assert.AreEqual(true, testResult);
         }
     }
 }
