@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerTests", "ServerTests\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPFClientDummy", "WPFClientDummy\WPFClientDummy.csproj", "{9FB6AFCA-1D5D-468D-9254-A86265913A46}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedNetworkingTests", "SharedNetworkingTests\SharedNetworkingTests.csproj", "{494A8BA9-17BA-4E8E-A6BF-836932535FEB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedNetworkingTests", "SharedNetworkingTests\SharedNetworkingTests.csproj", "{494A8BA9-17BA-4E8E-A6BF-836932535FEB}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
