@@ -35,6 +35,7 @@ namespace Server
         public const int guessTimeMills = 30000;
         private Stopwatch stopwatch;
         private string filePath;
+        private object onEndTurnSyncLock = new object();
 
         #endregion
 
@@ -217,23 +218,26 @@ namespace Server
 
         private void OnEndTurn(object sender, ElapsedEventArgs e)
         {
-            if (!Check())
-                Debug.WriteLine("did not pass check");
+            lock (onEndTurnSyncLock)
+            {
+                if (!Check())
+                    Debug.WriteLine("did not pass check");
 
-            this.networkHandler.TellTurnOver(this.players, this.currentWord);
+                this.networkHandler.TellTurnOver(this.players, this.currentWord);
 
-            Sleep(5000);//idk why
+                Sleep(5000);//idk why
 
-            if (this.drawingPlayers.Count == 0)
-                if (this.currentRound < numRounds)
-                    SetNextRound();
-                else
-                {
-                    endOfGame();
-                    return;
-                }
+                if (this.drawingPlayers.Count == 0)
+                    if (this.currentRound < numRounds)
+                        SetNextRound();
+                    else
+                    {
+                        endOfGame();
+                        return;
+                    }
 
-            SetNextTurn();
+                SetNextTurn();
+            }
         }
 
         private void endOfGame()
