@@ -19,7 +19,7 @@ namespace WpfClient.ViewModels
 
             this.GoToLoginView = new RelayCommand(() =>
             {
-                this.MainViewModel.SelectedViewModel = new LoginViewModel(this.MainViewModel);
+                this.MainViewModel.resetToLogin();
             });
         }
     }

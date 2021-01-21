@@ -50,8 +50,6 @@ namespace Server
 
             byte[] payload = messageBytes.Skip(5).ToArray();
 
-            string packet = Encoding.ASCII.GetString(payload);
-
             byte messageId = messageBytes[4];
             switch (messageId)
             {
