@@ -3,14 +3,15 @@ using Server;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace ServerTests
 {
     [TestClass]
-    class SkribbleRoomTest
+    public class SkribbleRoomTest
     {
         [TestMethod]
-        public void simpleTest()
+        public void SimpleTest()
         {
             TestNetworHandler networHandler = new TestNetworHandler();
             SkribblRoom skribblRoom = new SkribblRoom(networHandler);
@@ -27,12 +28,116 @@ namespace ServerTests
         }
 
         [TestMethod]
-        public void test2()
+        public void Test1()
         {
+            //arrange
             TestNetworHandler networHandler = new TestNetworHandler();
             SkribblRoom skribblRoom = new SkribblRoom(networHandler);
 
-            skribblRoom.lines
+            Player player = new Player("super awsome username", 10000, 0);
+
+            //act
+            skribblRoom.AddPlayer(player);
+
+            //assert
+            Assert.AreEqual(1, skribblRoom.GetPlayers().Count);
+
+            foreach (Player p in skribblRoom.GetPlayers())
+            {
+                Assert.AreEqual(player.username, p.username);
+                Assert.AreEqual(skribblRoom, p.playingInRoom);
+            }
+
+        }
+
+        [TestMethod]
+        public void Test2()
+        {
+            //arrange
+            TestNetworHandler networHandler = new TestNetworHandler();
+            SkribblRoom skribblRoom = new SkribblRoom(networHandler);
+
+            Player player = new Player("super awsome username", 10000, 0);
+
+            //act
+            skribblRoom.AddPlayer(player);
+
+            //assert
+            Assert.AreEqual(1, skribblRoom.GetPlayers().Count);
+
+            foreach (Player p in skribblRoom.GetPlayers())
+            {
+                Assert.AreEqual(player.username, p.username);
+                Assert.AreEqual(skribblRoom, p.playingInRoom);
+            }
+
+            //act
+            skribblRoom.RemovePlayer(player);
+
+            //assert
+            Assert.AreEqual(0, skribblRoom.GetPlayers().Count);
+        }
+
+        [TestMethod]
+        public void Test3()
+        {
+            //arrange
+            TestNetworHandler networHandler = new TestNetworHandler();
+            SkribblRoom skribblRoom = new SkribblRoom(networHandler);
+
+            Player player1 = new Player("super awsome username2", 10000, 0);
+            Player player2 = new Player("super awsome username2", 20000, 1);
+
+            skribblRoom.AddPlayer(player1);
+
+            Assert.IsFalse(skribblRoom.Start());
+
+            Assert.IsTrue(skribblRoom.TryAddPlayer(player2));
+
+            Assert.AreEqual(2, skribblRoom.GetPlayers().Count);
+
+            Assert.IsTrue(skribblRoom.Start());
+
+            Assert.AreEqual(2, networHandler.TellAboutNewPlayerCount);
+            Assert.AreEqual(0, networHandler.TellGameOverCount);
+            Assert.AreEqual(0, networHandler.TellGameResetCount);
+            Assert.AreEqual(1, networHandler.TellGameStartCount);
+            Assert.AreEqual(1, networHandler.TellNewTurnCount);
+            Assert.AreEqual(0, networHandler.TellTurnOverCount);
+        }
+
+        [TestMethod]
+        public void Test4()
+        {
+            //arrange
+            TestNetworHandler networHandler = new TestNetworHandler();
+            SkribblRoom skribblRoom = new SkribblRoom(networHandler);
+
+            Player player1 = new Player("super awsome username2", 10000, 0);
+            Player player2 = new Player("super awsome username2", 20000, 1);
+
+            skribblRoom.AddPlayer(player1);
+            skribblRoom.AddPlayer(player2);
+
+            Assert.IsTrue(skribblRoom.Start());
+
+            Assert.AreEqual(2, networHandler.TellAboutNewPlayerCount);
+            Assert.AreEqual(0, networHandler.TellGameOverCount);
+            Assert.AreEqual(0, networHandler.TellGameResetCount);
+            Assert.AreEqual(1, networHandler.TellGameStartCount);
+            Assert.AreEqual(1, networHandler.TellNewTurnCount);
+            Assert.AreEqual(0, networHandler.TellTurnOverCount);
+
+            int waited = 0;
+            int waitIncrements = 10;
+            while (networHandler.TellTurnOverCount <= 0 && waited < 31000)// turn takes a maximum of 30 sec
+            {
+                Thread.Sleep(waitIncrements);
+                waited += waitIncrements;
+            }
+            Assert.AreEqual(1, networHandler.TellTurnOverCount);
+            Assert.AreEqual(2, networHandler.TellNewTurnCount);
+
 
         }
 
@@ -63,17 +168,17 @@ namespace ServerTests
 
         public void TellGameStart(List<Player> players)
         {
-            throw new NotImplementedException();
+            TellGameStartCount++;
         }
 
         public void TellNewTurn(Player currentPlayer, string currentWord, List<Player> players)
         {
-            throw new NotImplementedException();
+            TellNewTurnCount++;
         }
 
         public void TellTurnOver(List<Player> players, string currentWord)
         {
-            throw new NotImplementedException();
+            TellTurnOverCount++;
         }
     }
 }
