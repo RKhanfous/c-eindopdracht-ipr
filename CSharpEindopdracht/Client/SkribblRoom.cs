@@ -20,7 +20,7 @@ namespace Server
     {
         #region private Members
 
-        private NetworkHandler networkHandler;
+        private INetworkHandler networkHandler;
         private List<Player> players;
         private List<Player> correctlyGuessedPlayers;
         private int currentRound;
@@ -53,14 +53,14 @@ namespace Server
         /// 
         /// </summary>
         /// <param name="networkHandler"></param>
-        public SkribblRoom(NetworkHandler networkHandler) : this(networkHandler, "") { }
+        public SkribblRoom(INetworkHandler networkHandler) : this(networkHandler, "") { }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="networkHandler"></param>
         /// <param name="roomCode"></param>
-        public SkribblRoom(NetworkHandler networkHandler, string roomCode) : this(networkHandler, roomCode, 3) { }
+        public SkribblRoom(INetworkHandler networkHandler, string roomCode) : this(networkHandler, roomCode, 3) { }
 
         /// <summary>
         /// 
@@ -68,7 +68,7 @@ namespace Server
         /// <param name="networkHandler"></param>
         /// <param name="roomCode"></param>
         /// <param name="numberOfRounds"></param>
-        public SkribblRoom(NetworkHandler networkHandler, string roomCode, int numberOfRounds)
+        public SkribblRoom(INetworkHandler networkHandler, string roomCode, int numberOfRounds)
         {
             // Filepath for FileIO
             this.filePath = @"Words\GameWords.txt";
