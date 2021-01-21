@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Server
 {
-    interface ILogger
+    public interface ILogger
     {
-        void logException(string exception);
+        string logException(string exception);
         void logServer();
         void logConnectClient(int clientID);
         void logDisconnectClient(Client client);

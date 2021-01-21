@@ -17,8 +17,7 @@ namespace Server
         public List<Client> clients { get; set; }
         public IServer Server { get; private set; }
 
-        private ILogger iLogger;
-        private Logger logger;
+        private ILogger logger;
 
         public NetworkHandler(IServer server, Logger logger)
         {
@@ -56,7 +55,7 @@ namespace Server
             }
             var tcpClient = listener.EndAcceptTcpClient(ar);
             Console.WriteLine($"Client connected from {tcpClient.Client.RemoteEndPoint}");
-            clients.Add(new Client(tcpClient, this, (uint)randomClientID));
+            clients.Add(new Client(tcpClient, this, (uint)randomClientID, this.logger));
             logger.logConnectClient(randomClientID);
 
             listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
@@ -74,7 +73,7 @@ namespace Server
         internal void Disconnect(Client client)
         {
             clients.Remove(client);
-            iLogger.logDisconnectClient(client);
+            logger.logDisconnectClient(client);
             Console.WriteLine("Client disconnected");
         }
 

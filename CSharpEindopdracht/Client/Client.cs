@@ -20,11 +20,11 @@ namespace Server
         private string username { get; set; }
         public uint ClientId { get; set; }
 
-        public Client(TcpClient tcpClient, NetworkHandler network, uint clientID) : base(tcpClient)
+        public Client(TcpClient tcpClient, NetworkHandler network, uint clientID, ILogger logger) : base(tcpClient)
         {
             this.ClientId = clientID;
             this.networkHandler = network;
-            this.logger = new ILogger();
+            this.logger = logger;
         }
 
         public void Write(byte messageID, string packet)

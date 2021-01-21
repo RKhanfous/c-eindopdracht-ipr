@@ -16,7 +16,7 @@ namespace Server
         public Logger(string logPathApp)
         {
             this.logPath = logPathApp;
-            this.logName = "SystemLog" + StringBuilderTime + ".txt";
+            this.logName = "SystemLog" + StringBuilderTime() + ".txt";
             this.fileName = logPath + @"\" + logName;
             if (!Directory.Exists(logPath))
             {
@@ -24,9 +24,10 @@ namespace Server
             }
         }
 
-        public void logException(String exception)
+        public string logException(string exception)
         {
             writeTextToFile("[" + DateTime.Now + "] this exception has occured: " + exception + "!");
+            return exception;
         }
 
         public void logServer()
