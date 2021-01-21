@@ -121,6 +121,19 @@ namespace ServerTests
 
             Assert.IsTrue(skribblRoom.Start());
 
+            Thread waitingThread = new Thread(() =>
+            {
+                int waited = 0;
+                int waitIncrements = 10;
+                while (networHandler.TellTurnOverCount <= 0 && waited < 31000)// turn takes a maximum of 30 sec
+                {
+                    Thread.Sleep(waitIncrements);
+                    waited += waitIncrements;
+                }
+            });
+
+            waitingThread.Start();
+
             Assert.AreEqual(2, networHandler.TellAboutNewPlayerCount);
             Assert.AreEqual(0, networHandler.TellGameOverCount);
             Assert.AreEqual(0, networHandler.TellGameResetCount);
@@ -128,13 +141,7 @@ namespace ServerTests
             Assert.AreEqual(1, networHandler.TellNewTurnCount);
             Assert.AreEqual(0, networHandler.TellTurnOverCount);
 
-            int waited = 0;
-            int waitIncrements = 10;
-            while (networHandler.TellTurnOverCount <= 0 && waited < 31000)// turn takes a maximum of 30 sec
-            {
-                Thread.Sleep(waitIncrements);
-                waited += waitIncrements;
-            }
+            waitingThread.Join();
             Assert.AreEqual(1, networHandler.TellTurnOverCount);
             Assert.AreEqual(2, networHandler.TellNewTurnCount);
 
