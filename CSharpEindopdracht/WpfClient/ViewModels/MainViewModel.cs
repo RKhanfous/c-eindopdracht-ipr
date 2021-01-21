@@ -302,9 +302,9 @@ namespace WpfClient.ViewModels
             }), word);
         }
 
-        public void GameOver(SharedNetworking.Utils.Player[] players)
+        public void GameOver()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         #endregion

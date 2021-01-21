@@ -133,7 +133,7 @@ namespace Server
             }
             foreach (Player player in players)
             {
-                getClientByUser(player.clientID).SendMessage(DataParser.GetGameOverMessage(dataPlayers));
+                getClientByUser(player.clientID).SendMessage(DataParser.GetGameOverMessage());
             }
         }
 

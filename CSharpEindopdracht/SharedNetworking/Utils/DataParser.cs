@@ -262,20 +262,9 @@ namespace SharedNetworking.Utils
         }
         //==============================================================================================================================================
 
-        public static byte[] GetGameOverMessage(Player[] players)
+        public static byte[] GetGameOverMessage()
         {
-            return getJsonMessage(GAME_OVER, new { players = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(players)) });
-
-        }
-
-        public static Player[] GetPlayersFromGameOverJsonMessage(byte[] payload)
-        {
-            dynamic json = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(payload));
-            if (json.identifier == GAME_OVER)
-            {
-                return JsonConvert.DeserializeObject<Player>(Encoding.ASCII.GetString(json.data.players));
-            }
-            return default;
+            return getJsonMessage(GAME_OVER, null);
         }
         #endregion
     }

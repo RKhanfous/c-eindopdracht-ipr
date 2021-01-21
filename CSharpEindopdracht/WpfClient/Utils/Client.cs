@@ -80,7 +80,7 @@ namespace WpfClient.Utils
                             this.clientCallback.TurnOver(word);
                             break;
                         case DataParser.GAME_OVER:
-                            this.clientCallback.GameOver(DataParser.GetPlayersFromGameOverJsonMessage(payload));
+                            this.clientCallback.GameOver();
                             break;
                         default:
                             Console.WriteLine($"Received json with identifier {identifier}");
