@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using S;
 
 namespace SharedNetworkingTests
 {
@@ -10,13 +11,12 @@ namespace SharedNetworkingTests
         {
             // Arrange
             byte[] testArray = new byte[9];
-            for(int i = 0; i < 10; i++)
+            for (int i = 0; i < 10; i++)
             {
                 testArray[i] = 0x02;
             }
 
             string testIdentifier = "START";
-
             // Act
             bool testResult = DataParser.getJsonIdentifier(testArray, testIdentifier);
 

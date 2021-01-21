@@ -41,18 +41,15 @@ namespace ServerTests
         public void testGetJsonIdentifier_returnsBool_where()
         {
             // Arrange
-            byte[] testArray = new byte[9];
-            for (int i = 0; i < 10; i++)
-            {
-                testArray[i] = 0x02;
-            }
+            byte[] testArray = SharedNetworking.Utils.DataParser.GetClearLinesMessage();
+            string testIdentifier;
 
-            string testIdentifier = "START";
             // Act
             bool testResult = SharedNetworking.Utils.DataParser.getJsonIdentifier(testArray, out testIdentifier);
 
             // Assert
-            Assert.AreEqual(true, testResult);
+            Assert.IsTrue(testResult);
+            Assert.AreEqual(SharedNetworking.Utils.DataParser.CLEAR_LINES, testIdentifier);
         }
     }
 }
