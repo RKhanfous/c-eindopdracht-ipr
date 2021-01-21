@@ -17,6 +17,7 @@ namespace WpfClient.ViewModels
     {
         private Point lastPoint;
 
+        private Random random;
         public MainViewModel MainViewModel { get; private set; }
 
 
@@ -36,6 +37,8 @@ namespace WpfClient.ViewModels
         public GameViewModel(MainViewModel mainViewModel)
         {
             this.MainViewModel = mainViewModel;
+
+            this.random = new Random();
 
             this.MouseDownCommand = new RelayCommand<MouseButtonEventArgs>((param) =>
             {
@@ -82,24 +85,48 @@ namespace WpfClient.ViewModels
                     line.Y2 = (short)lastPoint.Y;
                     if (stroke == 0)
                     {
-                        ICollection<Line> toBeDeltedLines = new LinkedList<Line>();
+                        ICollection<int> toBeDeltedLineIds = new LinkedList<int>();
                         Parallel.ForEach(this.MainViewModel.Lines, (otherLine) =>
                          {
                              if (line.Collide1(otherLine))
                              {
-                                 lock (toBeDeltedLines)
+                                 lock (toBeDeltedLineIds)
                                  {
-                                     toBeDeltedLines.Add(otherLine);
+                                     toBeDeltedLineIds.Add(otherLine.Id);
                                  }
                              }
                          });
 
-                        //todo delelte lines
-                        if (toBeDeltedLines.Count > 0)
-                            Debug.WriteLine("toBeDeltedLines.Count = " + toBeDeltedLines.Count);
+
+                        foreach (int toBeDeltedLineId in toBeDeltedLineIds)
+                        {
+                            foreach (Line mainLine in this.MainViewModel.Lines)
+                            {
+                                if (mainLine.Id == toBeDeltedLineId)
+                                {
+                                    this.MainViewModel.Lines.Remove(mainLine);
+                                    break;
+                                }
+                            }
+                            this.MainViewModel.Client.SendMessage(SharedNetworking.Utils.DataParser.GetDeleteLineMessage(toBeDeltedLineId));
+
+                        }
+
                     }
                     else
                     {
+                        int id = random.Next();
+
+                        foreach (Line mainLine in this.MainViewModel.Lines)
+                        {
+                            if (mainLine.Id == id)
+                            {
+                                id = random.Next();
+                                continue;
+                            }
+                        }
+
+                        line.Id = id;
                         this.MainViewModel.Lines.Add(line);
                         this.MainViewModel.Client.SendMessage(SharedNetworking.Utils.DataParser.GetLineMessage(line.serialize()));
                     }

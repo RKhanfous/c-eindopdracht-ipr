@@ -18,6 +18,8 @@ namespace SharedNetworking.Utils
         public const string WORD = "WORD";
         public const string CLEAR_LINES = "CLEARLINES";
         public const string GUESS = "GUESS";
+        public const string DELETE_LINE = "DELETELINE";
+        public const string TURN_OVER = "TURNOVER";
         #endregion
 
 
@@ -44,6 +46,28 @@ namespace SharedNetworking.Utils
         public static byte[] GetLineMessage(byte[] line)
         {
             return getMessage(line, 0x01);
+        }
+        //==============================================================================================================================================
+
+        public static byte[] GetPlayerMessage(Player player)
+        {
+            return getMessage(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(player)), 0x03);
+        }
+
+        public static Player GetPlayerFromBytes(byte[] payload)
+        {
+            return JsonConvert.DeserializeObject<Player>(Encoding.ASCII.GetString(payload));
+        }
+        //==============================================================================================================================================
+
+        public static byte[] GetDeleteLineMessage(int toBeDeltedLineId)
+        {
+            return getMessage(BitConverter.GetBytes(toBeDeltedLineId), 0x04);
+        }
+
+        public static int GetLineFromDeleteLine(byte[] payload)
+        {
+            return BitConverter.ToInt32(payload, 0);
         }
 
         #endregion
@@ -206,34 +230,34 @@ namespace SharedNetworking.Utils
             return default;
         }
 
-        public static byte[] GetGuessScoreMessage(int GuessScore)
+        public static byte[] GetGuessScoreMessage(uint mClientId, int GuessScore)
         {
-            return getJsonMessage(GUESS, new { guessScore = GuessScore });
+            return getJsonMessage(GUESS, new { clientId = mClientId, guessScore = GuessScore });
         }
 
-        public static int GetGuessScoreFromjsonMessage(byte[] payload)
+        public static (uint, int) GetGuessScoreFromjsonMessage(byte[] payload)
         {
             dynamic json = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(payload));
             if (json.identifier == GUESS)
             {
-                return json.data.guessScore;
+                return (json.data.clientId, json.data.guessScore);
             }
             return default;
         }
-
-
-        #endregion
-
-        #region players
-
-        public static byte[] GetPlayerMessage(Player player)
+        //==============================================================================================================================================
+        public static byte[] GetTurnOverMessage(string Word)
         {
-            return getMessage(Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(player)), 0x03);
+            return getJsonMessage(TURN_OVER, new { word = Word });
         }
 
-        public static Player GetPlayerFromBytes(byte[] payload)
+        public static string GetWordFromjsonTurnOverMessage(byte[] payload)
         {
-            return JsonConvert.DeserializeObject<Player>(Encoding.ASCII.GetString(payload));
+            dynamic json = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(payload));
+            if (json.identifier == TURN_OVER)
+            {
+                return json.data.word;
+            }
+            return default;
         }
 
         #endregion

@@ -72,8 +72,12 @@ namespace WpfClient.Utils
                             this.clientCallback.ClearLines();
                             break;
                         case DataParser.GUESS:
-                            int score = DataParser.GetGuessScoreFromjsonMessage(payload);
-                            this.clientCallback.GiveScore(score);
+                            (uint, int) score = DataParser.GetGuessScoreFromjsonMessage(payload);
+                            this.clientCallback.GiveScore(score.Item1, score.Item2);
+                            break;
+                        case DataParser.TURN_OVER:
+                            string word = DataParser.GetWordFromjsonTurnOverMessage(payload);
+                            this.clientCallback.TurnOver(word);
                             break;
                         default:
                             Console.WriteLine($"Received json with identifier {identifier}");
@@ -85,6 +89,10 @@ namespace WpfClient.Utils
                     Player dataPlayer = DataParser.GetPlayerFromBytes(payload);
 
                     clientCallback.AddPlayer(dataPlayer);
+                    break;
+
+                case 0x04:
+                    this.clientCallback.DeleteLine(DataParser.GetLineFromDeleteLine(payload));
                     break;
                 default:
                     Debug.WriteLine($"received message with id {messageId}");

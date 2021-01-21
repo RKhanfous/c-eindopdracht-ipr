@@ -1,4 +1,5 @@
 ﻿using SharedNetworking.Utils;
+using SharedSkribbl;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -67,6 +68,7 @@ namespace Server
                 getClientByUser(player.clientID).SendMessage(DataParser.GetDrawerMessage(currentPlayer.clientID));
             }
             getClientByUser(currentPlayer.clientID).SendMessage(DataParser.GetWordMessage(currentWord));
+
         }
 
         internal void Disconnect(Client client)
@@ -110,13 +112,32 @@ namespace Server
 
         internal void DrewLine(uint clientID, byte[] messageBytes)
         {
+            SkribblRoom skribblRoom = this.Server.GetPlayer(clientID).playingInRoom;
+            skribblRoom.lines.Add(Line.GetLine(messageBytes.Skip(5).ToArray()));
             foreach (Player player in this.Server.GetPlayer(clientID).playingInRoom.GetPlayers())
             {
                 if (player.clientID != clientID)
                     getClientByUser(player.clientID).SendMessage(messageBytes);
             }
         }
-
+        internal void DeleteLine(uint clientID, byte[] messageBytes)
+        {
+            SkribblRoom skribblRoom = this.Server.GetPlayer(clientID).playingInRoom;
+            Line deleteLine = Line.GetLine(messageBytes.Skip(5).ToArray());
+            foreach (Line line in skribblRoom.lines)
+            {
+                if (line.Id == deleteLine.Id)
+                {
+                    skribblRoom.lines.Remove(line);
+                    break;
+                }
+            }
+            foreach (Player player in this.Server.GetPlayer(clientID).playingInRoom.GetPlayers())
+            {
+                if (player.clientID != clientID)
+                    getClientByUser(player.clientID).SendMessage(messageBytes);
+            }
+        }
         internal void TellGameReset(List<Player> players)
         {
             throw new NotImplementedException();
@@ -131,13 +152,18 @@ namespace Server
             }
         }
 
-        internal int Guess(uint clientId, string guess)
+        internal void Guess(uint clientId, string guess)
         {
             Player player = this.Server.GetPlayer(clientId);
-            return player.playingInRoom.guess(player, guess);
+            int score = player.playingInRoom.guess(player, guess);
+            foreach (Player roomPlayers in player.playingInRoom.GetPlayers())
+            {
+                getClientByUser(roomPlayers.clientID).SendMessage(
+                    DataParser.GetGuessScoreMessage(player.clientID, score));
+            }
         }
 
-        internal void DeleteLines(uint clientId)
+        internal void ClearLines(uint clientId)
         {
             SkribblRoom skribblRoom = this.Server.GetPlayer(clientId).playingInRoom;
             skribblRoom.lines.Clear();
@@ -158,7 +184,10 @@ namespace Server
 
         internal void TellTurnOver(List<Player> players, string currentWord)
         {
-            throw new NotImplementedException();
+            foreach (Player p in players)
+            {
+                getClientByUser(p.clientID).SendMessage(DataParser.GetTurnOverMessage(currentWord));
+            }
         }
 
         internal void SendDataToPlayer(IClient client)

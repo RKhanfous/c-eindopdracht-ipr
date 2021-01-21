@@ -208,11 +208,17 @@ namespace WpfClient.ViewModels
 
         public void SetDrawer(uint id)
         {
-            foreach (Player player in this.Players)
+            Application.Current.Dispatcher.BeginInvoke(new Action<uint>((id) =>
             {
-                player.IsDrawing = player.Id == id;
-            }
-            this.currentWord = "";
+                foreach (Player player in this.Players)
+                {
+                    player.IsDrawing = (player.Id == id);
+                    player.PenState = PenState.STROKE1;
+                }
+                if (!MePlayer.IsDrawing)
+                    this.currentWord = "";
+                this.Lines.Clear();
+            }), id);
         }
 
         public void AddLine(Line line)
@@ -231,15 +237,69 @@ namespace WpfClient.ViewModels
             }));
         }
 
-        public void GiveScore(int score)
+        public void GiveScore(uint id, int score)
         {
             Application.Current.Dispatcher.BeginInvoke(new Action<int>((score) =>
             {
-                if (score == -1)
-                    this.Chat.Add("You Guessed Wrong");
+                if (MePlayer.Id == id)
+                {
+                    if (score == -1)
+                        this.Chat.Add("You Guessed Wrong");
+                    else if (score == -2)
+                        this.Chat.Add("You are not allowd to guess");
+                    else
+                    {
+                        this.Chat.Add($"You Guessed right and got {score} points");
+                        this.MePlayer.Score += (uint)score;
+                    }
+                }
                 else
-                    this.Chat.Add($"You Guessed right and got {score} points");
+                {
+                    if (score == -1 || score == -2)
+                        return;
+                    Player player = null;
+                    foreach (Player p in Players)
+                    {
+                        if (p.Id == id)
+                        {
+                            p.Score += (uint)score;
+                            player = p;
+                            break;
+                        }
+                    }
+
+                    if (player.Id != MePlayer.Id)
+                        this.Chat.Add($"{player.Username} Guessed right and got {score} points");
+                }
             }), score);
+        }
+
+        public void DeleteLine(int lineId)
+        {
+            Application.Current.Dispatcher.BeginInvoke(new Action<int>((lineId) =>
+            {
+                foreach (Line mainLine in this.Lines)
+                {
+                    if (mainLine.Id == lineId)
+                    {
+                        this.Lines.Remove(mainLine);
+                        break;
+                    }
+                }
+            }), lineId);
+        }
+
+        public void TurnOver(string word)
+        {
+            Application.Current.Dispatcher.BeginInvoke(new Action<string>((word) =>
+            {
+                this.Chat.Add($"Word was {word}");
+                foreach (Player p in Players)
+                {
+                    p.IsDrawing = false;
+                }
+                this.currentWord = word;
+            }), word);
         }
 
         #endregion
