@@ -332,6 +332,9 @@ namespace Server
             //add player to list of players that already guessed correcly
             correctlyGuessedPlayers.Add(player);
 
+            if (players.Count == correctlyGuessedPlayers.Count)
+                this.OnEndTurn(null, null);
+
             //return score
             return score;
         }

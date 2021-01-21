@@ -20,5 +20,6 @@ namespace WpfClient.Utils
         void GiveScore(uint clientId, int score);
         void DeleteLine(int lineId);
         void TurnOver(string word);
+        void GameOver();
     }
 }

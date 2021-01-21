@@ -20,6 +20,7 @@ namespace SharedNetworking.Utils
         public const string GUESS = "GUESS";
         public const string DELETE_LINE = "DELETELINE";
         public const string TURN_OVER = "TURNOVER";
+        public const string GAME_OVER = "GAMEOVER";
         #endregion
 
 
@@ -259,7 +260,12 @@ namespace SharedNetworking.Utils
             }
             return default;
         }
+        //==============================================================================================================================================
 
+        public static byte[] GetGameOverMessage()
+        {
+            return getJsonMessage(GAME_OVER, null);
+        }
         #endregion
     }
 }
