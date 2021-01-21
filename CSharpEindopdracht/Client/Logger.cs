@@ -11,18 +11,19 @@ namespace Server
 
         private string logName { get; set; }
 
-        private StreamWriter outputFile;
+        private string fileName { get; set; }
 
         public Logger(string logPathApp)
         {
             this.logPath = logPathApp;
             this.logName = "SystemLog" + StringBuilderTime() + ".txt";
-            this.outputFile = new StreamWriter(Path.Combine(logPath, logName), true);
+            this.fileName = logPath + @"\" + logName;
         }
 
         public void logException(String exception)
         {
-            using (this.outputFile) {
+            using (this.outputFile)
+            {
 
                 this.outputFile.WriteLine("[" + DateTime.Now + "] this exception has occured: " + exception + "!");
             }
@@ -38,31 +39,44 @@ namespace Server
 
         public void logStartGame(Player player)
         {
-            using (this.outputFile)
-            {
-                this.outputFile.WriteLine("[" + DateTime.Now + "] player:" + player.username + "with clientID:" + player.clientID + " started a game.");
-            }
+            writeTextToFile("[" + DateTime.Now + "] player:" + player.username + "with clientID:" + player.clientID + " started a game.");
         }
 
         public void logConnectClient(int clientID)
         {
-            using (this.outputFile)
-            {
-                this.outputFile.WriteLine("[" + DateTime.Now + "]" + clientID + " connected to the server!");
-            }
+            writeTextToFile("[" + DateTime.Now + "]" + clientID + " connected to the server!");
         }
 
         public void logDisconnectClient(Client client)
         {
-            using (this.outputFile)
-            {
-                this.outputFile.WriteLine("[" + DateTime.Now + "]" + client.ClientId + " left the server!");
-            }
+            writeTextToFile("[" + DateTime.Now + "]" + client.ClientId + " left the server!");
         }
 
         private string StringBuilderTime()
         {
-            return "[" + DateTime.Now.Hour + "H_" + DateTime.Now.Minute + "M_" + DateTime.Now.Second + "S_Day_" + DateTime.Now.Day + "_Month_" + DateTime.Now.Month + "_Year_" + DateTime.Now.Year + "]";
+            return "[" + DateTime.Now.Hour + "H/" + DateTime.Now.Minute + "M/" + DateTime.Now.Second + "S_Day" + DateTime.Now.Day + "/Month" + DateTime.Now.Month + "/Year" + DateTime.Now.Year + "]";
+        }
+
+        private void writeTextToFile(string text)
+        {
+            int length = 0;
+            try
+            {
+                FileInfo fi = new FileInfo(this.fileName);
+                length = (int)fi.length();
+            }
+            catch
+            {
+                //do nothing
+            }
+
+            using (var fileStream = new FileStream(this.fileName, FileMode.Append, FileAccess.Write, FileShare.None))
+            using (var sw = new StreamWriter(fileStream))
+            {
+                sw.BaseStream.Seek(length, SeekOrigin.Begin);
+                sw.WriteLine(test);
+                sw.flush();
+            }
         }
     }
 }
