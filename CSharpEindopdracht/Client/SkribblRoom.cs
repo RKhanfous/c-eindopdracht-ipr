@@ -347,7 +347,8 @@ namespace Server
 
         #endregion
 
-        #region helpers
+        
+#region helpers
 
         private T getrandom<T>(List<T> list)
         {
@@ -387,6 +388,5 @@ namespace Server
         }
 
         #endregion
-
     }
 }
