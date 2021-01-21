@@ -18,7 +18,7 @@ namespace Server
 
         public Server()
         {
-            networkHandler = new NetworkHandler(this, new Logger(Directory.GetCurrentDirectory() + "/Log/" + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")));
+            networkHandler = new NetworkHandler(this, new Logger(Directory.GetCurrentDirectory() + "/Log"));
             skribblRooms = new List<SkribblRoom>();
             players = new List<Player>();
         }
