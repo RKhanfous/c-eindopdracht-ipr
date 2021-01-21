@@ -26,7 +26,8 @@ namespace Server
         {
             if (score < 0)
             {
-                this.score += 0;
+                throw new ArgumentOutOfRangeException("Cannot add negative scores");
+
             }
             this.score += score;
         }

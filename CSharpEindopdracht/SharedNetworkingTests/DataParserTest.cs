@@ -1,5 +1,4 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using S;
 
 namespace SharedNetworkingTests
 {
@@ -7,21 +6,28 @@ namespace SharedNetworkingTests
     public class DataParserTest
     {
         [TestMethod]
-        public void testGetJsonIdentifier_returnsBool_where()
+        public void testGetJsonIdentifier_returnsBool_whereIdentifierIsCLEARLINES()
         {
             // Arrange
-            byte[] testArray = new byte[9];
-            for (int i = 0; i < 10; i++)
-            {
-                testArray[i] = 0x02;
-            }
+            byte[] testArray = SharedNetworking.Utils.DataParser.GetClearLinesMessage();
+            string testIdentifier;
 
-            string testIdentifier = "START";
             // Act
-            bool testResult = DataParser.getJsonIdentifier(testArray, testIdentifier);
+            bool testResult = SharedNetworking.Utils.DataParser.getJsonIdentifier(testArray, out testIdentifier);
 
             // Assert
-            Assert.AreEqual(true, testResult);
+            Assert.IsTrue(testResult);
+            Assert.AreEqual(SharedNetworking.Utils.DataParser.CLEAR_LINES, testIdentifier);
+        }
+
+        [TestMethod]
+        public void testGetLogOnJsonMessage()
+        {
+            // Arrange
+            byte[] testArray;
+            // Act
+            // Assert
+
         }
     }
 }
