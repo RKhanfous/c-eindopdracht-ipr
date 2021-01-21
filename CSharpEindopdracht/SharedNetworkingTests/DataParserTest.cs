@@ -29,11 +29,14 @@ namespace SharedNetworkingTests
             //arrange
             string username = "username";
             string roomCode = "roomCode";
+            string testIdentifier;
 
             //act
             byte[] message = DataParser.GetLogOnJsonMessage(username, roomCode);
 
             int expectedMessageLength = BitConverter.ToInt32(message, 0);
+
+            DataParser.getJsonIdentifier(message, out testIdentifier);
 
             byte[] payload = message.Skip(5).ToArray();
 
@@ -42,6 +45,7 @@ namespace SharedNetworkingTests
             Assert.AreEqual(0x02, message[4]);
             Assert.AreEqual(username, DataParser.GetUsernameFromLogOnjson(payload));
             Assert.AreEqual(roomCode, DataParser.GetRoomCodeFromLogOnjson(payload));
+            Assert.AreEqual(DataParser.LOG_ON, testIdentifier);
         }
 
         [TestMethod]
@@ -50,11 +54,14 @@ namespace SharedNetworkingTests
             //arrange
             string roomCode = "roomCode";
             bool running = true;
+            string testIdentifier;
 
             //act
             byte[] message = DataParser.GetGoToRoomMessage(roomCode, running);
 
             int expectedMessageLength = BitConverter.ToInt32(message, 0);
+
+            DataParser.getJsonIdentifier(message, out testIdentifier);
 
             byte[] payload = message.Skip(5).ToArray();
 
@@ -62,6 +69,7 @@ namespace SharedNetworkingTests
             Assert.AreEqual(message.Length, expectedMessageLength);
             Assert.AreEqual(0x02, message[4]);
             Assert.AreEqual((roomCode, running), DataParser.GetRoomDataFromGoToRoomjson(payload));
+            Assert.AreEqual(DataParser.GO_TO_ROOM, testIdentifier);
         }
 
         [TestMethod]
@@ -70,11 +78,14 @@ namespace SharedNetworkingTests
             //arrange
             string username = "username";
             uint i = 13;
+            string testIdentifier;
 
             //act
             byte[] message = DataParser.GetOwnDataMessage(username, i);
 
             int expectedMessageLength = BitConverter.ToInt32(message, 0);
+
+            DataParser.getJsonIdentifier(message, out testIdentifier);
 
             byte[] testPayload = message.Skip(5).ToArray();
 
@@ -82,6 +93,7 @@ namespace SharedNetworkingTests
             Assert.AreEqual(message.Length, expectedMessageLength);
             Assert.AreEqual(0x02, message[4]);
             Assert.AreEqual((username, i), DataParser.GetUsernameIdFromJsonMessage(testPayload));
+            Assert.AreEqual(DataParser.OWN_DATA, testIdentifier);
         }
 
         [TestMethod]
@@ -107,11 +119,14 @@ namespace SharedNetworkingTests
         {
             //arrange
             uint id = 13;
+            string testIdentifier;
 
             //act
             byte[] message = DataParser.GetDrawerMessage(id);
 
             int expectedMessageLength = BitConverter.ToInt32(message, 0);
+
+            DataParser.getJsonIdentifier(message, out testIdentifier);
 
             byte[] testPayload = message.Skip(5).ToArray();
 
@@ -119,6 +134,7 @@ namespace SharedNetworkingTests
             Assert.AreEqual(message.Length, expectedMessageLength);
             Assert.AreEqual(0x02, message[4]);
             Assert.AreEqual(id, DataParser.GetDrawerId(testPayload));
+            Assert.AreEqual(DataParser.SET_DRAWER, testIdentifier);
         }
 
         [TestMethod]
@@ -126,11 +142,14 @@ namespace SharedNetworkingTests
         {
             //arrange
             string word = "word";
+            string testIdentifier;
 
             //act
             byte[] message = DataParser.GetWordMessage(word);
 
             int expectedMessageLength = BitConverter.ToInt32(message, 0);
+
+            DataParser.getJsonIdentifier(message, out testIdentifier);
 
             byte[] testPayload = message.Skip(5).ToArray();
 
@@ -138,6 +157,7 @@ namespace SharedNetworkingTests
             Assert.AreEqual(message.Length, expectedMessageLength);
             Assert.AreEqual(0x02, message[4]);
             Assert.AreEqual(word, DataParser.GetWordFromjsonMessage(testPayload));
+            Assert.AreEqual(DataParser.WORD, testIdentifier);
         }
 
         [TestMethod]
@@ -145,6 +165,7 @@ namespace SharedNetworkingTests
         {
             //arrange
             string testIdentifier;
+
 
             //act
             byte[] message = DataParser.GetClearLinesMessage();
@@ -163,11 +184,14 @@ namespace SharedNetworkingTests
         {
             //arrange
             string guess = "guess";
+            string testIdentifier;
 
             //act
             byte[] message = DataParser.GetGuessMessage(guess);
 
             int expectedMessageLength = BitConverter.ToInt32(message, 0);
+
+            DataParser.getJsonIdentifier(message, out testIdentifier);
 
             byte[] testPayload = message.Skip(5).ToArray();
 
@@ -175,6 +199,7 @@ namespace SharedNetworkingTests
             Assert.AreEqual(message.Length, expectedMessageLength);
             Assert.AreEqual(0x02, message[4]);
             Assert.AreEqual(guess, DataParser.GetGuessFromjsonMessage(testPayload));
+            Assert.AreEqual(DataParser.GUESS, testIdentifier);
         }
 
         [TestMethod]
@@ -183,11 +208,14 @@ namespace SharedNetworkingTests
             //arrange
             uint clientID = 100;
             int score = 99;
+            string testIdentifier;
 
             //act
             byte[] message = DataParser.GetGuessScoreMessage(clientID, score);
 
             int expectedMessageLength = BitConverter.ToInt32(message, 0);
+
+            DataParser.getJsonIdentifier(message, out testIdentifier);
 
             byte[] testPayload = message.Skip(5).ToArray();
 
@@ -195,6 +223,7 @@ namespace SharedNetworkingTests
             Assert.AreEqual(message.Length, expectedMessageLength);
             Assert.AreEqual(0x02, message[4]);
             Assert.AreEqual((clientID, score), DataParser.GetGuessScoreFromjsonMessage(testPayload));
+            Assert.AreEqual(DataParser.GUESS, testIdentifier);
         }
 
         [TestMethod]
@@ -202,11 +231,14 @@ namespace SharedNetworkingTests
         {
             //arrange
             string word = "word";
+            string testIdentifier;
 
             //act
             byte[] message = DataParser.GetTurnOverMessage(word);
 
             int expectedMessageLength = BitConverter.ToInt32(message, 0);
+
+            DataParser.getJsonIdentifier(message, out testIdentifier);
 
             byte[] testPayload = message.Skip(5).ToArray();
 
@@ -214,6 +246,7 @@ namespace SharedNetworkingTests
             Assert.AreEqual(message.Length, expectedMessageLength);
             Assert.AreEqual(0x02, message[4]);
             Assert.AreEqual(word, DataParser.GetWordFromjsonTurnOverMessage(testPayload));
+            Assert.AreEqual(DataParser.TURN_OVER, testIdentifier);
         }
 
         [TestMethod]
