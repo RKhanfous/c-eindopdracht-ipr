@@ -188,6 +188,7 @@ namespace Server
             foreach (Player player in players)
             {
                 getClientByUser(player.clientID).SendMessage(DataParser.GetGoToRoomMessage(player.playingInRoom.roomCode, false));
+                this.logger.LogGameOver(player);
             }
         }
 
@@ -212,6 +213,7 @@ namespace Server
 
         public void TellAboutNewPlayer(List<Player> players, Player newPlayer)
         {
+            this.logger.logNewPlayer(newPlayer);
             foreach (Player player in players)
             {
                 getClientByUser(player.clientID).SendMessage(DataParser.GetPlayerMessage(newPlayer.GetDataPlayer()));

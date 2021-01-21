@@ -12,5 +12,7 @@ namespace Server
         void logConnectClient(int clientID);
         void logDisconnectClient(Client client);
         void logStartGame(Player player);
+        void LogGameOver(Player player);
+        void logNewPlayer(Player newPlayer);
     }
 }

@@ -37,7 +37,7 @@ namespace Server
 
         public void logStartGame(Player player)
         {
-            writeTextToFile("[" + DateTime.Now + "] player:" + player.username + "with clientID:" + player.clientID + " started a game.");
+            writeTextToFile($"[{DateTime.Now}] roomCode: {player.playingInRoom.roomCode} player: {player.username} with clientID: {player.clientID} started game");
         }
 
         public void logConnectClient(int clientID)
@@ -49,11 +49,21 @@ namespace Server
         {
             writeTextToFile("[" + DateTime.Now + "]" + client.ClientId + " left the server!");
         }
+        public void LogGameOver(Player player)
+        {
+            writeTextToFile($"[{DateTime.Now}] roomcode: {player.playingInRoom.roomCode}  player: {player.username} with clientID: {player.clientID} game over");
+        }
+
+        public void logNewPlayer(Player newPlayer)
+        {
+            writeTextToFile($"[{DateTime.Now}] roomcode: {newPlayer.playingInRoom.roomCode}  newPlayer: {newPlayer.username} with clientID: {newPlayer.clientID} joined room");
+        }
 
         private string StringBuilderTime()
         {
             return "[" + DateTime.Now.Hour + "H-" + DateTime.Now.Minute + "M-" + DateTime.Now.Second + "S-Day" + DateTime.Now.Day + "-Month" + DateTime.Now.Month + "-Year" + DateTime.Now.Year + "]";
         }
+
 
         public void writeTextToFile(string data)
         {
@@ -62,5 +72,6 @@ namespace Server
                 sw.WriteLine(data);
             }
         }
+
     }
 }
