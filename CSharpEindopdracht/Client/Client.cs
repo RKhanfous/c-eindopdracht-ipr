@@ -14,14 +14,17 @@ namespace Server
 {
     public class Client : SharedClient, IClient
     {
+        private ILogger logger;
+
         private NetworkHandler networkHandler;
         private string username { get; set; }
         public uint ClientId { get; set; }
 
-        public Client(TcpClient tcpClient, NetworkHandler network, uint clientID) : base(tcpClient)
+        public Client(TcpClient tcpClient, NetworkHandler network, uint clientID, ILogger logger) : base(tcpClient)
         {
             this.ClientId = clientID;
             this.networkHandler = network;
+            this.logger = logger;
         }
 
         public void Write(byte messageID, string packet)
@@ -66,12 +69,12 @@ namespace Server
                         case DataParser.LOG_ON:
                             username = DataParser.GetUsernameFromLogOnjson(payload);
                             if (username == null)
-                                throw new Exception("couldn't get username from json");
+                                throw new Exception(logger.logException("Client: couldn't get username from json"));
                             Console.WriteLine($"received username {username}");
 
                             (string, bool) roomData = networkHandler.Server.GetRoom(username, this.ClientId, DataParser.GetRoomCodeFromLogOnjson(payload));
                             if (roomData.Item1 == null)
-                                throw new Exception("should never happen");
+                                throw new Exception(logger.logException("Client: should never happen"));
 
                             Player player = networkHandler.Server.GetPlayer(ClientId);
                             SendMessage(DataParser.GetOwnDataMessage(player.username, player.clientID));

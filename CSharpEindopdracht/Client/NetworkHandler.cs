@@ -2,6 +2,7 @@
 using SharedSkribbl;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -10,12 +11,15 @@ using System.Threading.Tasks;
 namespace Server
 {
     public class NetworkHandler
+
     {
         private TcpListener listener;
         public List<Client> clients { get; set; }
         public IServer Server { get; private set; }
 
-        public NetworkHandler(IServer server)
+        private ILogger logger;
+
+        public NetworkHandler(IServer server, Logger logger)
         {
             this.Server = server;
             clients = new List<Client>();
@@ -25,6 +29,16 @@ namespace Server
                                 $"\tstarted accepting clients at {DateTime.Now}\n" +
                             $"==========================================================================");
             listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
+
+            // Write to file
+            //docPath = AppDomain.CurrentDomain.BaseDirectory + @"\Server\Logs";
+            //using (outputFile = new StreamWriter(Path.Combine(docPath, "ServerLog.txt")))
+            //{
+            //    outputFile.WriteLine("[" + DateTime.Now + "] server started!");
+            //}
+
+            this.logger = logger;
+            logger.logServer();
         }
 
         private void OnConnect(IAsyncResult ar)
@@ -41,8 +55,8 @@ namespace Server
             }
             var tcpClient = listener.EndAcceptTcpClient(ar);
             Console.WriteLine($"Client connected from {tcpClient.Client.RemoteEndPoint}");
-            clients.Add(new Client(tcpClient, this, (uint)randomClientID));
-
+            clients.Add(new Client(tcpClient, this, (uint)randomClientID, this.logger));
+            logger.logConnectClient(randomClientID);
 
             listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
         }
@@ -59,6 +73,7 @@ namespace Server
         internal void Disconnect(Client client)
         {
             clients.Remove(client);
+            logger.logDisconnectClient(client);
             Console.WriteLine("Client disconnected");
         }
 
@@ -142,6 +157,7 @@ namespace Server
             foreach (Player player in players)
             {
                 getClientByUser(player.clientID).SendMessage(DataParser.GetGoToRoomMessage(player.playingInRoom.roomCode, true));
+                logger.logStartGame(player);
             }
         }
 

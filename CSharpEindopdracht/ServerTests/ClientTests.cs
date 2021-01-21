@@ -24,7 +24,7 @@ namespace ServerTests
             expectedArray[2] = 0x03;
 
             //here we create a instance of the client object.
-            Client client = new Client(new System.Net.Sockets.TcpClient(), new NetworkHandler(null), 10);
+            Client client = new Client(new System.Net.Sockets.TcpClient(), new NetworkHandler(null, null), 10);
 
             //here we create the byte array with the values that are coming out of the method.
             byte[] result = client.addByteToArray(testByteArray, testByte);
