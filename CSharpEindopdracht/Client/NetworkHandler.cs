@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Server
 {
-    public class NetworkHandler
+    public class NetworkHandler : INetworkHandler
 
     {
         private TcpListener listener;
@@ -60,7 +60,7 @@ namespace Server
 
             listener.BeginAcceptTcpClient(new AsyncCallback(OnConnect), null);
         }
-        internal void TellNewTurn(Player currentPlayer, string currentWord, List<Player> players)
+        public void TellNewTurn(Player currentPlayer, string currentWord, List<Player> players)
         {
             foreach (Player player in players)
             {
@@ -77,7 +77,7 @@ namespace Server
             Console.WriteLine("Client disconnected");
         }
 
-        internal void SendToUser(int clientID, string packet)
+        public void SendToUser(int clientID, string packet)
         {
             foreach (var client in clients.Where(c => c.ClientId == clientID))
             {
@@ -137,7 +137,7 @@ namespace Server
                     getClientByUser(player.clientID).SendMessage(messageBytes);
             }
         }
-        internal void TellGameReset(List<Player> players)
+        public void TellGameReset(List<Player> players)
         {
             SharedNetworking.Utils.Player[] dataPlayers = new SharedNetworking.Utils.Player[players.Count];
             int index = 0;
@@ -152,7 +152,7 @@ namespace Server
             }
         }
 
-        internal void TellGameStart(List<Player> players)
+        public void TellGameStart(List<Player> players)
         {
             foreach (Player player in players)
             {
@@ -183,7 +183,7 @@ namespace Server
             }
         }
 
-        internal void TellGameOver(List<Player> players)
+        public void TellGameOver(List<Player> players)
         {
             foreach (Player player in players)
             {
@@ -191,7 +191,7 @@ namespace Server
             }
         }
 
-        internal void TellTurnOver(List<Player> players, string currentWord)
+        public void TellTurnOver(List<Player> players, string currentWord)
         {
             foreach (Player p in players)
             {
@@ -210,7 +210,7 @@ namespace Server
             }
         }
 
-        internal void TellAboutNewPlayer(List<Player> players, Player newPlayer)
+        public void TellAboutNewPlayer(List<Player> players, Player newPlayer)
         {
             foreach (Player player in players)
             {
