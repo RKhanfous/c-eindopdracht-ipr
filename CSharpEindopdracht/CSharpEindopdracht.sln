@@ -15,12 +15,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerTests", "ServerTests\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPFClientDummy", "WPFClientDummy\WPFClientDummy.csproj", "{9FB6AFCA-1D5D-468D-9254-A86265913A46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedNetworkingTests", "SharedNetworkingTests\SharedNetworkingTests.csproj", "{494A8BA9-17BA-4E8E-A6BF-836932535FEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedNetworkingTests", "SharedNetworkingTests\SharedNetworkingTests.csproj", "{494A8BA9-17BA-4E8E-A6BF-836932535FEB}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		SharedNetworking\SharedNetworking.projitems*{084112f6-823c-4ad5-bbf2-8630368a5039}*SharedItemsImports = 5
 		SharedSkribbl\SharedSkribbl.projitems*{084112f6-823c-4ad5-bbf2-8630368a5039}*SharedItemsImports = 5
+		SharedNetworking\SharedNetworking.projitems*{494a8ba9-17ba-4e8e-a6bf-836932535feb}*SharedItemsImports = 5
 		SharedSkribbl\SharedSkribbl.projitems*{5db30c1e-d9a7-4113-b095-3c993b6bf0a4}*SharedItemsImports = 13
 		SharedNetworking\SharedNetworking.projitems*{a2eaf6b3-9ab3-4155-b0ea-8bd0f7ae1dd0}*SharedItemsImports = 13
 		SharedNetworking\SharedNetworking.projitems*{ea7ce9c1-5ca4-4eb6-84af-d9cd01912a2e}*SharedItemsImports = 5

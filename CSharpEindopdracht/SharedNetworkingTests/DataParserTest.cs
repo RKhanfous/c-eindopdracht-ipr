@@ -1,4 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SharedNetworking.Utils;
+using System;
+using System.Linq;
 
 namespace SharedNetworkingTests
 {
@@ -23,11 +26,41 @@ namespace SharedNetworkingTests
         [TestMethod]
         public void testGetLogOnJsonMessage()
         {
-            // Arrange
-            byte[] testArray;
-            // Act
-            // Assert
+            string username = "username";
+            string roomCode = "roomCode";
 
+            //act
+            byte[] message = DataParser.GetLogOnJsonMessage(username, roomCode);
+
+            int expectedMessageLength = BitConverter.ToInt32(message, 0);
+
+            byte[] payload = message.Skip(5).ToArray();
+
+            //assert
+            Assert.AreEqual(message.Length, expectedMessageLength);
+            Assert.AreEqual(0x02, message[4]);
+            Assert.AreEqual(username, DataParser.GetUsernameFromLogOnjson(payload));
+            Assert.AreEqual(roomCode, DataParser.GetRoomCodeFromLogOnjson(payload));
+        }
+
+        [TestMethod]
+        public void GoToRoomMessage()
+        {
+            //arrange
+            string roomCode = "roomCode";
+            bool running = true;
+
+            //act
+            byte[] message = DataParser.GetGoToRoomMessage(roomCode, running);
+
+            int expectedMessageLength = BitConverter.ToInt32(message, 0);
+
+            byte[] payload = message.Skip(5).ToArray();
+
+            //assert
+            Assert.AreEqual(message.Length, expectedMessageLength);
+            Assert.AreEqual(0x02, message[4]);
+            Assert.AreEqual((roomCode, running), DataParser.GetRoomDataFromGoToRoomjson(payload));
         }
     }
 }
