@@ -15,6 +15,9 @@ namespace ServerTests
             TestNetworHandler networHandler = new TestNetworHandler();
             SkribblRoom skribblRoom = new SkribblRoom(networHandler);
 
+            Assert.AreEqual("", skribblRoom.roomCode);
+            Assert.AreEqual(false, skribblRoom.running);
+
             Assert.AreEqual(0, networHandler.TellAboutNewPlayerCount);
             Assert.AreEqual(0, networHandler.TellGameOverCount);
             Assert.AreEqual(0, networHandler.TellGameResetCount);
@@ -29,7 +32,7 @@ namespace ServerTests
             TestNetworHandler networHandler = new TestNetworHandler();
             SkribblRoom skribblRoom = new SkribblRoom(networHandler);
 
-            skribblRoom.
+            skribblRoom.lines
 
         }
 
