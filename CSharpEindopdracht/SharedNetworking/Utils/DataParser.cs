@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SharedNetworking.Utils
 {
-    class DataParser
+    public class DataParser
     {
 
         #region consts
