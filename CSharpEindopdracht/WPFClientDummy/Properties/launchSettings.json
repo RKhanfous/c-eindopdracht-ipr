@@ -2,7 +2,7 @@
   "profiles": {
     "WPFClientDummy": {
       "commandName": "Executable",
-      "executablePath": "C:\\Users\\redon\\Documents\\Avans\\Jaar 2\\Periode 1\\IPR\\c-eindopdracht-ipr\\CSharpEindopdracht\\WpfClient\\output\\netcoreapp3.1\\WpfClient.exe"
+      "executablePath": "C:\\Users\\Shinichi\\source\\repos\\c-eindopdracht-ipr\\CSharpEindopdracht\\WpfClient\\output\\netcoreapp3.1\\WpfClient.exe"
     }
   }
 }

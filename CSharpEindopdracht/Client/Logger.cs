@@ -16,25 +16,27 @@ namespace Server
         public Logger(string logPathApp)
         {
             this.logPath = logPathApp;
-            this.logName = "SystemLog" + StringBuilderTime() + ".txt";
+            this.logName = "SystemLog" + ".txt";
             this.fileName = logPath + @"\" + logName;
+            if (!Directory.Exists(logPath))
+            {
+                Directory.CreateDirectory(logPath);
+            }
+            //FileInfo fi = new FileInfo(this.fileName);
+            //if (!fi.Exists)
+            //{
+            //    File.Create(fileName);
+            //}
         }
 
         public void logException(String exception)
         {
-            using (this.outputFile)
-            {
-
-                this.outputFile.WriteLine("[" + DateTime.Now + "] this exception has occured: " + exception + "!");
-            }
+            writeTextToFile("[" + DateTime.Now + "] this exception has occured: " + exception + "!");
         }
 
         public void logServer()
         {
-            using (this.outputFile)
-            {
-                this.outputFile.WriteLine("[" + DateTime.Now + "] server started!");
-            }
+            writeTextToFile("[" + DateTime.Now + "] server started!");
         }
 
         public void logStartGame(Player player)
@@ -57,13 +59,14 @@ namespace Server
             return "[" + DateTime.Now.Hour + "H/" + DateTime.Now.Minute + "M/" + DateTime.Now.Second + "S_Day" + DateTime.Now.Day + "/Month" + DateTime.Now.Month + "/Year" + DateTime.Now.Year + "]";
         }
 
-        private void writeTextToFile(string text)
+        private void writeTextToFile2(string text)
         {
             int length = 0;
             try
             {
                 FileInfo fi = new FileInfo(this.fileName);
-                length = (int)fi.length();
+
+                length = (int)fi.Length;
             }
             catch
             {
@@ -74,8 +77,15 @@ namespace Server
             using (var sw = new StreamWriter(fileStream))
             {
                 sw.BaseStream.Seek(length, SeekOrigin.Begin);
-                sw.WriteLine(test);
-                sw.flush();
+                sw.WriteLine(text);
+                sw.Flush();
+            }
+        }
+        public void writeTextToFile(string data)
+        {
+            using (StreamWriter sw = File.AppendText(this.fileName))
+            {
+                sw.WriteLine(data);
             }
         }
     }
