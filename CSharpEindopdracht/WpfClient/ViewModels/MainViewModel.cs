@@ -22,6 +22,7 @@ namespace WpfClient.ViewModels
 
         private int mOuterMarginSize = 10;
         private int mWindowRadius = 10;
+        private LoginViewModel loginViewModel;
 
 
         #endregion
@@ -129,6 +130,7 @@ namespace WpfClient.ViewModels
 
             LoginViewModel loginViewModel = new LoginViewModel(this);
             this.SelectedViewModel = loginViewModel;
+            this.loginViewModel = loginViewModel;
 
             this.MinimizeCommand = new RelayCommand(() => this.mWindow.WindowState = WindowState.Minimized);
             this.MaximizeCommand = new RelayCommand(() => this.mWindow.WindowState ^= WindowState.Maximized);
@@ -154,6 +156,11 @@ namespace WpfClient.ViewModels
             {
                 Debug.WriteLine("[mainviewmodel] i don't want to implement singleton ok? client already exists");
             }
+        }
+
+        internal void resetToLogin()
+        {
+            this.SelectedViewModel = this.loginViewModel;
         }
 
 
@@ -219,8 +226,11 @@ namespace WpfClient.ViewModels
 
         public void SetMePlayer(string username, uint id)
         {
-            this.MePlayer = new Player() { Username = username, Id = id };
-            this.Players.Add(this.MePlayer);
+            Application.Current.Dispatcher.BeginInvoke(new Action<string, uint>((username, id) =>
+            {
+                this.MePlayer = new Player() { Username = username, Id = id };
+                this.Players.Add(this.MePlayer);
+            }), username, id);
         }
 
         public void SetDrawer(uint id)
